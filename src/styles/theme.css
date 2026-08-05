@@ -1,0 +1,33 @@
+:root {
+  /* Light Theme */
+
+  --background: #FFFFFF;
+  --surface: #F8F9FB;
+  --card: #FFFFFF;
+
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-muted: #9CA3AF;
+
+  --accent: #8B5CF6;
+  --accent-secondary: #38BDF8;
+
+  --border: #E5E7EB;
+}
+
+.dark {
+  /* Dark Theme */
+
+  --background: #050505;
+  --surface: #0F0F10;
+  --card: #17181C;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #B4B4B8;
+  --text-muted: #71717A;
+
+  --accent: #8B5CF6;
+  --accent-secondary: #38BDF8;
+
+  --border: #2A2A2A;
+}
