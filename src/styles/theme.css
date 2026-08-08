@@ -1,33 +1,31 @@
 :root {
   /* Light Theme */
-
-  --background: #FFFFFF;
-  --surface: #F8F9FB;
-  --card: #FFFFFF;
+  --background: #ffffff;
+  --surface: #f8f9fb;
+  --card: #ffffff;
 
   --text-primary: #111827;
-  --text-secondary: #4B5563;
-  --text-muted: #9CA3AF;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
 
-  --accent: #8B5CF6;
-  --accent-secondary: #38BDF8;
+  --accent: #8b5cf6;
+  --accent-secondary: #38bdf8;
 
-  --border: #E5E7EB;
+  --border: #e5e7eb;
 }
 
 .dark {
   /* Dark Theme */
-
   --background: #050505;
-  --surface: #0F0F10;
-  --card: #17181C;
+  --surface: #0f0f10;
+  --card: #17181c;
 
-  --text-primary: #FFFFFF;
-  --text-secondary: #B4B4B8;
-  --text-muted: #71717A;
+  --text-primary: #ffffff;
+  --text-secondary: #b4b4b8;
+  --text-muted: #71717a;
 
-  --accent: #8B5CF6;
-  --accent-secondary: #38BDF8;
+  --accent: #8b5cf6;
+  --accent-secondary: #38bdf8;
 
-  --border: #2A2A2A;
+  --border: #2a2a2a;
 }
