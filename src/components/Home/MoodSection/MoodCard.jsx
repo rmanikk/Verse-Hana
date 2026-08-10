@@ -11,51 +11,163 @@ function MoodCard({ mood }) {
       transition={{
         duration: 0.3,
       }}
-      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-2xl shadow-lg"
+      className="
+        group
+        relative
+        h-full
+        overflow-hidden
+        rounded-3xl
+        border
+        border-[var(--border)]
+        bg-[var(--card)]
+        p-5
+        shadow-lg
+        backdrop-blur-2xl
+        transition-shadow
+        duration-300
+
+        sm:p-6
+
+        hover:shadow-2xl
+        hover:shadow-violet-500/10
+      "
     >
       {/* Gradient Glow */}
 
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${mood.color} opacity-0 blur-3xl transition-all duration-500 group-hover:opacity-20`}
+        className={`
+          pointer-events-none
+          absolute
+          inset-0
+          bg-gradient-to-br
+          ${mood.color}
+          opacity-0
+          blur-3xl
+          transition-all
+          duration-500
+          group-hover:opacity-20
+        `}
       />
 
       {/* Content */}
 
-      <div className="relative z-10">
+      <div className="relative z-10 flex h-full flex-col">
 
-        <div className="text-5xl">
+        {/* Emoji */}
+
+        <div
+          className="
+            text-4xl
+
+            sm:text-5xl
+          "
+        >
           {mood.emoji}
         </div>
 
-        <h3 className="mt-6 text-2xl font-bold text-white">
+        {/* Title */}
+
+        <h3
+          className="
+            mt-5
+            text-xl
+            font-bold
+            text-[var(--text-primary)]
+
+            sm:mt-6
+            sm:text-2xl
+          "
+        >
           {mood.title}
         </h3>
 
-        <p className="mt-3 text-sm leading-6 text-gray-400">
+        {/* Description */}
+
+        <p
+          className="
+            mt-3
+            text-sm
+            leading-6
+            text-[var(--text-secondary)]
+          "
+        >
           {mood.description}
         </p>
 
-        <div className="mt-8 flex items-center justify-between">
+        {/* Bottom */}
 
-          <span className="text-sm font-medium text-violet-400">
+        <div
+          className="
+            mt-auto
+            flex
+            items-center
+            justify-between
+            pt-7
+          "
+        >
+          {/* Song count */}
+
+          <span
+            className="
+              text-sm
+              font-medium
+              text-violet-500
+            "
+          >
             {mood.songs}
           </span>
 
+          {/* Arrow */}
+
           <motion.div
             whileHover={{ x: 4 }}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors duration-300 group-hover:bg-violet-600"
+            className="
+              flex
+              h-9
+              w-9
+              shrink-0
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-[var(--border)]
+              bg-[var(--surface)]
+              transition-all
+              duration-300
+
+              group-hover:border-violet-500
+              group-hover:bg-violet-600
+            "
           >
-            <HiArrowRight className="text-lg text-white" />
+            <HiArrowRight
+              className="
+                text-base
+                text-[var(--text-primary)]
+                transition-colors
+                duration-300
+
+                group-hover:text-white
+              "
+            />
           </motion.div>
-
         </div>
-
       </div>
 
       {/* Border Glow */}
 
-      <div className="absolute inset-0 rounded-3xl border border-transparent transition-all duration-300 group-hover:border-violet-500/40" />
-
+      <div
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          rounded-3xl
+          border
+          border-transparent
+          transition-all
+          duration-300
+          group-hover:border-violet-500/40
+        "
+      />
     </motion.div>
   );
 }
