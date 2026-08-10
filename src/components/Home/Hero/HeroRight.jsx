@@ -8,9 +8,32 @@ import album4 from "../../../assets/albums/album4.jpg";
 
 function HeroRight() {
   return (
-    <div className="relative hidden h-[650px] w-[650px] lg:flex items-center justify-center">
+    <div
+      className="
+        relative
+        flex
+        h-[430px]
+        w-full
+        max-w-[430px]
+        items-center
+        justify-center
 
-      {/* Background Glow */}
+        sm:h-[500px]
+        sm:max-w-[500px]
+
+        md:h-[540px]
+        md:max-w-[560px]
+
+        lg:h-[600px]
+        lg:w-[600px]
+        lg:max-w-none
+
+        xl:h-[650px]
+        xl:w-[650px]
+      "
+    >
+      {/* ================= BACKGROUND GLOW ================= */}
+
       <motion.div
         animate={{
           scale: [1, 1.15, 1],
@@ -21,38 +44,67 @@ function HeroRight() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute h-[450px] w-[450px] rounded-full bg-violet-600/20 blur-[140px]"
+        className="
+          pointer-events-none
+          absolute
+          h-[280px]
+          w-[280px]
+          rounded-full
+          bg-violet-600/20
+          blur-[100px]
+
+          sm:h-[350px]
+          sm:w-[350px]
+          sm:blur-[120px]
+
+          lg:h-[450px]
+          lg:w-[450px]
+          lg:blur-[140px]
+        "
       />
 
-      {/* Album + Vinyl */}
+      {/* ================= ALBUM + VINYL ================= */}
+
       <motion.div
         initial="rest"
         whileHover="hover"
         animate="rest"
-        className="relative flex items-center justify-center"
+        className="
+          relative
+          flex
+          items-center
+          justify-center
+        "
       >
-
-        {/* Vinyl */}
+        {/* ================= VINYL ================= */}
 
         <motion.div
           variants={{
             rest: {
-              x: 70,
+              x: 35,
             },
             hover: {
-              x: 20,
+              x: 5,
             },
           }}
           transition={{
             duration: 0.5,
             ease: "easeInOut",
           }}
-          className="absolute left-0 z-10"
+          className="
+            absolute
+            left-0
+            z-10
+
+            sm:translate-x-4
+
+            lg:translate-x-0
+          "
         >
           <Vinyl />
         </motion.div>
 
-        {/* Album Card */}
+        {/* ================= MAIN ALBUM ================= */}
 
         <motion.div
           variants={{
@@ -70,39 +122,111 @@ function HeroRight() {
           transition={{
             duration: 0.45,
           }}
-          className="relative ml-36 z-20 w-[330px] overflow-hidden rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-2xl shadow-[0_35px_80px_rgba(0,0,0,0.65)]"
+          className="
+            relative
+            z-20
+            ml-20
+            w-[230px]
+            overflow-hidden
+            rounded-[24px]
+            border
+            border-[var(--border)]
+            bg-[var(--card)]/80
+            shadow-[0_25px_60px_rgba(0,0,0,0.35)]
+            backdrop-blur-2xl
+
+            sm:ml-24
+            sm:w-[270px]
+            sm:rounded-[28px]
+
+            md:ml-28
+            md:w-[300px]
+
+            lg:ml-32
+            lg:w-[320px]
+
+            xl:ml-36
+            xl:w-[330px]
+          "
         >
           <img
             src={album1}
-            alt="Album"
-            className="h-[340px] w-full object-cover"
+            alt="Midnight Feelings album artwork"
+            className="
+              h-[230px]
+              w-full
+              object-cover
+
+              sm:h-[270px]
+
+              md:h-[300px]
+
+              lg:h-[325px]
+
+              xl:h-[340px]
+            "
           />
 
-          <div className="p-6">
+          <div
+            className="
+              p-4
 
-            <p className="text-sm text-violet-400">
+              sm:p-5
+
+              lg:p-6
+            "
+          >
+            <p
+              className="
+                text-xs
+                font-medium
+                text-violet-500
+
+                dark:text-violet-400
+
+                sm:text-sm
+              "
+            >
               Now Playing
             </p>
 
-            <h3 className="mt-2 text-2xl font-bold text-white">
+            <h3
+              className="
+                mt-1
+                text-lg
+                font-bold
+                text-[var(--text-primary)]
+
+                sm:text-xl
+
+                lg:text-2xl
+              "
+            >
               Midnight Feelings
             </h3>
 
-            <p className="mt-2 text-gray-400">
+            <p
+              className="
+                mt-1
+                text-xs
+                text-[var(--text-secondary)]
+
+                sm:mt-2
+                sm:text-sm
+              "
+            >
               Late Night • Chill • Lofi
             </p>
-
           </div>
-
         </motion.div>
-
       </motion.div>
 
-      {/* Floating Album Top */}
+      {/* ================= FLOATING ALBUM TOP ================= */}
 
       <motion.img
         src={album2}
         alt=""
+        aria-hidden="true"
         animate={{
           y: [0, -18, 0],
           rotate: [10, 18, 10],
@@ -112,14 +236,39 @@ function HeroRight() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute right-4 top-10 h-28 w-28 rounded-2xl border border-white/10 shadow-2xl"
+        className="
+          absolute
+          right-2
+          top-8
+          h-20
+          w-20
+          rounded-xl
+          border
+          border-[var(--border)]
+          object-cover
+          shadow-2xl
+
+          sm:right-4
+          sm:top-10
+          sm:h-24
+          sm:w-24
+          sm:rounded-2xl
+
+          md:h-28
+          md:w-28
+
+          lg:right-4
+          lg:h-28
+          lg:w-28
+        "
       />
 
-      {/* Floating Album Left */}
+      {/* ================= FLOATING ALBUM LEFT ================= */}
 
       <motion.img
         src={album3}
         alt=""
+        aria-hidden="true"
         animate={{
           y: [0, 16, 0],
           rotate: [-12, -18, -12],
@@ -129,14 +278,39 @@ function HeroRight() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute bottom-24 left-6 h-32 w-32 rounded-2xl border border-white/10 shadow-2xl"
+        className="
+          absolute
+          bottom-20
+          left-1
+          h-24
+          w-24
+          rounded-xl
+          border
+          border-[var(--border)]
+          object-cover
+          shadow-2xl
+
+          sm:bottom-24
+          sm:left-4
+          sm:h-28
+          sm:w-28
+          sm:rounded-2xl
+
+          md:h-32
+          md:w-32
+
+          lg:left-6
+          lg:h-32
+          lg:w-32
+        "
       />
 
-      {/* Floating Album Bottom */}
+      {/* ================= FLOATING ALBUM BOTTOM ================= */}
 
       <motion.img
         src={album4}
         alt=""
+        aria-hidden="true"
         animate={{
           y: [0, -12, 0],
           rotate: [8, 14, 8],
@@ -146,10 +320,33 @@ function HeroRight() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute bottom-8 right-12 h-24 w-24 rounded-2xl border border-white/10 shadow-2xl"
+        className="
+          absolute
+          bottom-4
+          right-4
+          h-20
+          w-20
+          rounded-xl
+          border
+          border-[var(--border)]
+          object-cover
+          shadow-2xl
+
+          sm:bottom-6
+          sm:right-8
+          sm:h-22
+          sm:w-22
+
+          md:h-24
+          md:w-24
+
+          lg:right-12
+          lg:h-24
+          lg:w-24
+        "
       />
 
-      {/* Mini Player */}
+      {/* ================= MINI PLAYER ================= */}
 
       <motion.div
         animate={{
@@ -159,36 +356,70 @@ function HeroRight() {
           duration: 4,
           repeat: Infinity,
         }}
-        className="absolute bottom-2 right-4 rounded-2xl border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-xl shadow-2xl"
-      >
+        className="
+          absolute
+          bottom-0
+          right-1
+          z-30
+          rounded-xl
+          border
+          border-[var(--border)]
+          bg-[var(--surface)]/90
+          px-3
+          py-3
+          shadow-2xl
+          backdrop-blur-xl
 
-        <div className="flex items-center gap-4">
+          sm:right-2
+          sm:rounded-2xl
+          sm:px-4
+          sm:py-3
+
+          md:right-4
+          md:px-5
+          md:py-4
+        "
+      >
+        <div className="flex items-center gap-3 sm:gap-4">
+
+          {/* Equalizer */}
 
           <div className="flex gap-1">
-
-            <span className="h-4 w-1 animate-pulse rounded-full bg-violet-400"></span>
-            <span className="h-7 w-1 animate-pulse rounded-full bg-violet-500"></span>
-            <span className="h-5 w-1 animate-pulse rounded-full bg-fuchsia-400"></span>
-            <span className="h-6 w-1 animate-pulse rounded-full bg-violet-500"></span>
-
+            <span className="h-3 w-1 animate-pulse rounded-full bg-violet-400 sm:h-4" />
+            <span className="h-5 w-1 animate-pulse rounded-full bg-violet-500 sm:h-7" />
+            <span className="h-4 w-1 animate-pulse rounded-full bg-fuchsia-400 sm:h-5" />
+            <span className="h-5 w-1 animate-pulse rounded-full bg-violet-500 sm:h-6" />
           </div>
 
-          <div>
+          {/* Track */}
 
-            <p className="text-xs text-gray-400">
+          <div>
+            <p
+              className="
+                text-[10px]
+                text-[var(--text-muted)]
+
+                sm:text-xs
+              "
+            >
               Now Playing
             </p>
 
-            <h4 className="font-semibold text-white">
+            <h4
+              className="
+                text-xs
+                font-semibold
+                text-[var(--text-primary)]
+
+                sm:text-sm
+              "
+            >
               Midnight Feelings
             </h4>
-
           </div>
 
         </div>
-
       </motion.div>
-
     </div>
   );
 }

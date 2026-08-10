@@ -1,21 +1,23 @@
 :root {
-  /* Light Theme */
+  /* ================= LIGHT THEME ================= */
+
   --background: #ffffff;
   --surface: #f8f9fb;
   --card: #ffffff;
 
   --text-primary: #111827;
   --text-secondary: #4b5563;
-  --text-muted: #9ca3af;
+  --text-muted: #6b7280;
 
-  --accent: #8b5cf6;
-  --accent-secondary: #38bdf8;
+  --accent: #7c3aed;
+  --accent-secondary: #0284c7;
 
   --border: #e5e7eb;
 }
 
 .dark {
-  /* Dark Theme */
+  /* ================= DARK THEME ================= */
+
   --background: #050505;
   --surface: #0f0f10;
   --card: #17181c;
