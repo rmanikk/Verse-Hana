@@ -6,20 +6,75 @@ import Artist from "./Artist";
 
 function TrendingArtists() {
   return (
-    <section className="relative overflow-hidden py-28 lg:py-36">
+    <section
+      className="
+        relative
+        overflow-hidden
+        py-16
 
+        sm:py-24
+
+        lg:py-24
+        xl:py-36
+      "
+    >
       {/* Background Glow */}
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="
+            absolute
+            left-[-140px]
+            top-20
+            h-[300px]
+            w-[300px]
+            rounded-full
+            bg-fuchsia-600/10
+            blur-[130px]
 
-        <div className="absolute left-[-180px] top-20 h-[400px] w-[400px] rounded-full bg-fuchsia-600/10 blur-[160px]" />
+            sm:left-[-180px]
+            sm:h-[400px]
+            sm:w-[400px]
+            sm:blur-[160px]
+          "
+        />
 
-        <div className="absolute right-[-180px] bottom-10 h-[400px] w-[400px] rounded-full bg-violet-600/10 blur-[160px]" />
+        <div
+          className="
+            absolute
+            right-[-140px]
+            bottom-10
+            h-[300px]
+            w-[300px]
+            rounded-full
+            bg-violet-600/10
+            blur-[130px]
 
+            sm:right-[-180px]
+            sm:h-[400px]
+            sm:w-[400px]
+            sm:blur-[160px]
+          "
+        />
       </div>
 
-      <div className="relative mx-auto max-w-[1450px] px-8 lg:px-12">
+      {/* Content */}
 
+      <div
+        className="
+          relative
+          mx-auto
+          w-full
+          max-w-[1450px]
+          px-5
+
+          sm:px-8
+
+          lg:px-12
+
+          xl:px-16
+        "
+      >
         {/* Section Header */}
 
         <motion.div
@@ -27,40 +82,154 @@ function TrendingArtists() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between"
+          className="
+            flex
+            flex-col
+            gap-7
+
+            lg:flex-row
+            lg:items-end
+            lg:justify-between
+            lg:gap-10
+          "
         >
+          {/* Heading Content */}
 
-          <div>
+          <div className="max-w-3xl">
+            <span
+              className="
+                inline-flex
+                rounded-full
+                border
+                border-fuchsia-500/30
+                bg-fuchsia-500/10
+                px-4
+                py-2
+                text-xs
+                font-medium
+                text-fuchsia-500
 
-            <span className="inline-flex rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 px-5 py-2 text-sm font-medium text-fuchsia-400">
+                sm:px-5
+                sm:text-sm
+              "
+            >
               🎤 Trending Artists
             </span>
 
-            <h2 className="mt-8 text-5xl font-bold leading-tight text-[var(--text-primary)] lg:text-6xl">
+            <h2
+              className="
+                mt-6
+                text-3xl
+                font-bold
+                leading-tight
+                text-[var(--text-primary)]
+
+                sm:mt-8
+                sm:text-4xl
+
+                md:text-5xl
+
+                lg:text-6xl
+              "
+            >
               Voices that
-              <span className="block bg-gradient-to-r from-fuchsia-400 via-violet-400 to-pink-400 bg-clip-text text-transparent">
+
+              <span
+                className="
+                  block
+                  bg-gradient-to-r
+                  from-fuchsia-500
+                  via-violet-500
+                  to-pink-500
+                  bg-clip-text
+                  text-transparent
+                "
+              >
                 move you.
               </span>
             </h2>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-400">
+            <p
+              className="
+                mt-5
+                max-w-2xl
+                text-sm
+                leading-7
+                text-[var(--text-secondary)]
+
+                sm:mt-6
+                sm:text-base
+                sm:leading-8
+
+                lg:text-lg
+              "
+            >
               Discover artists whose music connects with millions of
               listeners and every kind of emotion.
             </p>
-
           </div>
 
-          <button className="flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-[var(--text-primary)] backdrop-blur-xl transition hover:border-violet-500 hover:bg-violet-500/10">
-            Explore Artists
-            <HiArrowRight />
-          </button>
+          {/* Explore Button */}
 
+          <button
+            className="
+              group
+              flex
+              w-fit
+              shrink-0
+              items-center
+              gap-2
+              rounded-full
+              border
+              border-[var(--border)]
+              bg-[var(--surface)]
+              px-5
+              py-3
+              text-sm
+              font-semibold
+              text-[var(--text-primary)]
+              backdrop-blur-xl
+              transition-all
+              duration-300
+
+              hover:border-violet-500
+              hover:bg-violet-500/10
+              hover:text-violet-500
+
+              sm:px-6
+            "
+          >
+            Explore Artists
+
+            <HiArrowRight
+              className="
+                transition-transform
+                duration-300
+                group-hover:translate-x-1
+              "
+            />
+          </button>
         </motion.div>
 
         {/* Artist Grid */}
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div
+          className="
+            mt-12
+            grid
+            grid-cols-1
+            gap-5
 
+            sm:mt-16
+            sm:grid-cols-2
+            sm:gap-6
+
+            lg:grid-cols-4
+            lg:gap-7
+
+            xl:gap-8
+          "
+        >
           {artists.map((artist, index) => (
             <motion.div
               key={artist.id}
@@ -71,15 +240,13 @@ function TrendingArtists() {
                 duration: 0.5,
                 delay: index * 0.1,
               }}
+              className="h-full"
             >
               <Artist artist={artist} />
             </motion.div>
           ))}
-
         </div>
-
       </div>
-
     </section>
   );
 }

@@ -14,7 +14,14 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const navLinks = ["Home", "Discover", "Moods", "Artists", "About"];
+  // Navigation Links
+  const navLinks = [
+    { name: "Home", href: "#home" },
+    { name: "Discover", href: "#discover" },
+    { name: "Moods", href: "#moods" },
+    { name: "Artists", href: "#artists" },
+    { name: "Lyrics", href: "#lyrics" },
+  ];
 
   /* ---------------- SCROLL ---------------- */
 
@@ -77,7 +84,7 @@ function Navbar() {
           {/* ================= LOGO ================= */}
 
           <a
-            href="#"
+            href="#home"
             onClick={closeMenu}
             className="flex shrink-0 items-center"
           >
@@ -98,10 +105,12 @@ function Navbar() {
           {/* ================= DESKTOP NAVIGATION ================= */}
 
           <ul className="hidden items-center gap-8 lg:flex xl:gap-10 2xl:gap-12">
+
             {navLinks.map((item) => (
-              <li key={item}>
+              <li key={item.name}>
+
                 <a
-                  href="#"
+                  href={item.href}
                   className="
                     group relative
                     text-sm font-medium tracking-wide
@@ -111,7 +120,7 @@ function Navbar() {
                     xl:text-[15px]
                   "
                 >
-                  {item}
+                  {item.name}
 
                   <span
                     className="
@@ -124,8 +133,10 @@ function Navbar() {
                     "
                   />
                 </a>
+
               </li>
             ))}
+
           </ul>
 
           {/* ================= DESKTOP ACTIONS ================= */}
@@ -280,9 +291,10 @@ function Navbar() {
             <ul className="space-y-1">
 
               {navLinks.map((item) => (
-                <li key={item}>
+                <li key={item.name}>
+
                   <a
-                    href="#"
+                    href={item.href}
                     onClick={closeMenu}
                     className="
                       block
@@ -295,8 +307,9 @@ function Navbar() {
                       hover:text-violet-500
                     "
                   >
-                    {item}
+                    {item.name}
                   </a>
+
                 </li>
               ))}
 

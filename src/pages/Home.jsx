@@ -13,15 +13,34 @@ function Home() {
   return (
     <>
       <Navbar />
-      <Hero />
-      <MoodSection />
-      <FeaturedMusic />
-         <Features />
-          <TrendingArtists />
-          <Lyrics />
-          <Community />
-          <CTA />
-              <Footer />
+
+      <div id="home">
+        <Hero />
+      </div>
+
+      <div id="moods">
+        <MoodSection />
+      </div>
+
+      <div id="discover">
+        <FeaturedMusic />
+      </div>
+
+      <Features />
+
+      <div id="artists">
+        <TrendingArtists />
+      </div>
+
+      <div id="lyrics">
+        <Lyrics />
+      </div>
+
+      <Community />
+
+      <CTA />
+
+      <Footer />
     </>
   );
 }

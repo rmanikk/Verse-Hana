@@ -10,11 +10,11 @@ function FeaturedMusic() {
       className="
         relative
         overflow-hidden
-        py-20
+        py-16
 
         sm:py-24
 
-        lg:py-28
+        lg:py-24
       "
     >
       {/* Background Glow */}
