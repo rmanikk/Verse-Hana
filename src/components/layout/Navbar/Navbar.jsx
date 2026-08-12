@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   HiOutlineMoon,
   HiOutlineSun,
@@ -14,7 +15,8 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Navigation Links
+  const location = useLocation();
+
   const navLinks = [
     { name: "Home", href: "#home" },
     { name: "Discover", href: "#discover" },
@@ -63,6 +65,27 @@ function Navbar() {
     setMenuOpen(false);
   };
 
+  /* ---------------- NAVIGATION ---------------- */
+
+  const handleSectionClick = (href) => {
+    closeMenu();
+
+    // If we're already on the homepage
+    if (location.pathname === "/") {
+      const element = document.querySelector(href);
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    } else {
+      // Go back to homepage with the section hash
+      window.location.href = `/${href}`;
+    }
+  };
+
   return (
     <header
       className={`
@@ -75,16 +98,13 @@ function Navbar() {
         }
       `}
     >
-      {/* ================= CONTAINER ================= */}
-
       <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
-
         <nav className="flex h-20 items-center justify-between">
 
           {/* ================= LOGO ================= */}
 
-          <a
-            href="#home"
+          <Link
+            to="/"
             onClick={closeMenu}
             className="flex shrink-0 items-center"
           >
@@ -100,17 +120,15 @@ function Navbar() {
                 lg:h-12 lg:w-12
               "
             />
-          </a>
+          </Link>
 
           {/* ================= DESKTOP NAVIGATION ================= */}
 
           <ul className="hidden items-center gap-8 lg:flex xl:gap-10 2xl:gap-12">
-
             {navLinks.map((item) => (
               <li key={item.name}>
-
-                <a
-                  href={item.href}
+                <button
+                  onClick={() => handleSectionClick(item.href)}
                   className="
                     group relative
                     text-sm font-medium tracking-wide
@@ -132,18 +150,16 @@ function Navbar() {
                       group-hover:w-full
                     "
                   />
-                </a>
-
+                </button>
               </li>
             ))}
-
           </ul>
 
           {/* ================= DESKTOP ACTIONS ================= */}
 
           <div className="hidden items-center gap-4 lg:flex xl:gap-5">
 
-            {/* Theme Toggle */}
+            {/* Theme */}
 
             <button
               onClick={toggleTheme}
@@ -169,7 +185,8 @@ function Navbar() {
 
             {/* Login */}
 
-            <button
+            <Link
+              to="/login"
               className="
                 text-sm font-medium
                 text-[var(--text-primary)]
@@ -178,11 +195,12 @@ function Navbar() {
               "
             >
               Login
-            </button>
+            </Link>
 
             {/* Sign Up */}
 
-            <button
+            <Link
+              to="/signup"
               className="
                 rounded-full
                 bg-gradient-to-r
@@ -200,7 +218,7 @@ function Navbar() {
               "
             >
               Sign Up
-            </button>
+            </Link>
 
           </div>
 
@@ -208,7 +226,7 @@ function Navbar() {
 
           <div className="flex items-center gap-2 lg:hidden">
 
-            {/* Theme Toggle */}
+            {/* Theme */}
 
             <button
               onClick={toggleTheme}
@@ -258,7 +276,6 @@ function Navbar() {
             </button>
 
           </div>
-
         </nav>
 
         {/* ================= MOBILE MENU ================= */}
@@ -286,20 +303,18 @@ function Navbar() {
             "
           >
 
-            {/* Navigation Links */}
+            {/* Navigation */}
 
             <ul className="space-y-1">
-
               {navLinks.map((item) => (
                 <li key={item.name}>
-
-                  <a
-                    href={item.href}
-                    onClick={closeMenu}
+                  <button
+                    onClick={() => handleSectionClick(item.href)}
                     className="
-                      block
+                      block w-full
                       rounded-xl
                       px-4 py-3
+                      text-left
                       text-sm font-medium
                       text-[var(--text-primary)]
                       transition
@@ -308,28 +323,26 @@ function Navbar() {
                     "
                   >
                     {item.name}
-                  </a>
-
+                  </button>
                 </li>
               ))}
-
             </ul>
-
-            {/* Divider */}
 
             <div className="my-3 h-px bg-[var(--border)]" />
 
-            {/* Mobile Buttons */}
+            {/* Mobile Auth */}
 
             <div className="flex gap-3">
 
-              <button
+              <Link
+                to="/login"
                 onClick={closeMenu}
                 className="
                   flex-1
                   rounded-xl
                   border border-[var(--border)]
                   px-4 py-3
+                  text-center
                   text-sm font-medium
                   text-[var(--text-primary)]
                   transition
@@ -338,9 +351,10 @@ function Navbar() {
                 "
               >
                 Login
-              </button>
+              </Link>
 
-              <button
+              <Link
+                to="/signup"
                 onClick={closeMenu}
                 className="
                   flex-1
@@ -349,6 +363,7 @@ function Navbar() {
                   from-violet-600
                   to-fuchsia-600
                   px-4 py-3
+                  text-center
                   text-sm font-semibold
                   text-white
                   transition duration-300
@@ -358,13 +373,12 @@ function Navbar() {
                 "
               >
                 Sign Up
-              </button>
+              </Link>
 
             </div>
 
           </div>
         </div>
-
       </div>
     </header>
   );
