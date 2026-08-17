@@ -1,7 +1,96 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { HiArrowRight, HiMusicalNote } from "react-icons/hi2";
 
 function Signup() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    terms: false,
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setError("");
+
+    const { name, email, password, confirmPassword, terms } = formData;
+
+    // Frontend validation
+    if (!name || !email || !password || !confirmPassword) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (!terms) {
+      setError("Please accept the Terms of Service and Privacy Policy.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5000/api/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Unable to create account.");
+        return;
+      }
+
+      // Signup successful
+      navigate("/login");
+    } catch (error) {
+      console.error("Signup error:", error);
+      setError(
+        "Unable to connect to the server. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
       <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 sm:px-6 lg:px-8">
@@ -20,7 +109,6 @@ function Signup() {
 
           {/* Brand */}
           <div className="mb-8 text-center">
-
             <Link
               to="/"
               className="inline-flex items-center gap-2"
@@ -36,7 +124,6 @@ function Signup() {
                 </span>
               </span>
             </Link>
-
           </div>
 
           {/* Signup Card */}
@@ -44,7 +131,6 @@ function Signup() {
 
             {/* Heading */}
             <div className="text-center">
-
               <span className="inline-flex rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-1.5 text-xs font-medium text-violet-400">
                 🎧 Join VerseHana
               </span>
@@ -56,11 +142,13 @@ function Signup() {
               <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
                 Start discovering music that feels right for you.
               </p>
-
             </div>
 
             {/* Form */}
-            <form className="mt-8 space-y-5">
+            <form
+              onSubmit={handleSubmit}
+              className="mt-8 space-y-5"
+            >
 
               {/* Name */}
               <div>
@@ -75,6 +163,8 @@ function Signup() {
                   id="name"
                   name="name"
                   type="text"
+                  value={formData.name}
+                  onChange={handleChange}
                   placeholder="Enter your name"
                   className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3.5 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
                 />
@@ -93,6 +183,8 @@ function Signup() {
                   id="email"
                   name="email"
                   type="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="you@example.com"
                   className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3.5 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
                 />
@@ -111,6 +203,8 @@ function Signup() {
                   id="password"
                   name="password"
                   type="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   placeholder="Create a password"
                   className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3.5 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
                 />
@@ -129,6 +223,8 @@ function Signup() {
                   id="confirmPassword"
                   name="confirmPassword"
                   type="password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                   placeholder="Confirm your password"
                   className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3.5 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
                 />
@@ -136,9 +232,11 @@ function Signup() {
 
               {/* Terms */}
               <label className="flex cursor-pointer items-start gap-3 text-xs leading-5 text-[var(--text-secondary)]">
-
                 <input
+                  name="terms"
                   type="checkbox"
+                  checked={formData.terms}
+                  onChange={handleChange}
                   className="mt-1 h-4 w-4 accent-violet-600"
                 />
 
@@ -159,19 +257,27 @@ function Signup() {
                   </button>
                   .
                 </span>
-
               </label>
+
+              {/* Error */}
+              {error && (
+                <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                  {error}
+                </div>
+              )}
 
               {/* Submit */}
               <button
                 type="submit"
-                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-violet-500/30"
+                disabled={loading}
+                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-violet-500/30 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
               >
-                Create Account
+                {loading ? "Creating account..." : "Create Account"}
 
-                <HiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+                {!loading && (
+                  <HiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+                )}
               </button>
-
             </form>
 
             {/* Login */}
@@ -184,7 +290,6 @@ function Signup() {
                 Login
               </Link>
             </p>
-
           </div>
 
           {/* Back */}

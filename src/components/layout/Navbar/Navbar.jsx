@@ -10,12 +10,16 @@ import {
 import logoDark from "../../../assets/logo/versehana-white.png";
 import logoLight from "../../../assets/logo/versehana-black.png";
 
+import { useAuth } from "../../../context/AuthContext";
+
 function Navbar() {
   const [isDark, setIsDark] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const location = useLocation();
+
+  const { user, loading, logout } = useAuth();
 
   const navLinks = [
     { name: "Home", href: "#home" },
@@ -65,12 +69,19 @@ function Navbar() {
     setMenuOpen(false);
   };
 
+  /* ---------------- LOGOUT ---------------- */
+
+  const handleLogout = async () => {
+    closeMenu();
+
+    await logout();
+  };
+
   /* ---------------- NAVIGATION ---------------- */
 
   const handleSectionClick = (href) => {
     closeMenu();
 
-    // If we're already on the homepage
     if (location.pathname === "/") {
       const element = document.querySelector(href);
 
@@ -81,7 +92,6 @@ function Navbar() {
         });
       }
     } else {
-      // Go back to homepage with the section hash
       window.location.href = `/${href}`;
     }
   };
@@ -183,43 +193,81 @@ function Navbar() {
               )}
             </button>
 
-            {/* Login */}
+            {/* ================= AUTH ACTIONS ================= */}
 
-            <Link
-              to="/login"
-              className="
-                text-sm font-medium
-                text-[var(--text-primary)]
-                transition
-                hover:text-violet-500
-              "
-            >
-              Login
-            </Link>
+            {!loading && (
+              <>
+                {!user ? (
+                  <>
+                    {/* Login */}
 
-            {/* Sign Up */}
+                    <Link
+                      to="/login"
+                      className="
+                        text-sm font-medium
+                        text-[var(--text-primary)]
+                        transition
+                        hover:text-violet-500
+                      "
+                    >
+                      Login
+                    </Link>
 
-            <Link
-              to="/signup"
-              className="
-                rounded-full
-                bg-gradient-to-r
-                from-violet-600
-                via-purple-600
-                to-fuchsia-600
-                px-5 py-2.5
-                text-sm font-semibold
-                text-white
-                transition duration-300
-                hover:scale-105
-                hover:shadow-lg
-                hover:shadow-violet-500/30
-                xl:px-6
-              "
-            >
-              Sign Up
-            </Link>
+                    {/* Sign Up */}
 
+                    <Link
+                      to="/signup"
+                      className="
+                        rounded-full
+                        bg-gradient-to-r
+                        from-violet-600
+                        via-purple-600
+                        to-fuchsia-600
+                        px-5 py-2.5
+                        text-sm font-semibold
+                        text-white
+                        transition duration-300
+                        hover:scale-105
+                        hover:shadow-lg
+                        hover:shadow-violet-500/30
+                        xl:px-6
+                      "
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    {/* Logged In User */}
+
+                    <span
+                      className="
+                        max-w-[140px]
+                        truncate
+                        text-sm font-medium
+                        text-[var(--text-primary)]
+                      "
+                    >
+                      Hi, {user.name}
+                    </span>
+
+                    {/* Logout */}
+
+                    <button
+                      onClick={handleLogout}
+                      className="
+                        text-sm font-medium
+                        text-[var(--text-secondary)]
+                        transition
+                        hover:text-red-400
+                      "
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
+              </>
+            )}
           </div>
 
           {/* ================= MOBILE ACTIONS ================= */}
@@ -330,52 +378,104 @@ function Navbar() {
 
             <div className="my-3 h-px bg-[var(--border)]" />
 
-            {/* Mobile Auth */}
+            {/* ================= MOBILE AUTH ================= */}
 
-            <div className="flex gap-3">
+            {!loading && (
+              <>
+                {!user ? (
+                  <div className="flex gap-3">
 
-              <Link
-                to="/login"
-                onClick={closeMenu}
-                className="
-                  flex-1
-                  rounded-xl
-                  border border-[var(--border)]
-                  px-4 py-3
-                  text-center
-                  text-sm font-medium
-                  text-[var(--text-primary)]
-                  transition
-                  hover:border-violet-500
-                  hover:text-violet-500
-                "
-              >
-                Login
-              </Link>
+                    <Link
+                      to="/login"
+                      onClick={closeMenu}
+                      className="
+                        flex-1
+                        rounded-xl
+                        border border-[var(--border)]
+                        px-4 py-3
+                        text-center
+                        text-sm font-medium
+                        text-[var(--text-primary)]
+                        transition
+                        hover:border-violet-500
+                        hover:text-violet-500
+                      "
+                    >
+                      Login
+                    </Link>
 
-              <Link
-                to="/signup"
-                onClick={closeMenu}
-                className="
-                  flex-1
-                  rounded-xl
-                  bg-gradient-to-r
-                  from-violet-600
-                  to-fuchsia-600
-                  px-4 py-3
-                  text-center
-                  text-sm font-semibold
-                  text-white
-                  transition duration-300
-                  hover:scale-[1.02]
-                  hover:shadow-lg
-                  hover:shadow-violet-500/20
-                "
-              >
-                Sign Up
-              </Link>
+                    <Link
+                      to="/signup"
+                      onClick={closeMenu}
+                      className="
+                        flex-1
+                        rounded-xl
+                        bg-gradient-to-r
+                        from-violet-600
+                        to-fuchsia-600
+                        px-4 py-3
+                        text-center
+                        text-sm font-semibold
+                        text-white
+                        transition duration-300
+                        hover:scale-[1.02]
+                        hover:shadow-lg
+                        hover:shadow-violet-500/20
+                      "
+                    >
+                      Sign Up
+                    </Link>
 
-            </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+
+                    {/* User */}
+
+                    <div
+                      className="
+                        rounded-xl
+                        border border-[var(--border)]
+                        bg-[var(--background)]/50
+                        px-4 py-3
+                      "
+                    >
+                      <p className="text-xs text-[var(--text-muted)]">
+                        Signed in as
+                      </p>
+
+                      <p className="mt-1 truncate text-sm font-semibold text-[var(--text-primary)]">
+                        {user.name}
+                      </p>
+
+                      <p className="mt-0.5 truncate text-xs text-[var(--text-secondary)]">
+                        {user.email}
+                      </p>
+                    </div>
+
+                    {/* Logout */}
+
+                    <button
+                      onClick={handleLogout}
+                      className="
+                        w-full
+                        rounded-xl
+                        border border-[var(--border)]
+                        px-4 py-3
+                        text-sm font-medium
+                        text-red-400
+                        transition
+                        hover:border-red-500/40
+                        hover:bg-red-500/10
+                      "
+                    >
+                      Logout
+                    </button>
+
+                  </div>
+                )}
+              </>
+            )}
 
           </div>
         </div>

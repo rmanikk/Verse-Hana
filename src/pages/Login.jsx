@@ -1,7 +1,48 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { HiArrowRight, HiMusicalNote } from "react-icons/hi2";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setError("");
+
+    // Frontend validation
+    if (!email || !password) {
+      setError("Please enter your email and password.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await login(email, password);
+
+      // Login successful
+      navigate("/");
+    } catch (error) {
+      console.error("Login error:", error);
+
+      setError(
+        error.message || "Unable to login. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
       <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 sm:px-6 lg:px-8">
@@ -58,7 +99,10 @@ function Login() {
             </div>
 
             {/* Form */}
-            <form className="mt-8 space-y-5">
+            <form
+              onSubmit={handleSubmit}
+              className="mt-8 space-y-5"
+            >
 
               {/* Email */}
               <div>
@@ -73,6 +117,8 @@ function Login() {
                   id="email"
                   name="email"
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3.5 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
                 />
@@ -102,6 +148,8 @@ function Login() {
                   id="password"
                   name="password"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3.5 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
                 />
@@ -111,6 +159,8 @@ function Login() {
               <label className="flex cursor-pointer items-center gap-3 text-sm text-[var(--text-secondary)]">
                 <input
                   type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                   className="h-4 w-4 rounded accent-violet-600"
                 />
 
@@ -119,14 +169,24 @@ function Login() {
                 </span>
               </label>
 
+              {/* Error */}
+              {error && (
+                <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                  {error}
+                </div>
+              )}
+
               {/* Submit */}
               <button
                 type="submit"
-                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-violet-500/30"
+                disabled={loading}
+                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-violet-500/30 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
               >
-                Login
+                {loading ? "Logging in..." : "Login"}
 
-                <HiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+                {!loading && (
+                  <HiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+                )}
               </button>
 
             </form>
