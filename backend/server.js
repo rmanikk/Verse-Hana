@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import audiusRoutes from "./routes/audiusRoutes.js";
 
 dotenv.config();
 
@@ -30,6 +31,8 @@ app.use(cookieParser());
 
 // Authentication
 app.use("/api/auth", authRoutes);
+// Music
+app.use("/api/music", audiusRoutes);
 
 // Test route
 app.get("/", (req, res) => {
