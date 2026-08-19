@@ -39,6 +39,7 @@ router.post("/signup", async (req, res) => {
       email,
       password: hashedPassword,
       role: "user",
+      status: "active",
     });
 
     return res.status(201).json({
@@ -48,6 +49,7 @@ router.post("/signup", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
       },
     });
   } catch (error) {
@@ -80,6 +82,12 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.status(401).json({
         message: "Invalid email or password.",
+      });
+    }
+
+    if (user.status === "suspended") {
+      return res.status(403).json({
+        message: "This account has been suspended.",
       });
     }
 
@@ -125,6 +133,7 @@ router.post("/login", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
       },
     });
   } catch (error) {
@@ -146,8 +155,9 @@ router.get("/me", protect, async (req, res) => {
     user: {
       id: req.user._id,
       name: req.user.name,
-      email: req.user.email,
-      role: req.user.role,
+        email: req.user.email,
+        role: req.user.role,
+        status: req.user.status || "active",
     },
   });
 });

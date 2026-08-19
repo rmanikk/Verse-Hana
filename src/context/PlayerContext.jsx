@@ -21,6 +21,37 @@ export function PlayerProvider({ children }) {
   const [volume, setVolume] = useState(1);
 
   // =====================================================
+  // ADD SONG TO RECENTLY PLAYED
+  // =====================================================
+
+  const addToHistory = async (song) => {
+    try {
+      if (!song) return;
+
+      await fetch("http://localhost:5000/api/history", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          songId: song.id,
+          title: song.title,
+          artist: song.user?.name || "Unknown artist",
+          artwork:
+            song.artwork?.["480x480"] ||
+            song.artwork?.["150x150"] ||
+            song.artwork?.["1000x1000"] ||
+            "",
+        }),
+      });
+    } catch (error) {
+      // History should NEVER break music playback
+      console.error("History error:", error);
+    }
+  };
+
+  // =====================================================
   // AUDIO EVENTS
   // =====================================================
 
@@ -46,7 +77,6 @@ export function PlayerProvider({ children }) {
         if (nextIndex < queue.length) {
           const nextTrack = queue[nextIndex];
 
-          // Load next track asynchronously
           setTimeout(() => {
             loadSong(nextTrack);
           }, 0);
@@ -59,16 +89,27 @@ export function PlayerProvider({ children }) {
     };
 
     audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener(
+      "loadedmetadata",
+      handleLoadedMetadata
+    );
     audio.addEventListener("ended", handleEnded);
 
     return () => {
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener(
+        "timeupdate",
+        handleTimeUpdate
+      );
+
       audio.removeEventListener(
         "loadedmetadata",
         handleLoadedMetadata
       );
-      audio.removeEventListener("ended", handleEnded);
+
+      audio.removeEventListener(
+        "ended",
+        handleEnded
+      );
     };
   }, [queue]);
 
@@ -97,6 +138,10 @@ export function PlayerProvider({ children }) {
       await audio.play();
 
       setIsPlaying(true);
+
+      // Record song after playback successfully starts
+      addToHistory(song);
+
     } catch (error) {
       console.error("Song loading error:", error);
       setIsPlaying(false);
@@ -141,6 +186,7 @@ export function PlayerProvider({ children }) {
       }
 
       await loadSong(song);
+
     } catch (error) {
       console.error("Playback error:", error);
       setIsPlaying(false);

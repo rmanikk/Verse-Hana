@@ -6,9 +6,12 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import MoodSelection from "./pages/MoodSelection";
 import UserDashboard from "./pages/UserDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import MusicPlayer from "./components/music/MusicPlayer";
+import LikedSongs from "./pages/LikedSongs";
+import RecentlyPlayed from "./pages/RecentlyPlayed";
 
 function App() {
   return (
@@ -25,6 +28,13 @@ function App() {
           <Route path="/mood" element={<MoodSelection />} />
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/liked-songs" element={<LikedSongs />} />
+           <Route path="/recently-played" element={<RecentlyPlayed />} />
+        </Route>
+
+        {/* Admin-only routes */}
+        <Route element={<ProtectedRoute requiredRole="admin" />}>
+          <Route path="/admin" element={<AdminDashboard />} />
         </Route>
 
       </Routes>

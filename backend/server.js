@@ -6,6 +6,10 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import audiusRoutes from "./routes/audiusRoutes.js";
+import likeRoutes from "./routes/likeRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import catalogRoutes from "./routes/catalogRoutes.js";
+import historyRoutes from "./routes/historyRoutes.js";
 
 dotenv.config();
 
@@ -33,6 +37,13 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 // Music
 app.use("/api/music", audiusRoutes);
+//Like
+app.use("/api/likes", likeRoutes);
+//history
+app.use("/api/history", historyRoutes);
+// Admin
+app.use("/api/admin", adminRoutes);
+app.use("/api/admin", catalogRoutes);
 
 // Test route
 app.get("/", (req, res) => {

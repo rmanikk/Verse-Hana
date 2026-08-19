@@ -251,6 +251,15 @@ function Navbar() {
                       Hi, {user.name}
                     </span>
 
+                    {user.role === "admin" && (
+                      <Link
+                        to="/admin"
+                        className="text-sm font-semibold text-violet-400 transition hover:text-violet-300"
+                      >
+                        Admin
+                      </Link>
+                    )}
+
                     {/* Logout */}
 
                     <button
@@ -452,6 +461,16 @@ function Navbar() {
                         {user.email}
                       </p>
                     </div>
+
+                    {user.role === "admin" && (
+                      <Link
+                        to="/admin"
+                        onClick={closeMenu}
+                        className="block w-full rounded-xl border border-violet-500/25 bg-violet-500/10 px-4 py-3 text-center text-sm font-semibold text-violet-300 transition hover:border-violet-500/50 hover:bg-violet-500/15"
+                      >
+                        Open admin workspace
+                      </Link>
+                    )}
 
                     {/* Logout */}
 

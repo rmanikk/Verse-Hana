@@ -27,6 +27,12 @@ const protect = async (req, res, next) => {
       });
     }
 
+    if (user.status === "suspended") {
+      return res.status(403).json({
+        message: "This account has been suspended.",
+      });
+    }
+
     // Attach user to request
     req.user = user;
 
@@ -38,6 +44,16 @@ const protect = async (req, res, next) => {
       message: "Invalid or expired authentication.",
     });
   }
+};
+
+export const adminOnly = (req, res, next) => {
+  if (req.user?.role !== "admin") {
+    return res.status(403).json({
+      message: "Admin access required.",
+    });
+  }
+
+  next();
 };
 
 export default protect;

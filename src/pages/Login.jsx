@@ -28,10 +28,10 @@ function Login() {
     try {
       setLoading(true);
 
-      await login(email, password);
+      const data = await login(email, password);
 
-      // Login successful
-      navigate("/");
+      // Send each account to its role-appropriate workspace.
+      navigate(data.user.role === "admin" ? "/admin" : "/dashboard");
     } catch (error) {
       console.error("Login error:", error);
 
