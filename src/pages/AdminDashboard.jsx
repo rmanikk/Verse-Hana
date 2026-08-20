@@ -545,11 +545,43 @@ function AdminDashboard() {
                 </div>
               </section>
 
-              <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <StatCard icon={<HiUserGroup className="text-xl" />} label="Total members" value={stats.totalUsers} detail={`${formatNumber(stats.activeUsers)} active accounts`} />
-                <StatCard icon={<HiShieldCheck className="text-xl" />} label="Administrators" value={stats.adminUsers} detail="Protected workspace access" tone="sky" />
-                <StatCard icon={<HiHeart className="text-xl" />} label="Songs saved" value={stats.totalLikes} detail={`${formatNumber(stats.uniqueTracks)} unique tracks`} tone="pink" />
-                <StatCard icon={<HiNoSymbol className="text-xl" />} label="Suspended accounts" value={stats.suspendedUsers} detail="Cannot sign in or use the API" tone="emerald" />
+              <section className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                  <StatCard icon={<HiUserGroup className="text-xl" />} label="Total members" value={stats.totalUsers} detail={`${formatNumber(stats.activeUsers)} active accounts`} />
+                  <StatCard icon={<HiShieldCheck className="text-xl" />} label="Administrators" value={stats.adminUsers} detail="Protected workspace access" tone="sky" />
+                  <StatCard icon={<HiHeart className="text-xl" />} label="Songs saved" value={stats.totalLikes} detail={`${formatNumber(stats.uniqueTracks)} unique tracks`} tone="pink" />
+                  <StatCard icon={<HiNoSymbol className="text-xl" />} label="Suspended accounts" value={stats.suspendedUsers} detail="Cannot sign in or use the API" tone="emerald" />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                  <StatCard
+                    icon={<HiCheckCircle className="text-xl" />}
+                    label="Active accounts"
+                    value={stats.activeUsers}
+                    detail="Members currently able to use VerseHana"
+                    tone="emerald"
+                  />
+                  <StatCard
+                    icon={<HiNoSymbol className="text-xl" />}
+                    label="Accounts needing review"
+                    value={stats.suspendedUsers}
+                    detail="Suspended accounts requiring attention"
+                  />
+                  <StatCard
+                    icon={<HiMusicalNote className="text-xl" />}
+                    label="Unique tracks"
+                    value={stats.uniqueTracks}
+                    detail="Different tracks saved by members"
+                    tone="sky"
+                  />
+                  <StatCard
+                    icon={<HiClock className="text-xl" />}
+                    label="Recent admin activity"
+                    value={recentActivity.length}
+                    detail="Actions visible in the latest activity feed"
+                    tone="violet"
+                  />
+                </div>
               </section>
 
               <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
