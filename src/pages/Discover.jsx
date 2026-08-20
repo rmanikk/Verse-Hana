@@ -12,6 +12,8 @@ import {
   HiPause,
   HiPlus,
   HiXMark,
+  HiChevronLeft,
+  HiChevronRight,
 } from "react-icons/hi2";
 
 import { useAuth } from "../context/AuthContext";
@@ -53,6 +55,13 @@ function Discover() {
 
   const [artists, setArtists] = useState([]);
   const [loadingArtists, setLoadingArtists] = useState(true);
+
+  // Pagination
+  const SONGS_PER_PAGE = 6;
+  const ARTISTS_PER_PAGE = 4;
+
+  const [trackPage, setTrackPage] = useState(1);
+  const [artistPage, setArtistPage] = useState(1);
 
   const [likedSongs, setLikedSongs] = useState([]);
   const [likingSong, setLikingSong] = useState(null);
@@ -98,10 +107,57 @@ function Discover() {
   };
 
   // =====================================================
+  // FETCH ALL MUSIC
+  // =====================================================
+
+  const fetchAllMusic = async () => {
+    try {
+      // The public music API does not expose /api/music.
+      // Use the working Audius trending endpoint instead.
+      const response = await fetch(
+        `${API_URL}/api/music/trending?limit=100`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+
+      const data = await getJson(response);
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to fetch music."
+        );
+      }
+
+      const music =
+        data.tracks ||
+        data.music ||
+        data.songs ||
+        [];
+
+      setAllTracks(music);
+
+      return music;
+    } catch (error) {
+      console.error(
+        "Fetch all music error:",
+        error
+      );
+
+      throw error;
+    }
+  };
+
+  // =====================================================
   // FETCH MUSIC
   // =====================================================
 
-   const fetchTracks = async (query = "") => {
+  const fetchTracks = async (query = "") => {
     try {
       setLoading(true);
       setError("");
@@ -109,18 +165,19 @@ function Discover() {
       let url;
 
       if (query.trim()) {
-        // Search endpoint
         url = `${API_URL}/api/music/search?q=${encodeURIComponent(
           query.trim()
         )}&limit=20`;
       } else {
-        // Default Discover page
         url = `${API_URL}/api/music/trending?limit=20`;
       }
 
       const response = await fetch(url, {
         method: "GET",
         credentials: "include",
+        headers: {
+          Accept: "application/json",
+        },
       });
 
       const contentType =
@@ -136,7 +193,8 @@ function Discover() {
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Failed to fetch music."
+          data.message ||
+            "Failed to fetch music."
         );
       }
 
@@ -147,7 +205,10 @@ function Discover() {
           []
       );
     } catch (error) {
-      console.error("Discover music error:", error);
+      console.error(
+        "Discover music error:",
+        error
+      );
 
       setError(
         error.message ||
@@ -158,8 +219,6 @@ function Discover() {
     }
   };
 
-
-
   // =====================================================
   // TRENDING
   // =====================================================
@@ -169,7 +228,7 @@ function Discover() {
       setLoadingTrending(true);
 
       const response = await fetch(
-        `${API_URL}/api/music/trending`,
+        `${API_URL}/api/music/trending?limit=6`,
         {
           method: "GET",
           credentials: "include",
@@ -187,12 +246,13 @@ function Discover() {
 
       const data = await getJson(response);
 
-      setTrendingTracks(
+      const trending =
         data.tracks ||
-          data.music ||
-          data.songs ||
-          []
-      );
+        data.music ||
+        data.songs ||
+        [];
+
+      setTrendingTracks(trending);
     } catch (error) {
       console.warn(
         "Trending endpoint unavailable. Using music catalog.",
@@ -202,7 +262,9 @@ function Discover() {
       try {
         const music = await fetchAllMusic();
 
-        setTrendingTracks(music.slice(0, 6));
+        setTrendingTracks(
+          music.slice(0, 6)
+        );
       } catch (fallbackError) {
         console.error(
           "Trending fallback error:",
@@ -224,24 +286,38 @@ function Discover() {
     try {
       setLoadingArtists(true);
 
-      const music = await fetchAllMusic();
+      const music =
+        allTracks.length > 0
+          ? allTracks
+          : await fetchAllMusic();
 
       const artistMap = new Map();
 
       music.forEach((track) => {
+        // Audius tracks normally keep the artist inside `user`.
+        // Keep a few fallbacks so the section still works if the
+        // API response shape changes slightly.
         const artist =
           track.user?.name ||
-          track.artist ||
+          track.user?.handle ||
+          track.user?.username ||
+          (typeof track.artist === "string"
+            ? track.artist
+            : track.artist?.name) ||
           "Unknown Artist";
+
+        const artwork =
+          track.user?.profile_picture?.["480x480"] ||
+          track.user?.profile_picture?.["150x150"] ||
+          track.artwork?.["480x480"] ||
+          track.artwork?.["150x150"] ||
+          track.artwork?.["1000x1000"] ||
+          "";
 
         if (!artistMap.has(artist)) {
           artistMap.set(artist, {
             name: artist,
-            artwork:
-              track.artwork?.["480x480"] ||
-              track.artwork?.["150x150"] ||
-              track.artwork?.["1000x1000"] ||
-              "",
+            artwork,
             songCount: 1,
           });
         } else {
@@ -252,25 +328,25 @@ function Discover() {
 
           if (
             !existing.artwork &&
-            track.artwork
+            artwork
           ) {
-            existing.artwork =
-              track.artwork?.["480x480"] ||
-              track.artwork?.["150x150"] ||
-              track.artwork?.["1000x1000"] ||
-              "";
+            existing.artwork = artwork;
           }
         }
       });
 
+      // Keep all discovered artists; pagination controls
+      // decide how many are displayed at once.
       setArtists(
-        Array.from(artistMap.values()).slice(
-          0,
-          8
+        Array.from(artistMap.values()).sort(
+          (a, b) => b.songCount - a.songCount
         )
       );
     } catch (error) {
-      console.error("Artists error:", error);
+      console.error(
+        "Artists error:",
+        error
+      );
 
       setArtists([]);
     } finally {
@@ -347,7 +423,9 @@ function Discover() {
 
       const data = await getJson(response);
 
-      setPlaylists(data.playlists || []);
+      setPlaylists(
+        data.playlists || []
+      );
     } catch (error) {
       console.error(
         "Fetch playlists error:",
@@ -355,13 +433,28 @@ function Discover() {
       );
     }
   };
+
   // =====================================================
   // INITIAL LOAD
   // =====================================================
 
   useEffect(() => {
     fetchTracks();
+    fetchTrending();
+    fetchArtists();
+    fetchLikedSongs();
+    fetchPlaylists();
   }, []);
+
+  // Reset pagination whenever the result set changes.
+  useEffect(() => {
+    setTrackPage(1);
+  }, [tracks]);
+
+  useEffect(() => {
+    setArtistPage(1);
+  }, [artists]);
+
   // =====================================================
   // SEARCH
   // =====================================================
@@ -405,7 +498,12 @@ function Discover() {
         );
       }
 
-      setTracks(data.tracks || []);
+      setTracks(
+        data.tracks ||
+          data.music ||
+          data.songs ||
+          []
+      );
     } catch (error) {
       console.error(
         "Mood discover error:",
@@ -662,6 +760,36 @@ function Discover() {
 
       return "Discover music";
     }, [activeMood, search]);
+
+  const totalTrackPages = Math.max(
+    1,
+    Math.ceil(tracks.length / SONGS_PER_PAGE)
+  );
+
+  const visibleTracks = useMemo(() => {
+    const start =
+      (trackPage - 1) * SONGS_PER_PAGE;
+
+    return tracks.slice(
+      start,
+      start + SONGS_PER_PAGE
+    );
+  }, [tracks, trackPage]);
+
+  const totalArtistPages = Math.max(
+    1,
+    Math.ceil(artists.length / ARTISTS_PER_PAGE)
+  );
+
+  const visibleArtists = useMemo(() => {
+    const start =
+      (artistPage - 1) * ARTISTS_PER_PAGE;
+
+    return artists.slice(
+      start,
+      start + ARTISTS_PER_PAGE
+    );
+  }, [artists, artistPage]);
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
@@ -1016,26 +1144,50 @@ function Discover() {
                   {!loading &&
                     !error &&
                     tracks.length > 0 && (
-                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                      <>
+                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
 
-                        {tracks.map((track) => (
-                          <DiscoverCard
-                            key={track.id}
-                            track={track}
-                            tracks={tracks}
-                            currentSong={currentSong}
-                            isPlaying={isPlaying}
-                            onPlay={handlePlay}
-                            isLiked={isLiked(track.id)}
-                            onLike={handleLike}
-                            likingSong={likingSong}
-                            onPlaylist={
-                              openPlaylistModal
+                          {visibleTracks.map((track) => (
+                            <DiscoverCard
+                              key={track.id}
+                              track={track}
+                              tracks={tracks}
+                              currentSong={currentSong}
+                              isPlaying={isPlaying}
+                              onPlay={handlePlay}
+                              isLiked={isLiked(track.id)}
+                              onLike={handleLike}
+                              likingSong={likingSong}
+                              onPlaylist={
+                                openPlaylistModal
+                              }
+                            />
+                          ))}
+
+                        </div>
+
+                        {totalTrackPages > 1 && (
+                          <PaginationControls
+                            currentPage={trackPage}
+                            totalPages={totalTrackPages}
+                            totalItems={tracks.length}
+                            itemsPerPage={SONGS_PER_PAGE}
+                            onPrevious={() =>
+                              setTrackPage((page) =>
+                                Math.max(1, page - 1)
+                              )
+                            }
+                            onNext={() =>
+                              setTrackPage((page) =>
+                                Math.min(
+                                  totalTrackPages,
+                                  page + 1
+                                )
+                              )
                             }
                           />
-                        ))}
-
-                      </div>
+                        )}
+                      </>
                     )}
 
                 </section>
@@ -1175,56 +1327,75 @@ function Discover() {
 
                     </div>
                   ) : (
-                    <div className="grid grid-cols-2 gap-3">
+                    <>
+                      <div className="grid grid-cols-2 gap-3">
 
-                      {artists.map(
-                        (artist) => (
-                          <button
-                            key={artist.name}
-                            type="button"
-                            onClick={() =>
-                              handleArtist(
-                                artist.name
+                        {visibleArtists.map(
+                          (artist) => (
+                            <button
+                              key={artist.name}
+                              type="button"
+                              onClick={() =>
+                                handleArtist(
+                                  artist.name
+                                )
+                              }
+                              className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-4 text-center transition hover:-translate-y-1 hover:border-violet-500/30 hover:bg-violet-500/5"
+                            >
+
+                              <div className="mx-auto flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet-500/30 to-fuchsia-500/30">
+
+                                {artist.artwork ? (
+                                  <img
+                                    src={artist.artwork}
+                                    alt={artist.name}
+                                    className="h-full w-full object-cover transition duration-300 group-hover:scale-110"
+                                  />
+                                ) : (
+                                  <HiMusicalNote className="text-2xl text-violet-400" />
+                                )}
+
+                              </div>
+
+                              <h3 className="mt-3 truncate text-sm font-semibold">
+                                {artist.name}
+                              </h3>
+
+                              <p className="mt-1 text-xs text-[var(--text-muted)]">
+                                {artist.songCount}{" "}
+                                {artist.songCount === 1
+                                  ? "song"
+                                  : "songs"}
+                              </p>
+
+                            </button>
+                          )
+                        )}
+
+                      </div>
+
+                      {totalArtistPages > 1 && (
+                        <PaginationControls
+                          currentPage={artistPage}
+                          totalPages={totalArtistPages}
+                          totalItems={artists.length}
+                          itemsPerPage={ARTISTS_PER_PAGE}
+                          onPrevious={() =>
+                            setArtistPage((page) =>
+                              Math.max(1, page - 1)
+                            )
+                          }
+                          onNext={() =>
+                            setArtistPage((page) =>
+                              Math.min(
+                                totalArtistPages,
+                                page + 1
                               )
-                            }
-                            className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-4 text-center transition hover:-translate-y-1 hover:border-violet-500/30 hover:bg-violet-500/5"
-                          >
-
-                            <div className="mx-auto flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet-500/30 to-fuchsia-500/30">
-
-                              {artist.artwork ? (
-                                <img
-                                  src={
-                                    artist.artwork
-                                  }
-                                  alt={
-                                    artist.name
-                                  }
-                                  className="h-full w-full object-cover transition duration-300 group-hover:scale-110"
-                                />
-                              ) : (
-                                <HiMusicalNote className="text-2xl text-violet-400" />
-                              )}
-
-                            </div>
-
-                            <h3 className="mt-3 truncate text-sm font-semibold">
-                              {artist.name}
-                            </h3>
-
-                            <p className="mt-1 text-xs text-[var(--text-muted)]">
-                              {artist.songCount}{" "}
-                              {artist.songCount ===
-                              1
-                                ? "song"
-                                : "songs"}
-                            </p>
-
-                          </button>
-                        )
+                            )
+                          }
+                        />
                       )}
-
-                    </div>
+                    </>
                   )}
 
                 </section>
@@ -1598,6 +1769,59 @@ function TrendingCard({
       </div>
 
     </button>
+  );
+}
+
+function PaginationControls({
+  currentPage,
+  totalPages,
+  totalItems,
+  itemsPerPage,
+  onPrevious,
+  onNext,
+}) {
+  const firstItem =
+    totalItems === 0
+      ? 0
+      : (currentPage - 1) * itemsPerPage + 1;
+
+  const lastItem = Math.min(
+    currentPage * itemsPerPage,
+    totalItems
+  );
+
+  return (
+    <div className="mt-6 flex items-center justify-between gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3 sm:p-4">
+      <p className="text-xs text-[var(--text-muted)] sm:text-sm">
+        Showing {firstItem}-{lastItem} of {totalItems}
+      </p>
+
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={onPrevious}
+          disabled={currentPage === 1}
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400 disabled:cursor-not-allowed disabled:opacity-40"
+          aria-label="Previous page"
+        >
+          <HiChevronLeft className="text-lg" />
+        </button>
+
+        <span className="min-w-[70px] text-center text-xs font-medium text-[var(--text-secondary)] sm:text-sm">
+          {currentPage} / {totalPages}
+        </span>
+
+        <button
+          type="button"
+          onClick={onNext}
+          disabled={currentPage === totalPages}
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400 disabled:cursor-not-allowed disabled:opacity-40"
+          aria-label="Next page"
+        >
+          <HiChevronRight className="text-lg" />
+        </button>
+      </div>
+    </div>
   );
 }
 
