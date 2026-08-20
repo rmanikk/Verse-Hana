@@ -1,17 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  HiArrowLeft,
+  HiHome,
   HiMagnifyingGlass,
+  HiHeart,
+  HiQueueList,
+  HiClock,
   HiMusicalNote,
+  HiArrowRightOnRectangle,
   HiPlay,
   HiPause,
-  HiHeart,
   HiPlus,
   HiXMark,
-  HiQueueList,
 } from "react-icons/hi2";
 
+import { useAuth } from "../context/AuthContext";
 import { usePlayer } from "../context/PlayerContext";
 
 const API_URL = "http://localhost:5000";
@@ -28,6 +31,8 @@ const moods = [
 ];
 
 function Discover() {
+  const { user, logout } = useAuth();
+
   const {
     currentSong,
     isPlaying,
@@ -35,35 +40,68 @@ function Discover() {
   } = usePlayer();
 
   const [tracks, setTracks] = useState([]);
+  const [allTracks, setAllTracks] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const [search, setSearch] = useState("");
   const [activeMood, setActiveMood] = useState("");
 
-  // =====================================================
-  // LIKES
-  // =====================================================
+  const [trendingTracks, setTrendingTracks] = useState([]);
+  const [loadingTrending, setLoadingTrending] = useState(true);
+
+  const [artists, setArtists] = useState([]);
+  const [loadingArtists, setLoadingArtists] = useState(true);
 
   const [likedSongs, setLikedSongs] = useState([]);
   const [likingSong, setLikingSong] = useState(null);
 
-  // =====================================================
-  // PLAYLISTS
-  // =====================================================
-
   const [playlists, setPlaylists] = useState([]);
-  const [playlistModalSong, setPlaylistModalSong] =
+  const [showPlaylistModal, setShowPlaylistModal] =
+    useState(false);
+  const [selectedTrack, setSelectedTrack] =
     useState(null);
-
   const [addingToPlaylist, setAddingToPlaylist] =
     useState(null);
+
+  // =====================================================
+  // SAFE JSON RESPONSE
+  // =====================================================
+
+  const getJson = async (response) => {
+    const contentType =
+      response.headers.get("content-type") || "";
+
+    const text = await response.text();
+
+    if (!contentType.includes("application/json")) {
+      console.error(
+        "Expected JSON but received:",
+        text.substring(0, 500)
+      );
+
+      throw new Error(
+        `Server returned ${response.status} ${response.statusText}.`
+      );
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      console.error("Invalid JSON response:", text);
+
+      throw new Error(
+        "The server returned invalid JSON."
+      );
+    }
+  };
 
   // =====================================================
   // FETCH MUSIC
   // =====================================================
 
-  const fetchTracks = async (query = "") => {
+   const fetchTracks = async (query = "") => {
     try {
       setLoading(true);
       setError("");
@@ -71,12 +109,13 @@ function Discover() {
       let url;
 
       if (query.trim()) {
-        url =
-          `${API_URL}/api/music/search?q=` +
-          `${encodeURIComponent(query.trim())}&limit=20`;
+        // Search endpoint
+        url = `${API_URL}/api/music/search?q=${encodeURIComponent(
+          query.trim()
+        )}&limit=20`;
       } else {
-        url =
-          `${API_URL}/api/music/trending?limit=20`;
+        // Default Discover page
+        url = `${API_URL}/api/music/trending?limit=20`;
       }
 
       const response = await fetch(url, {
@@ -119,15 +158,125 @@ function Discover() {
     }
   };
 
+
+
   // =====================================================
-  // INITIAL LOAD
+  // TRENDING
   // =====================================================
 
-  useEffect(() => {
-    fetchTracks();
-    fetchLikedSongs();
-    fetchPlaylists();
-  }, []);
+  const fetchTrending = async () => {
+    try {
+      setLoadingTrending(true);
+
+      const response = await fetch(
+        `${API_URL}/api/music/trending`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Trending endpoint unavailable."
+        );
+      }
+
+      const data = await getJson(response);
+
+      setTrendingTracks(
+        data.tracks ||
+          data.music ||
+          data.songs ||
+          []
+      );
+    } catch (error) {
+      console.warn(
+        "Trending endpoint unavailable. Using music catalog.",
+        error
+      );
+
+      try {
+        const music = await fetchAllMusic();
+
+        setTrendingTracks(music.slice(0, 6));
+      } catch (fallbackError) {
+        console.error(
+          "Trending fallback error:",
+          fallbackError
+        );
+
+        setTrendingTracks([]);
+      }
+    } finally {
+      setLoadingTrending(false);
+    }
+  };
+
+  // =====================================================
+  // FETCH ARTISTS
+  // =====================================================
+
+  const fetchArtists = async () => {
+    try {
+      setLoadingArtists(true);
+
+      const music = await fetchAllMusic();
+
+      const artistMap = new Map();
+
+      music.forEach((track) => {
+        const artist =
+          track.user?.name ||
+          track.artist ||
+          "Unknown Artist";
+
+        if (!artistMap.has(artist)) {
+          artistMap.set(artist, {
+            name: artist,
+            artwork:
+              track.artwork?.["480x480"] ||
+              track.artwork?.["150x150"] ||
+              track.artwork?.["1000x1000"] ||
+              "",
+            songCount: 1,
+          });
+        } else {
+          const existing =
+            artistMap.get(artist);
+
+          existing.songCount += 1;
+
+          if (
+            !existing.artwork &&
+            track.artwork
+          ) {
+            existing.artwork =
+              track.artwork?.["480x480"] ||
+              track.artwork?.["150x150"] ||
+              track.artwork?.["1000x1000"] ||
+              "";
+          }
+        }
+      });
+
+      setArtists(
+        Array.from(artistMap.values()).slice(
+          0,
+          8
+        )
+      );
+    } catch (error) {
+      console.error("Artists error:", error);
+
+      setArtists([]);
+    } finally {
+      setLoadingArtists(false);
+    }
+  };
 
   // =====================================================
   // FETCH LIKED SONGS
@@ -140,126 +289,38 @@ function Discover() {
         {
           method: "GET",
           credentials: "include",
+          headers: {
+            Accept: "application/json",
+          },
         }
       );
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(
-          data.message ||
-            "Failed to fetch liked songs."
-        );
+        return;
       }
 
-      setLikedSongs(data.likes || []);
+      const data = await getJson(response);
+
+      const likes =
+        data.likes ||
+        data.songs ||
+        [];
+
+      setLikedSongs(
+        likes
+          .map(
+            (song) =>
+              song.songId ||
+              song.id ||
+              song._id
+          )
+          .filter(Boolean)
+      );
     } catch (error) {
       console.error(
-        "Fetch liked songs error:",
+        "Fetch likes error:",
         error
       );
-    }
-  };
-
-  // =====================================================
-  // CHECK LIKE
-  // =====================================================
-
-  const isLiked = (songId) => {
-    return likedSongs.some(
-      (like) =>
-        String(like.songId) === String(songId)
-    );
-  };
-
-  // =====================================================
-  // LIKE / UNLIKE
-  // =====================================================
-
-  const handleLike = async (track) => {
-    if (
-      !track ||
-      likingSong === track.id
-    ) {
-      return;
-    }
-
-    const alreadyLiked = isLiked(track.id);
-
-    try {
-      setLikingSong(track.id);
-
-      const method = alreadyLiked
-        ? "DELETE"
-        : "POST";
-
-      const response = await fetch(
-        `${API_URL}/api/likes/${track.id}`,
-        {
-          method,
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body:
-            method === "POST"
-              ? JSON.stringify({
-                  title: track.title,
-                  artist:
-                    track.user?.name ||
-                    "Unknown artist",
-                  artwork:
-                    track.artwork?.["480x480"] ||
-                    track.artwork?.["150x150"] ||
-                    track.artwork?.["1000x1000"] ||
-                    "",
-                })
-              : undefined,
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message ||
-            "Failed to update like."
-        );
-      }
-
-      if (alreadyLiked) {
-        setLikedSongs((previous) =>
-          previous.filter(
-            (like) =>
-              String(like.songId) !==
-              String(track.id)
-          )
-        );
-      } else {
-        setLikedSongs((previous) => [
-          {
-            songId: track.id,
-            title: track.title,
-            artist:
-              track.user?.name ||
-              "Unknown artist",
-            artwork:
-              track.artwork?.["480x480"] ||
-              track.artwork?.["150x150"] ||
-              track.artwork?.["1000x1000"] ||
-              "",
-          },
-          ...previous,
-        ]);
-      }
-    } catch (error) {
-      console.error("Like error:", error);
-      alert(
-        error.message ||
-          "Failed to update like."
-      );
-    } finally {
-      setLikingSong(null);
     }
   };
 
@@ -274,17 +335,17 @@ function Discover() {
         {
           method: "GET",
           credentials: "include",
+          headers: {
+            Accept: "application/json",
+          },
         }
       );
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(
-          data.message ||
-            "Failed to fetch playlists."
-        );
+        return;
       }
+
+      const data = await getJson(response);
 
       setPlaylists(data.playlists || []);
     } catch (error) {
@@ -294,81 +355,13 @@ function Discover() {
       );
     }
   };
-
   // =====================================================
-  // ADD SONG TO PLAYLIST
+  // INITIAL LOAD
   // =====================================================
 
-  const handleAddToPlaylist = async (
-    playlist,
-    track
-  ) => {
-    if (!playlist || !track) {
-      return;
-    }
-
-    const key = `${playlist._id}-${track.id}`;
-
-    try {
-      setAddingToPlaylist(key);
-
-      const artwork =
-        track.artwork?.["480x480"] ||
-        track.artwork?.["150x150"] ||
-        track.artwork?.["1000x1000"] ||
-        "";
-
-      const response = await fetch(
-        `${API_URL}/api/playlists/${playlist._id}/songs`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            songId: track.id,
-            title: track.title,
-            artist:
-              track.user?.name ||
-              "Unknown artist",
-            artwork,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message ||
-            "Failed to add song to playlist."
-        );
-      }
-
-      alert(
-        `"${track.title}" added to "${playlist.name}".`
-      );
-
-      setPlaylistModalSong(null);
-
-      // Refresh playlists so song counts/artwork update
-      fetchPlaylists();
-    } catch (error) {
-      console.error(
-        "Add to playlist error:",
-        error
-      );
-
-      alert(
-        error.message ||
-          "Failed to add song to playlist."
-      );
-    } finally {
-      setAddingToPlaylist(null);
-    }
-  };
-
+  useEffect(() => {
+    fetchTracks();
+  }, []);
   // =====================================================
   // SEARCH
   // =====================================================
@@ -377,6 +370,7 @@ function Discover() {
     event.preventDefault();
 
     setActiveMood("");
+
     fetchTracks(search);
   };
 
@@ -396,19 +390,13 @@ function Discover() {
         {
           method: "GET",
           credentials: "include",
+          headers: {
+            Accept: "application/json",
+          },
         }
       );
 
-      const contentType =
-        response.headers.get("content-type") || "";
-
-      if (!contentType.includes("application/json")) {
-        throw new Error(
-          "The music server returned an invalid response."
-        );
-      }
-
-      const data = await response.json();
+      const data = await getJson(response);
 
       if (!response.ok) {
         throw new Error(
@@ -428,8 +416,217 @@ function Discover() {
         error.message ||
           "We couldn't load this mood."
       );
+
+      setTracks([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // =====================================================
+  // ARTIST SEARCH
+  // =====================================================
+
+  const handleArtist = (artistName) => {
+    setSearch(artistName);
+    setActiveMood("");
+
+    fetchTracks(artistName);
+  };
+
+  // =====================================================
+  // LIKE CHECK
+  // =====================================================
+
+  const isLiked = (songId) => {
+    return likedSongs.some(
+      (id) =>
+        String(id) === String(songId)
+    );
+  };
+
+  // =====================================================
+  // LIKE / UNLIKE
+  // =====================================================
+
+  const handleLike = async (track) => {
+    if (
+      !track ||
+      likingSong === track.id
+    ) {
+      return;
+    }
+
+    const alreadyLiked =
+      isLiked(track.id);
+
+    try {
+      setLikingSong(track.id);
+
+      const method = alreadyLiked
+        ? "DELETE"
+        : "POST";
+
+      const response = await fetch(
+        `${API_URL}/api/likes/${track.id}`,
+        {
+          method,
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type":
+              "application/json",
+          },
+          body:
+            method === "POST"
+              ? JSON.stringify({
+                  title: track.title,
+                  artist:
+                    track.user?.name ||
+                    track.artist ||
+                    "Unknown artist",
+                  artwork:
+                    track.artwork?.[
+                      "480x480"
+                    ] ||
+                    track.artwork?.[
+                      "150x150"
+                    ] ||
+                    track.artwork?.[
+                      "1000x1000"
+                    ] ||
+                    "",
+                })
+              : undefined,
+        }
+      );
+
+      const data = await getJson(response);
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to update like."
+        );
+      }
+
+      if (!alreadyLiked) {
+        setLikedSongs((previous) => [
+          ...previous,
+          track.id,
+        ]);
+      } else {
+        setLikedSongs((previous) =>
+          previous.filter(
+            (id) =>
+              String(id) !==
+              String(track.id)
+          )
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Like error:",
+        error
+      );
+
+      alert(
+        error.message ||
+          "Failed to update like."
+      );
+    } finally {
+      setLikingSong(null);
+    }
+  };
+
+  // =====================================================
+  // OPEN PLAYLIST MODAL
+  // =====================================================
+
+  const openPlaylistModal = (track) => {
+    setSelectedTrack(track);
+    setShowPlaylistModal(true);
+  };
+
+  // =====================================================
+  // ADD TO PLAYLIST
+  // =====================================================
+
+  const handleAddToPlaylist = async (
+    playlistId
+  ) => {
+    if (
+      !selectedTrack ||
+      addingToPlaylist
+    ) {
+      return;
+    }
+
+    try {
+      setAddingToPlaylist(playlistId);
+
+      const response = await fetch(
+        `${API_URL}/api/playlists/${playlistId}/songs`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify({
+            songId: selectedTrack.id,
+            title: selectedTrack.title,
+            artist:
+              selectedTrack.user?.name ||
+              selectedTrack.artist ||
+              "Unknown artist",
+            artwork:
+              selectedTrack.artwork?.[
+                "480x480"
+              ] ||
+              selectedTrack.artwork?.[
+                "150x150"
+              ] ||
+              selectedTrack.artwork?.[
+                "1000x1000"
+              ] ||
+              "",
+          }),
+        }
+      );
+
+      const data = await getJson(response);
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to add song to playlist."
+        );
+      }
+
+      const title =
+        selectedTrack.title;
+
+      setShowPlaylistModal(false);
+      setSelectedTrack(null);
+
+      alert(
+        `"${title}" added to playlist.`
+      );
+    } catch (error) {
+      console.error(
+        "Add playlist error:",
+        error
+      );
+
+      alert(
+        error.message ||
+          "Failed to add song to playlist."
+      );
+    } finally {
+      setAddingToPlaylist(null);
     }
   };
 
@@ -437,315 +634,606 @@ function Discover() {
   // PLAY
   // =====================================================
 
-  const handlePlay = (track) => {
-    playSong(track, tracks);
+  const handlePlay = (
+    track,
+    queue = tracks
+  ) => {
+    playSong(track, queue);
   };
+
+  // =====================================================
+  // RESULT TITLE
+  // =====================================================
+
+  const currentResultTitle =
+    useMemo(() => {
+      if (activeMood) {
+        return `${
+          moods.find(
+            (mood) =>
+              mood.id === activeMood
+          )?.name
+        } music`;
+      }
+
+      if (search) {
+        return `Results for "${search}"`;
+      }
+
+      return "Discover music";
+    }, [activeMood, search]);
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
-
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
-
-      <header className="border-b border-[var(--border)]">
-        <div className="mx-auto flex h-20 max-w-[1500px] items-center gap-4 px-5 sm:px-8 lg:px-10">
-
-          <Link
-            to="/dashboard"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-violet-400"
-          >
-            <HiArrowLeft className="text-xl" />
-          </Link>
-
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
-              Explore
-            </p>
-
-            <h1 className="text-2xl font-bold">
-              Discover
-            </h1>
-          </div>
-
-        </div>
-      </header>
-
-      {/* =====================================================
-          CONTENT
-      ===================================================== */}
-
-      <div className="mx-auto max-w-[1500px] space-y-10 px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
+      <div className="flex min-h-screen">
 
         {/* =====================================================
-            SEARCH HERO
+            SIDEBAR
         ===================================================== */}
 
-        <section className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 sm:p-8 lg:p-10">
+        <aside className="hidden w-64 shrink-0 border-r border-[var(--border)] bg-[var(--surface)]/60 lg:flex lg:flex-col">
 
-          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-[100px]" />
-
-          <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[100px]" />
-
-          <div className="relative z-10">
-
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
-              Find your next favorite
-            </p>
-
-            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-              What are{" "}
-              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-                you feeling?
-              </span>
-            </h2>
-
-            <p className="mt-4 max-w-xl text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
-              Search for songs and artists, or explore
-              music based on your mood.
-            </p>
-
-            <form
-              onSubmit={handleSearch}
-              className="mt-7 flex max-w-2xl gap-3"
-            >
-
-              <div className="relative flex-1">
-
-                <HiMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-[var(--text-muted)]" />
-
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(event) =>
-                    setSearch(event.target.value)
-                  }
-                  placeholder="Search songs or artists..."
-                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--card)] py-3.5 pl-11 pr-4 text-sm outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500"
-                />
-
-              </div>
-
-              <button
-                type="submit"
-                disabled={!search.trim()}
-                className="rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Search
-              </button>
-
-            </form>
-
-          </div>
-
-        </section>
-
-        {/* =====================================================
-            MOODS
-        ===================================================== */}
-
-        <section>
-
-          <div className="mb-5">
-
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
-              Explore by feeling
-            </p>
-
-            <h2 className="mt-2 text-2xl font-bold">
-              Browse moods
-            </h2>
-
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
-
-            {moods.map((mood) => (
-
-              <button
-                key={mood.id}
-                type="button"
-                onClick={() =>
-                  handleMood(mood.id)
-                }
-                className={`
-                  flex flex-col items-center justify-center
-                  gap-2 rounded-2xl border p-4
-                  transition duration-300
-                  ${
-                    activeMood === mood.id
-                      ? "border-violet-500/50 bg-violet-500/15 text-violet-400"
-                      : "border-[var(--border)] bg-[var(--surface)]/60 hover:-translate-y-1 hover:border-violet-500/30 hover:bg-violet-500/5"
-                  }
-                `}
-              >
-
-                <span className="text-2xl">
-                  {mood.emoji}
-                </span>
-
-                <span className="text-sm font-medium">
-                  {mood.name}
-                </span>
-
-              </button>
-
-            ))}
-
-          </div>
-
-        </section>
-
-        {/* =====================================================
-            RESULTS
-        ===================================================== */}
-
-        <section>
-
-          <div className="mb-5 flex items-end justify-between">
-
-            <div>
-
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
-                {activeMood
-                  ? "Mood selection"
-                  : search
-                    ? "Search results"
-                    : "Explore"}
-              </p>
-
-              <h2 className="mt-2 text-2xl font-bold">
-
-                {activeMood
-                  ? `${
-                      moods.find(
-                        (mood) =>
-                          mood.id === activeMood
-                      )?.name
-                    } music`
-                  : search
-                    ? `Results for "${search}"`
-                    : "Discover music"}
-
-              </h2>
-
+          <div className="flex h-20 items-center gap-3 border-b border-[var(--border)] px-6">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+              <HiMusicalNote className="text-xl" />
             </div>
 
-            {tracks.length > 0 && (
-              <span className="text-sm text-[var(--text-muted)]">
-                {tracks.length} songs
+            <span className="text-xl font-extrabold tracking-tight">
+              Verse
+              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                Hana
               </span>
-            )}
-
+            </span>
           </div>
 
-          {/* LOADING */}
+          <nav className="flex-1 space-y-2 p-4">
 
-          {loading && (
+            <Link
+              to="/dashboard"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiHome className="text-lg" />
+              Home
+            </Link>
 
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400">
+              <HiMagnifyingGlass className="text-lg" />
+              Discover
+            </div>
 
-              {[1, 2, 3, 4, 5].map(
-                (item) => (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch("");
+                setActiveMood("");
+                fetchTracks("");
+              }}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiMusicalNote className="text-lg" />
+              Moods
+            </button>
 
-                  <div
-                    key={item}
-                    className="animate-pulse"
-                  >
+            <Link
+              to="/liked-songs"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiHeart className="text-lg" />
+              Liked Songs
+            </Link>
 
-                    <div className="aspect-square rounded-2xl bg-[var(--card)]" />
+            <Link
+              to="/playlists"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiQueueList className="text-lg" />
+              Playlists
+            </Link>
 
-                    <div className="mt-3 h-4 w-3/4 rounded bg-[var(--card)]" />
+            <Link
+              to="/recently-played"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiClock className="text-lg" />
+              Recently Played
+            </Link>
 
-                    <div className="mt-2 h-3 w-1/2 rounded bg-[var(--card)]" />
+          </nav>
+
+          <div className="border-t border-[var(--border)] p-4">
+
+            <Link
+              to="/profile"
+              className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+            >
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+                {user?.name
+                  ?.charAt(0)
+                  ?.toUpperCase() ||
+                  "U"}
+              </div>
+
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold">
+                  {user?.name || "User"}
+                </p>
+
+                <p className="truncate text-xs text-[var(--text-muted)]">
+                  {user?.email}
+                </p>
+              </div>
+            </Link>
+
+            <button
+              type="button"
+              onClick={logout}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] transition hover:bg-red-500/10 hover:text-red-400"
+            >
+              <HiArrowRightOnRectangle className="text-lg" />
+              Logout
+            </button>
+
+          </div>
+        </aside>
+
+        {/* =====================================================
+            MAIN
+        ===================================================== */}
+
+        <section className="min-w-0 flex-1">
+
+          <header className="flex h-20 items-center justify-between border-b border-[var(--border)] px-5 sm:px-8 lg:px-10">
+
+            <div>
+              <p className="text-sm text-[var(--text-secondary)]">
+                Explore your music
+              </p>
+
+              <h1 className="text-lg font-bold sm:text-xl">
+                Discover
+              </h1>
+            </div>
+
+            <Link
+              to="/profile"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white"
+            >
+              {user?.name
+                ?.charAt(0)
+                ?.toUpperCase() ||
+                "U"}
+            </Link>
+
+          </header>
+
+          <div className="mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
+
+            <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_380px]">
+
+              {/* LEFT */}
+
+              <div className="min-w-0 space-y-8">
+
+                {/* SEARCH */}
+
+                <section className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 sm:p-8 lg:p-10">
+
+                  <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-[100px]" />
+
+                  <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[100px]" />
+
+                  <div className="relative z-10">
+
+                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                      Find your next favorite
+                    </p>
+
+                    <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+                      What are you{" "}
+                      <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                        feeling?
+                      </span>
+                    </h2>
+
+                    <p className="mt-4 max-w-xl text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
+                      Search for songs and artists,
+                      or explore music based on your
+                      mood.
+                    </p>
+
+                    <form
+                      onSubmit={handleSearch}
+                      className="mt-7 flex max-w-2xl gap-3"
+                    >
+
+                      <div className="relative flex-1">
+
+                        <HiMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-[var(--text-muted)]" />
+
+                        <input
+                          type="text"
+                          value={search}
+                          onChange={(event) =>
+                            setSearch(
+                              event.target.value
+                            )
+                          }
+                          placeholder="Search songs or artists..."
+                          className="w-full rounded-xl border border-[var(--border)] bg-[var(--card)] py-3.5 pl-11 pr-4 text-sm outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500"
+                        />
+
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02] disabled:cursor-wait disabled:opacity-60"
+                      >
+                        {loading
+                          ? "Searching..."
+                          : "Search"}
+                      </button>
+
+                    </form>
+
+                  </div>
+                </section>
+
+                {/* MOODS */}
+
+                <section>
+
+                  <div className="mb-5">
+                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                      Explore by feeling
+                    </p>
+
+                    <h2 className="mt-2 text-2xl font-bold">
+                      Browse moods
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+
+                    {moods.map((mood) => (
+                      <button
+                        key={mood.id}
+                        type="button"
+                        onClick={() =>
+                          handleMood(mood.id)
+                        }
+                        className={`flex flex-col items-center justify-center gap-2 rounded-2xl border p-4 transition duration-300 ${
+                          activeMood === mood.id
+                            ? "border-violet-500/50 bg-violet-500/15 text-violet-400"
+                            : "border-[var(--border)] bg-[var(--surface)]/60 hover:-translate-y-1 hover:border-violet-500/30 hover:bg-violet-500/5"
+                        }`}
+                      >
+                        <span className="text-2xl">
+                          {mood.emoji}
+                        </span>
+
+                        <span className="text-sm font-medium">
+                          {mood.name}
+                        </span>
+                      </button>
+                    ))}
+
+                  </div>
+                </section>
+
+                {/* RESULTS */}
+
+                <section>
+
+                  <div className="mb-5 flex items-end justify-between">
+
+                    <div>
+
+                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                        {activeMood
+                          ? "Mood selection"
+                          : search
+                            ? "Search results"
+                            : "Explore"}
+                      </p>
+
+                      <h2 className="mt-2 text-2xl font-bold">
+                        {currentResultTitle}
+                      </h2>
+
+                    </div>
+
+                    {tracks.length > 0 && (
+                      <span className="text-sm text-[var(--text-muted)]">
+                        {tracks.length} songs
+                      </span>
+                    )}
 
                   </div>
 
-                )
-              )}
+                  {loading && (
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
 
-            </div>
+                      {[1, 2, 3, 4, 5, 6].map(
+                        (item) => (
+                          <div
+                            key={item}
+                            className="animate-pulse"
+                          >
+                            <div className="aspect-square rounded-2xl bg-[var(--card)]" />
 
-          )}
+                            <div className="mt-3 h-4 w-3/4 rounded bg-[var(--card)]" />
 
-          {/* ERROR */}
+                            <div className="mt-2 h-3 w-1/2 rounded bg-[var(--card)]" />
+                          </div>
+                        )
+                      )}
 
-          {!loading && error && (
+                    </div>
+                  )}
 
-            <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-8 text-center">
+                  {!loading && error && (
+                    <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-8 text-center">
 
-              <HiMusicalNote className="mx-auto text-4xl text-red-400" />
+                      <HiMusicalNote className="mx-auto text-4xl text-red-400" />
 
-              <p className="mt-3 text-sm text-red-400">
-                {error}
-              </p>
+                      <p className="mt-3 text-sm text-red-400">
+                        {error}
+                      </p>
 
-              <button
-                type="button"
-                onClick={() =>
-                  fetchTracks(search)
-                }
-                className="mt-4 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
-              >
-                Try again
-              </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          fetchTracks(search)
+                        }
+                        className="mt-4 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white"
+                      >
+                        Try again
+                      </button>
 
-            </div>
+                    </div>
+                  )}
 
-          )}
+                  {!loading &&
+                    !error &&
+                    tracks.length === 0 && (
+                      <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 text-center">
 
-          {/* EMPTY */}
+                        <HiMusicalNote className="text-5xl text-[var(--text-muted)]" />
 
-          {!loading &&
-            !error &&
-            tracks.length === 0 && (
+                        <h3 className="mt-4 text-xl font-semibold">
+                          No music found
+                        </h3>
 
-              <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 text-center">
+                        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                          Try another search or
+                          explore a different mood.
+                        </p>
 
-                <HiMusicalNote className="text-5xl text-[var(--text-muted)]" />
+                      </div>
+                    )}
 
-                <h3 className="mt-4 text-xl font-semibold">
-                  No music found
-                </h3>
+                  {!loading &&
+                    !error &&
+                    tracks.length > 0 && (
+                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
 
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                  Try another search or explore a
-                  different mood.
-                </p>
+                        {tracks.map((track) => (
+                          <DiscoverCard
+                            key={track.id}
+                            track={track}
+                            tracks={tracks}
+                            currentSong={currentSong}
+                            isPlaying={isPlaying}
+                            onPlay={handlePlay}
+                            isLiked={isLiked(track.id)}
+                            onLike={handleLike}
+                            likingSong={likingSong}
+                            onPlaylist={
+                              openPlaylistModal
+                            }
+                          />
+                        ))}
+
+                      </div>
+                    )}
+
+                </section>
 
               </div>
 
-            )}
+              {/* RIGHT */}
 
-          {/* TRACKS */}
+              <aside className="space-y-8">
 
-          {!loading &&
-            !error &&
-            tracks.length > 0 && (
+                {/* TRENDING */}
 
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <section>
 
-                {tracks.map((track) => (
+                  <div className="mb-5 flex items-end justify-between">
 
-                  <DiscoverCard
-                    key={track.id}
-                    track={track}
-                    currentSong={currentSong}
-                    isPlaying={isPlaying}
-                    onPlay={handlePlay}
-                    isLiked={isLiked(track.id)}
-                    onLike={handleLike}
-                    likingSong={likingSong}
-                    onAddToPlaylist={() =>
-                      setPlaylistModalSong(track)
-                    }
-                  />
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                        Popular right now
+                      </p>
 
-                ))}
+                      <h2 className="mt-2 text-2xl font-bold">
+                        Trending
+                      </h2>
+                    </div>
 
-              </div>
+                    <span className="text-xs text-[var(--text-muted)]">
+                      Now
+                    </span>
 
-            )}
+                  </div>
+
+                  {loadingTrending ? (
+                    <div className="space-y-3">
+
+                      {[1, 2, 3, 4, 5].map(
+                        (item) => (
+                          <div
+                            key={item}
+                            className="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3"
+                          >
+                            <div className="h-12 w-12 animate-pulse rounded-xl bg-[var(--card)]" />
+
+                            <div className="flex-1">
+                              <div className="h-3 w-3/4 animate-pulse rounded bg-[var(--card)]" />
+
+                              <div className="mt-2 h-2 w-1/2 animate-pulse rounded bg-[var(--card)]" />
+                            </div>
+                          </div>
+                        )
+                      )}
+
+                    </div>
+                  ) : trendingTracks.length === 0 ? (
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-6 text-center">
+
+                      <HiMusicalNote className="mx-auto text-3xl text-[var(--text-muted)]" />
+
+                      <p className="mt-2 text-xs text-[var(--text-secondary)]">
+                        No trending songs yet.
+                      </p>
+
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+
+                      {trendingTracks
+                        .slice(0, 6)
+                        .map(
+                          (track, index) => (
+                            <TrendingCard
+                              key={track.id}
+                              track={track}
+                              index={index}
+                              currentSong={
+                                currentSong
+                              }
+                              isPlaying={
+                                isPlaying
+                              }
+                              onPlay={() =>
+                                handlePlay(
+                                  track,
+                                  trendingTracks
+                                )
+                              }
+                            />
+                          )
+                        )}
+
+                    </div>
+                  )}
+
+                </section>
+
+                {/* ARTISTS */}
+
+                <section>
+
+                  <div className="mb-5">
+
+                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                      From your music library
+                    </p>
+
+                    <h2 className="mt-2 text-2xl font-bold">
+                      Artists
+                    </h2>
+
+                  </div>
+
+                  {loadingArtists ? (
+                    <div className="grid grid-cols-2 gap-3">
+
+                      {[1, 2, 3, 4].map(
+                        (item) => (
+                          <div
+                            key={item}
+                            className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-4"
+                          >
+                            <div className="mx-auto h-16 w-16 animate-pulse rounded-full bg-[var(--card)]" />
+
+                            <div className="mx-auto mt-3 h-3 w-2/3 animate-pulse rounded bg-[var(--card)]" />
+                          </div>
+                        )
+                      )}
+
+                    </div>
+                  ) : artists.length === 0 ? (
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-6 text-center">
+
+                      <HiMusicalNote className="mx-auto text-3xl text-[var(--text-muted)]" />
+
+                      <p className="mt-2 text-xs text-[var(--text-secondary)]">
+                        Artists will appear as music is added.
+                      </p>
+
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-3">
+
+                      {artists.map(
+                        (artist) => (
+                          <button
+                            key={artist.name}
+                            type="button"
+                            onClick={() =>
+                              handleArtist(
+                                artist.name
+                              )
+                            }
+                            className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-4 text-center transition hover:-translate-y-1 hover:border-violet-500/30 hover:bg-violet-500/5"
+                          >
+
+                            <div className="mx-auto flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet-500/30 to-fuchsia-500/30">
+
+                              {artist.artwork ? (
+                                <img
+                                  src={
+                                    artist.artwork
+                                  }
+                                  alt={
+                                    artist.name
+                                  }
+                                  className="h-full w-full object-cover transition duration-300 group-hover:scale-110"
+                                />
+                              ) : (
+                                <HiMusicalNote className="text-2xl text-violet-400" />
+                              )}
+
+                            </div>
+
+                            <h3 className="mt-3 truncate text-sm font-semibold">
+                              {artist.name}
+                            </h3>
+
+                            <p className="mt-1 text-xs text-[var(--text-muted)]">
+                              {artist.songCount}{" "}
+                              {artist.songCount ===
+                              1
+                                ? "song"
+                                : "songs"}
+                            </p>
+
+                          </button>
+                        )
+                      )}
+
+                    </div>
+                  )}
+
+                </section>
+
+              </aside>
+
+            </div>
+
+          </div>
 
         </section>
 
@@ -755,44 +1243,44 @@ function Discover() {
           PLAYLIST MODAL
       ===================================================== */}
 
-      {playlistModalSong && (
-
+      {showPlaylistModal && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-5 backdrop-blur-sm"
           onClick={() =>
             !addingToPlaylist &&
-            setPlaylistModalSong(null)
+            setShowPlaylistModal(false)
           }
         >
 
           <div
-            className="w-full max-w-md overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl"
+            className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
 
-            {/* MODAL HEADER */}
-
-            <div className="flex items-center justify-between border-b border-[var(--border)] p-5">
+            <div className="flex items-start justify-between">
 
               <div>
-
                 <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
                   Save song
                 </p>
 
-                <h2 className="mt-1 text-xl font-bold">
-                  Add to playlist
+                <h2 className="mt-2 text-2xl font-bold">
+                  Add to Playlist
                 </h2>
 
+                <p className="mt-2 truncate text-sm text-[var(--text-secondary)]">
+                  {selectedTrack?.title}
+                </p>
               </div>
 
               <button
                 type="button"
                 onClick={() =>
-                  setPlaylistModalSong(null)
+                  setShowPlaylistModal(false)
                 }
+                disabled={!!addingToPlaylist}
                 className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-[var(--card)] hover:text-white"
               >
                 <HiXMark className="text-xl" />
@@ -800,159 +1288,86 @@ function Discover() {
 
             </div>
 
-            {/* SONG */}
-
-            <div className="border-b border-[var(--border)] p-5">
-
-              <div className="flex items-center gap-3">
-
-                <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-[var(--card)]">
-
-                  {(
-                    playlistModalSong.artwork?.[
-                      "150x150"
-                    ] ||
-                    playlistModalSong.artwork?.[
-                      "480x480"
-                    ] ||
-                    playlistModalSong.artwork?.[
-                      "1000x1000"
-                    ]
-                  ) ? (
-
-                    <img
-                      src={
-                        playlistModalSong.artwork?.[
-                          "150x150"
-                        ] ||
-                        playlistModalSong.artwork?.[
-                          "480x480"
-                        ] ||
-                        playlistModalSong.artwork?.[
-                          "1000x1000"
-                        ]
-                      }
-                      alt={playlistModalSong.title}
-                      className="h-full w-full object-cover"
-                    />
-
-                  ) : (
-
-                    <div className="flex h-full w-full items-center justify-center text-violet-400">
-                      <HiMusicalNote className="text-xl" />
-                    </div>
-
-                  )}
-
-                </div>
-
-                <div className="min-w-0">
-
-                  <p className="truncate text-sm font-semibold">
-                    {playlistModalSong.title}
-                  </p>
-
-                  <p className="mt-1 truncate text-xs text-[var(--text-muted)]">
-                    {playlistModalSong.user?.name ||
-                      "Unknown artist"}
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* PLAYLISTS */}
-
-            <div className="max-h-[350px] overflow-y-auto p-3">
+            <div className="mt-6 space-y-2">
 
               {playlists.length === 0 ? (
+                <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 text-center">
 
-                <div className="px-4 py-8 text-center">
+                  <HiQueueList className="mx-auto text-3xl text-[var(--text-muted)]" />
 
-                  <HiQueueList className="mx-auto text-4xl text-[var(--text-muted)]" />
-
-                  <p className="mt-3 text-sm font-medium">
-                    No playlists yet
-                  </p>
-
-                  <p className="mt-1 text-xs text-[var(--text-muted)]">
-                    Create a playlist first.
+                  <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                    You don't have any playlists yet.
                   </p>
 
                   <Link
                     to="/playlists"
-                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white"
                   >
                     <HiPlus />
                     Create Playlist
                   </Link>
 
                 </div>
-
               ) : (
+                playlists.map((playlist) => (
+                  <button
+                    key={playlist._id}
+                    type="button"
+                    onClick={() =>
+                      handleAddToPlaylist(
+                        playlist._id
+                      )
+                    }
+                    disabled={
+                      addingToPlaylist ===
+                      playlist._id
+                    }
+                    className="flex w-full items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3 text-left transition hover:border-violet-500/40 hover:bg-violet-500/10 disabled:cursor-wait disabled:opacity-60"
+                  >
 
-                <div className="space-y-2">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20">
 
-                  {playlists.map((playlist) => {
+                      {playlist.songs?.[0]
+                        ?.artwork ? (
+                        <img
+                          src={
+                            playlist.songs[0]
+                              .artwork
+                          }
+                          alt={playlist.name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <HiMusicalNote className="text-xl text-violet-400" />
+                      )}
 
-                    const key =
-                      `${playlist._id}-${playlistModalSong.id}`;
+                    </div>
 
-                    const isAdding =
-                      addingToPlaylist === key;
+                    <div className="min-w-0 flex-1">
 
-                    return (
+                      <p className="truncate text-sm font-semibold">
+                        {playlist.name}
+                      </p>
 
-                      <button
-                        key={playlist._id}
-                        type="button"
-                        disabled={isAdding}
-                        onClick={() =>
-                          handleAddToPlaylist(
-                            playlist,
-                            playlistModalSong
-                          )
-                        }
-                        className="flex w-full items-center gap-3 rounded-2xl border border-transparent bg-[var(--card)] p-3 text-left transition hover:border-violet-500/30 hover:bg-violet-500/10 disabled:cursor-wait disabled:opacity-60"
-                      >
+                      <p className="mt-1 text-xs text-[var(--text-muted)]">
+                        {playlist.songs?.length ||
+                          0}{" "}
+                        songs
+                      </p>
 
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                    </div>
 
-                          {isAdding ? (
-                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-violet-400 border-t-transparent" />
-                          ) : (
-                            <HiQueueList className="text-xl" />
-                          )}
+                    {addingToPlaylist ===
+                    playlist._id ? (
+                      <span className="text-xs text-violet-400">
+                        Adding...
+                      </span>
+                    ) : (
+                      <HiPlus className="text-lg text-[var(--text-secondary)]" />
+                    )}
 
-                        </div>
-
-                        <div className="min-w-0 flex-1">
-
-                          <p className="truncate text-sm font-semibold">
-                            {playlist.name}
-                          </p>
-
-                          <p className="mt-1 text-xs text-[var(--text-muted)]">
-                            {playlist.songs?.length || 0}{" "}
-                            {playlist.songs?.length === 1
-                              ? "song"
-                              : "songs"}
-                          </p>
-
-                        </div>
-
-                        <HiPlus className="shrink-0 text-lg text-[var(--text-muted)]" />
-
-                      </button>
-
-                    );
-
-                  })}
-
-                </div>
-
+                  </button>
+                ))
               )}
 
             </div>
@@ -960,7 +1375,6 @@ function Discover() {
           </div>
 
         </div>
-
       )}
 
     </main>
@@ -973,13 +1387,14 @@ function Discover() {
 
 function DiscoverCard({
   track,
+  tracks,
   currentSong,
   isPlaying,
   onPlay,
   isLiked,
   onLike,
   likingSong,
-  onAddToPlaylist,
+  onPlaylist,
 }) {
   const isCurrent =
     String(currentSong?.id) ===
@@ -990,180 +1405,99 @@ function DiscoverCard({
     track.artwork?.["150x150"] ||
     track.artwork?.["1000x1000"];
 
-  const handleLike = (event) => {
-    event.stopPropagation();
-    onLike(track);
-  };
-
-  const handlePlaylist = (event) => {
-    event.stopPropagation();
-    onAddToPlaylist(track);
-  };
-
   return (
-
-    <div className="group">
-
-      {/* ARTWORK */}
+    <div className="group min-w-0">
 
       <div className="relative aspect-square overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]">
 
         {artwork ? (
-
           <img
             src={artwork}
             alt={track.title}
-            className={`
-              h-full w-full object-cover
-              transition duration-500
-              ${
-                isCurrent
-                  ? "scale-105"
-                  : "group-hover:scale-105"
-              }
-            `}
+            className={`h-full w-full object-cover transition duration-500 ${
+              isCurrent
+                ? "scale-105"
+                : "group-hover:scale-105"
+            }`}
           />
-
         ) : (
-
           <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20">
             <HiMusicalNote className="text-5xl text-violet-400" />
           </div>
-
         )}
 
-        {/* OVERLAY */}
-
         <div
-          className={`
-            absolute inset-0 bg-black/30 transition
-            ${
-              isCurrent
-                ? "opacity-100"
-                : "opacity-0 group-hover:opacity-100"
-            }
-          `}
+          className={`absolute inset-0 bg-black/30 transition ${
+            isCurrent
+              ? "opacity-100"
+              : "opacity-0 group-hover:opacity-100"
+          }`}
         />
-
-        {/* LIKE */}
 
         <button
           type="button"
-          onClick={handleLike}
+          onClick={() =>
+            onLike(track)
+          }
           disabled={
             likingSong === track.id
           }
-          className={`
-            absolute left-3 top-3
-            flex h-10 w-10 items-center justify-center
-            rounded-full backdrop-blur-md
-            transition-all duration-200
-            ${
-              isLiked
-                ? "bg-violet-600 text-white opacity-100"
-                : "bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-violet-600"
-            }
-            ${
-              likingSong === track.id
-                ? "cursor-wait opacity-70"
-                : ""
-            }
-          `}
+          className={`absolute left-3 top-3 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-md transition-all ${
+            isLiked
+              ? "bg-violet-600 text-white opacity-100"
+              : "bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-violet-600"
+          }`}
           aria-label={
             isLiked
               ? "Unlike song"
               : "Like song"
           }
-          title={
-            isLiked
-              ? "Unlike"
-              : "Like"
-          }
         >
-
           <HiHeart
-            className={`
-              text-lg transition-transform
-              ${
-                isLiked
-                  ? "scale-110 fill-current"
-                  : ""
-              }
-            `}
+            className={`text-lg ${
+              isLiked
+                ? "scale-110 fill-current"
+                : ""
+            }`}
           />
-
         </button>
-
-        {/* ADD TO PLAYLIST */}
 
         <button
           type="button"
-          onClick={handlePlaylist}
-          className="absolute left-14 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-md transition-all duration-200 group-hover:opacity-100 hover:bg-violet-600"
+          onClick={() =>
+            onPlaylist(track)
+          }
+          className="absolute left-14 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-md transition group-hover:opacity-100 hover:bg-violet-600"
           aria-label="Add to playlist"
           title="Add to playlist"
         >
           <HiPlus className="text-lg" />
         </button>
 
-        {/* PLAY */}
-
         <button
           type="button"
           onClick={() =>
-            onPlay(track)
+            onPlay(track, tracks)
           }
-          className={`
-            absolute bottom-3 right-3
-            flex h-11 w-11 items-center justify-center
-            rounded-full bg-violet-600 text-white
-            shadow-lg shadow-violet-500/30
-            transition-all duration-300
-            hover:scale-105
-            ${
-              isCurrent
-                ? "translate-y-0 opacity-100"
-                : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
-            }
-          `}
+          className={`absolute bottom-3 right-3 flex h-11 w-11 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg shadow-violet-500/30 transition-all duration-300 hover:scale-105 ${
+            isCurrent
+              ? "translate-y-0 opacity-100"
+              : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+          }`}
           aria-label={
             isCurrent && isPlaying
               ? "Pause"
               : "Play"
           }
         >
-
           {isCurrent && isPlaying ? (
-
             <HiPause className="text-lg" />
-
           ) : (
-
             <HiPlay className="ml-0.5 text-lg" />
-
           )}
-
         </button>
 
-        {/* PLAYING INDICATOR */}
-
-        {isCurrent && isPlaying && (
-
-          <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1.5 backdrop-blur">
-
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-400" />
-
-            <span className="text-[10px] font-medium text-white">
-              Playing
-            </span>
-
-          </div>
-
-        )}
-
       </div>
-
-      {/* TRACK INFO */}
 
       <h3
         className="mt-3 truncate text-sm font-semibold"
@@ -1174,14 +1508,96 @@ function DiscoverCard({
 
       <p
         className="mt-1 truncate text-xs text-[var(--text-muted)]"
-        title={track.user?.name}
+        title={
+          track.user?.name ||
+          track.artist
+        }
       >
         {track.user?.name ||
+          track.artist ||
           "Unknown artist"}
       </p>
 
     </div>
+  );
+}
 
+// =====================================================
+// TRENDING CARD
+// =====================================================
+
+function TrendingCard({
+  track,
+  index,
+  currentSong,
+  isPlaying,
+  onPlay,
+}) {
+  const isCurrent =
+    String(currentSong?.id) ===
+    String(track.id);
+
+  const artwork =
+    track.artwork?.["150x150"] ||
+    track.artwork?.["480x480"] ||
+    track.artwork?.["1000x1000"];
+
+  return (
+    <button
+      type="button"
+      onClick={onPlay}
+      className="group flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3 text-left transition hover:border-violet-500/30 hover:bg-violet-500/5"
+    >
+
+      <span className="w-5 text-center text-xs font-bold text-[var(--text-muted)]">
+        {index + 1}
+      </span>
+
+      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[var(--card)]">
+
+        {artwork ? (
+          <img
+            src={artwork}
+            alt={track.title}
+            className="h-full w-full object-cover transition group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-violet-400">
+            <HiMusicalNote />
+          </div>
+        )}
+
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition group-hover:opacity-100">
+          {isCurrent && isPlaying ? (
+            <HiPause className="text-lg text-white" />
+          ) : (
+            <HiPlay className="text-lg text-white" />
+          )}
+        </div>
+
+      </div>
+
+      <div className="min-w-0 flex-1">
+
+        <p
+          className={`truncate text-sm font-semibold ${
+            isCurrent
+              ? "text-violet-400"
+              : ""
+          }`}
+        >
+          {track.title}
+        </p>
+
+        <p className="mt-1 truncate text-xs text-[var(--text-muted)]">
+          {track.user?.name ||
+            track.artist ||
+            "Unknown artist"}
+        </p>
+
+      </div>
+
+    </button>
   );
 }
 
