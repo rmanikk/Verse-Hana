@@ -13,6 +13,7 @@ import MusicPlayer from "./components/music/MusicPlayer";
 import LikedSongs from "./pages/LikedSongs";
 import RecentlyPlayed from "./pages/RecentlyPlayed";
 import Playlists from "./pages/Playlists";
+import PlaylistDetails from "./pages/PlaylistDetails";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
           <Route path="/liked-songs" element={<LikedSongs />} />
            <Route path="/recently-played" element={<RecentlyPlayed />} />
            <Route path="/playlists" element={<Playlists />} />
+            <Route path="/playlists/:playlistId" element={<PlaylistDetails />} />
+           
         </Route>
 
         {/* Admin-only routes */}

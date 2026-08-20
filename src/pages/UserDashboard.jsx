@@ -10,6 +10,8 @@ import {
   HiArrowRightOnRectangle,
   HiPlay,
   HiPause,
+  HiPlus,
+  HiXMark,
 } from "react-icons/hi2";
 
 import { useAuth } from "../context/AuthContext";
@@ -80,6 +82,12 @@ function UserDashboard() {
   const [recentSongs, setRecentSongs] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [historyError, setHistoryError] = useState("");
+
+  // Playlists
+  const [playlists, setPlaylists] = useState([]);
+  const [playlistModalSong, setPlaylistModalSong] = useState(null);
+  const [loadingPlaylists, setLoadingPlaylists] = useState(false);
+  const [addingToPlaylist, setAddingToPlaylist] = useState(null);
 
   const currentMood = useMemo(() => {
     const savedMood = localStorage.getItem("versehana_mood");
@@ -157,9 +165,9 @@ function UserDashboard() {
 
       setRecentSongs(
         data.history ||
-        data.histories ||
-        data.recentSongs ||
-        []
+          data.histories ||
+          data.recentSongs ||
+          []
       );
     } catch (error) {
       console.error("History error:", error);
@@ -255,6 +263,112 @@ function UserDashboard() {
   };
 
   // =====================================================
+  // FETCH PLAYLISTS
+  // =====================================================
+
+  const fetchPlaylists = async () => {
+    try {
+      setLoadingPlaylists(true);
+
+      const response = await fetch(
+        `${API_URL}/api/playlists`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to fetch playlists."
+        );
+      }
+
+      setPlaylists(data.playlists || []);
+    } catch (error) {
+      console.error("Fetch playlists error:", error);
+
+      alert(
+        error.message || "Failed to load playlists."
+      );
+    } finally {
+      setLoadingPlaylists(false);
+    }
+  };
+
+  // =====================================================
+  // ADD SONG TO PLAYLIST
+  // =====================================================
+
+  const handleAddToPlaylist = async (
+    playlist,
+    song
+  ) => {
+    try {
+      setAddingToPlaylist(playlist._id);
+
+      const response = await fetch(
+        `${API_URL}/api/playlists/${playlist._id}/songs`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            songId: song.id,
+            title: song.title,
+            artist:
+              song.user?.name || "Unknown artist",
+            artwork:
+              song.artwork?.["480x480"] ||
+              song.artwork?.["150x150"] ||
+              song.artwork?.["1000x1000"] ||
+              "",
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to add song to playlist."
+        );
+      }
+
+      setPlaylists((previous) =>
+        previous.map((item) =>
+          item._id === playlist._id
+            ? data.playlist
+            : item
+        )
+      );
+
+      alert(
+        `"${song.title}" added to ${playlist.name}`
+      );
+
+      setPlaylistModalSong(null);
+    } catch (error) {
+      console.error(
+        "Add song to playlist error:",
+        error
+      );
+
+      alert(
+        error.message ||
+          "Failed to add song to playlist."
+      );
+    } finally {
+      setAddingToPlaylist(null);
+    }
+  };
+
+  // =====================================================
   // CONVERT HISTORY SONG
   // =====================================================
 
@@ -346,18 +460,25 @@ function UserDashboard() {
               Liked Songs
             </Link>
 
-            <DashboardLink
-              icon={<HiQueueList />}
-              label="Playlists"
-            />
+            {/* PLAYLISTS */}
 
-           <Link
-  to="/recently-played"
-  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
->
-  <HiClock className="text-lg" />
-  Recently Played
-</Link>
+            <Link
+              to="/playlists"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiQueueList className="text-lg" />
+              Playlists
+            </Link>
+
+            {/* RECENTLY PLAYED */}
+
+            <Link
+              to="/recently-played"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiClock className="text-lg" />
+              Recently Played
+            </Link>
 
           </nav>
 
@@ -553,6 +674,10 @@ function UserDashboard() {
                         isLiked={isLiked(track.id)}
                         onLike={handleLike}
                         likingSong={likingSong}
+                        onOpenPlaylist={(song) => {
+                          setPlaylistModalSong(song);
+                          fetchPlaylists();
+                        }}
                       />
                     ))}
 
@@ -594,9 +719,12 @@ function UserDashboard() {
                 </div>
 
                 {recentSongs.length > 0 && (
-                  <span className="text-sm text-[var(--text-muted)]">
-                    {recentSongs.length} songs
-                  </span>
+                  <Link
+                    to="/recently-played"
+                    className="text-sm text-violet-400 transition hover:text-violet-300"
+                  >
+                    View all
+                  </Link>
                 )}
 
               </div>
@@ -690,13 +818,9 @@ function UserDashboard() {
                             className="group flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3 transition hover:border-violet-500/30 hover:bg-violet-500/5"
                           >
 
-                            {/* Number */}
-
                             <div className="hidden w-6 text-center text-sm text-[var(--text-muted)] sm:block">
                               {index + 1}
                             </div>
-
-                            {/* Artwork */}
 
                             <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-[var(--card)]">
 
@@ -731,8 +855,6 @@ function UserDashboard() {
 
                             </div>
 
-                            {/* Song Info */}
-
                             <div className="min-w-0 flex-1">
 
                               <h3
@@ -752,8 +874,6 @@ function UserDashboard() {
                               </p>
 
                             </div>
-
-                            {/* Play */}
 
                             <button
                               type="button"
@@ -787,6 +907,190 @@ function UserDashboard() {
         </section>
 
       </div>
+
+      {/* =====================================================
+          ADD TO PLAYLIST MODAL
+      ===================================================== */}
+
+      {playlistModalSong && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-5 backdrop-blur-sm"
+          onClick={() => {
+            if (!addingToPlaylist) {
+              setPlaylistModalSong(null);
+            }
+          }}
+        >
+          <div
+            className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+
+            {/* Modal Header */}
+
+            <div className="flex items-start justify-between">
+
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                  Add song
+                </p>
+
+                <h2 className="mt-2 text-2xl font-bold">
+                  Add to playlist
+                </h2>
+
+                <p className="mt-2 truncate text-sm text-[var(--text-secondary)]">
+                  {playlistModalSong.title}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  !addingToPlaylist &&
+                  setPlaylistModalSong(null)
+                }
+                className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-[var(--card)] hover:text-white"
+              >
+                <HiXMark className="text-xl" />
+              </button>
+
+            </div>
+
+            {/* Playlists */}
+
+            <div className="mt-6 max-h-[350px] space-y-2 overflow-y-auto">
+
+              {loadingPlaylists ? (
+                <div className="py-10 text-center">
+
+                  <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-violet-500/30 border-t-violet-500" />
+
+                  <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                    Loading playlists...
+                  </p>
+
+                </div>
+              ) : playlists.length === 0 ? (
+
+                <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 text-center">
+
+                  <HiQueueList className="mx-auto text-3xl text-violet-400" />
+
+                  <p className="mt-3 text-sm font-medium">
+                    No playlists yet
+                  </p>
+
+                  <p className="mt-1 text-xs text-[var(--text-muted)]">
+                    Create a playlist first from the Playlists page.
+                  </p>
+
+                  <Link
+                    to="/playlists"
+                    onClick={() =>
+                      setPlaylistModalSong(null)
+                    }
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
+                  >
+                    <HiPlus />
+                    Create Playlist
+                  </Link>
+
+                </div>
+              ) : (
+
+                playlists.map((playlist) => {
+
+                  const alreadyInPlaylist =
+                    playlist.songs?.some(
+                      (song) =>
+                        String(song.songId) ===
+                        String(
+                          playlistModalSong.id
+                        )
+                    );
+
+                  return (
+                    <button
+                      key={playlist._id}
+                      type="button"
+                      disabled={
+                        addingToPlaylist ===
+                          playlist._id ||
+                        alreadyInPlaylist
+                      }
+                      onClick={() =>
+                        handleAddToPlaylist(
+                          playlist,
+                          playlistModalSong
+                        )
+                      }
+                      className="flex w-full items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3 text-left transition hover:border-violet-500/40 hover:bg-violet-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+
+                      {/* Playlist artwork */}
+
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20">
+
+                        {playlist.songs?.[0]?.artwork ? (
+                          <img
+                            src={
+                              playlist.songs[0].artwork
+                            }
+                            alt={playlist.name}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <HiMusicalNote className="text-xl text-violet-400" />
+                        )}
+
+                      </div>
+
+                      {/* Playlist info */}
+
+                      <div className="min-w-0 flex-1">
+
+                        <p className="truncate text-sm font-semibold">
+                          {playlist.name}
+                        </p>
+
+                        <p className="mt-1 text-xs text-[var(--text-muted)]">
+                          {playlist.songs?.length || 0}{" "}
+                          {playlist.songs?.length === 1
+                            ? "song"
+                            : "songs"}
+                        </p>
+
+                      </div>
+
+                      {/* Status */}
+
+                      {alreadyInPlaylist ? (
+                        <span className="text-xs font-medium text-violet-400">
+                          Added
+                        </span>
+                      ) : addingToPlaylist ===
+                        playlist._id ? (
+                        <span className="text-xs text-[var(--text-muted)]">
+                          Adding...
+                        </span>
+                      ) : (
+                        <HiPlus className="text-lg text-[var(--text-secondary)]" />
+                      )}
+
+                    </button>
+                  );
+                })
+              )}
+
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </main>
   );
 }
@@ -835,6 +1139,7 @@ function SongCard({
   isLiked,
   onLike,
   likingSong,
+  onOpenPlaylist,
 }) {
   const isCurrentSong =
     currentSong?.id === track.id;
@@ -851,6 +1156,11 @@ function SongCard({
   const handleLike = (event) => {
     event.stopPropagation();
     onLike(track);
+  };
+
+  const handlePlaylist = (event) => {
+    event.stopPropagation();
+    onOpenPlaylist(track);
   };
 
   return (
@@ -933,6 +1243,18 @@ function SongCard({
           />
         </button>
 
+        {/* Add To Playlist */}
+
+        <button
+          type="button"
+          onClick={handlePlaylist}
+          className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white opacity-0 backdrop-blur-md transition-all duration-200 group-hover:opacity-100 hover:bg-violet-600"
+          aria-label="Add to playlist"
+          title="Add to playlist"
+        >
+          <HiPlus className="text-lg" />
+        </button>
+
         {/* Play Button */}
 
         <button
@@ -967,7 +1289,7 @@ function SongCard({
         {/* Playing Indicator */}
 
         {isCurrentSong && isPlaying && (
-          <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1.5 backdrop-blur">
+          <div className="absolute bottom-3 left-14 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1.5 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-400" />
 
             <span className="text-[10px] font-medium text-white">
