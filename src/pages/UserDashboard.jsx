@@ -442,10 +442,13 @@ function UserDashboard() {
               Home
             </Link>
 
-            <DashboardLink
-              icon={<HiMagnifyingGlass />}
-              label="Discover"
-            />
+            <Link
+  to="/discover"
+  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+>
+  <HiMagnifyingGlass className="text-lg" />
+  Discover
+</Link>
 
             <DashboardLink
               icon={<HiMusicalNote />}
