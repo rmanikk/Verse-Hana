@@ -10,6 +10,7 @@ import likeRoutes from "./routes/likeRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import catalogRoutes from "./routes/catalogRoutes.js";
 import historyRoutes from "./routes/historyRoutes.js";
+import playlistRoutes from "./routes/playlistRoutes.js";
 
 dotenv.config();
 
@@ -39,6 +40,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/music", audiusRoutes);
 //Like
 app.use("/api/likes", likeRoutes);
+//playlist
+app.use("/api/playlists", playlistRoutes);
 //history
 app.use("/api/history", historyRoutes);
 // Admin

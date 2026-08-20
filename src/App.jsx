@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import MusicPlayer from "./components/music/MusicPlayer";
 import LikedSongs from "./pages/LikedSongs";
 import RecentlyPlayed from "./pages/RecentlyPlayed";
+import Playlists from "./pages/Playlists";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/liked-songs" element={<LikedSongs />} />
            <Route path="/recently-played" element={<RecentlyPlayed />} />
+           <Route path="/playlists" element={<Playlists />} />
         </Route>
 
         {/* Admin-only routes */}
