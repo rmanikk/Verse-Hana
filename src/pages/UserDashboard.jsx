@@ -12,7 +12,6 @@ import {
   HiPause,
   HiPlus,
   HiXMark,
-  HiShieldCheck,
 } from "react-icons/hi2";
 
 import { useAuth } from "../context/AuthContext";
@@ -76,19 +75,33 @@ function UserDashboard() {
   const [loadingTracks, setLoadingTracks] = useState(true);
   const [trackError, setTrackError] = useState("");
 
+  // =====================================================
+  // LIKED SONGS
+  // =====================================================
+
   const [likedSongs, setLikedSongs] = useState([]);
   const [likingSong, setLikingSong] = useState(null);
 
-  // Recently played
+  // =====================================================
+  // RECENTLY PLAYED
+  // =====================================================
+
   const [recentSongs, setRecentSongs] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [historyError, setHistoryError] = useState("");
 
-  // Playlists
+  // =====================================================
+  // PLAYLISTS
+  // =====================================================
+
   const [playlists, setPlaylists] = useState([]);
   const [playlistModalSong, setPlaylistModalSong] = useState(null);
   const [loadingPlaylists, setLoadingPlaylists] = useState(false);
   const [addingToPlaylist, setAddingToPlaylist] = useState(null);
+
+  // =====================================================
+  // CURRENT MOOD
+  // =====================================================
 
   const currentMood = useMemo(() => {
     const savedMood = localStorage.getItem("versehana_mood");
@@ -137,6 +150,59 @@ function UserDashboard() {
     };
 
     fetchMoodTracks();
+  }, []);
+
+  // =====================================================
+  // FETCH LIKED SONGS
+  // IMPORTANT:
+  // This keeps the liked state after page refresh.
+  // =====================================================
+
+  const fetchLikedSongs = async () => {
+    try {
+      const response = await fetch(
+        `${API_URL}/api/likes`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to fetch liked songs."
+        );
+      }
+
+      /*
+        Backend may return:
+        data.likes = [
+          {
+            songId,
+            title,
+            artist,
+            artwork
+          }
+        ]
+      */
+
+      const ids = (data.likes || []).map(
+        (song) => song.songId
+      );
+
+      setLikedSongs(ids);
+    } catch (error) {
+      console.error(
+        "Fetch liked songs error:",
+        error
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchLikedSongs();
   }, []);
 
   // =====================================================
@@ -196,23 +262,57 @@ function UserDashboard() {
   };
 
   // =====================================================
+  // NORMALIZE SONG
+  // Allows dashboard + history songs to use
+  // the same like / playlist functionality.
+  // =====================================================
+
+  const normalizeSong = (song) => {
+    return {
+      id: song.id || song.songId,
+      title: song.title,
+      artwork:
+        typeof song.artwork === "string"
+          ? {
+              "480x480": song.artwork,
+            }
+          : song.artwork || null,
+      user: {
+        name:
+          song.user?.name ||
+          song.artist ||
+          "Unknown artist",
+      },
+    };
+  };
+
+  // =====================================================
   // LIKE / UNLIKE
   // =====================================================
 
   const handleLike = async (track) => {
-    if (!track || likingSong === track.id) {
+    if (!track) {
       return;
     }
 
-    const alreadyLiked = isLiked(track.id);
+    const song = normalizeSong(track);
+    const songId = song.id;
+
+    if (!songId || likingSong === songId) {
+      return;
+    }
+
+    const alreadyLiked = isLiked(songId);
 
     try {
-      setLikingSong(track.id);
+      setLikingSong(songId);
 
-      const method = alreadyLiked ? "DELETE" : "POST";
+      const method = alreadyLiked
+        ? "DELETE"
+        : "POST";
 
       const response = await fetch(
-        `${API_URL}/api/likes/${track.id}`,
+        `${API_URL}/api/likes/${songId}`,
         {
           method,
           credentials: "include",
@@ -222,13 +322,14 @@ function UserDashboard() {
           body:
             method === "POST"
               ? JSON.stringify({
-                  title: track.title,
+                  title: song.title,
                   artist:
-                    track.user?.name || "Unknown artist",
+                    song.user?.name ||
+                    "Unknown artist",
                   artwork:
-                    track.artwork?.["480x480"] ||
-                    track.artwork?.["150x150"] ||
-                    track.artwork?.["1000x1000"] ||
+                    song.artwork?.["480x480"] ||
+                    song.artwork?.["150x150"] ||
+                    song.artwork?.["1000x1000"] ||
                     "",
                 })
               : undefined,
@@ -239,22 +340,23 @@ function UserDashboard() {
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Failed to update like."
+          data.message ||
+            "Failed to update like."
         );
       }
 
-      if (!alreadyLiked) {
-        setLikedSongs((previous) => [
-          ...previous,
-          track.id,
-        ]);
-      } else {
+      if (alreadyLiked) {
         setLikedSongs((previous) =>
           previous.filter(
             (id) =>
-              String(id) !== String(track.id)
+              String(id) !== String(songId)
           )
         );
+      } else {
+        setLikedSongs((previous) => [
+          ...previous,
+          songId,
+        ]);
       }
     } catch (error) {
       console.error("Like error:", error);
@@ -283,16 +385,21 @@ function UserDashboard() {
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Failed to fetch playlists."
+          data.message ||
+            "Failed to fetch playlists."
         );
       }
 
       setPlaylists(data.playlists || []);
     } catch (error) {
-      console.error("Fetch playlists error:", error);
+      console.error(
+        "Fetch playlists error:",
+        error
+      );
 
       alert(
-        error.message || "Failed to load playlists."
+        error.message ||
+          "Failed to load playlists."
       );
     } finally {
       setLoadingPlaylists(false);
@@ -307,6 +414,9 @@ function UserDashboard() {
     playlist,
     song
   ) => {
+    const normalizedSong =
+      normalizeSong(song);
+
     try {
       setAddingToPlaylist(playlist._id);
 
@@ -319,14 +429,15 @@ function UserDashboard() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            songId: song.id,
-            title: song.title,
+            songId: normalizedSong.id,
+            title: normalizedSong.title,
             artist:
-              song.user?.name || "Unknown artist",
+              normalizedSong.user?.name ||
+              "Unknown artist",
             artwork:
-              song.artwork?.["480x480"] ||
-              song.artwork?.["150x150"] ||
-              song.artwork?.["1000x1000"] ||
+              normalizedSong.artwork?.["480x480"] ||
+              normalizedSong.artwork?.["150x150"] ||
+              normalizedSong.artwork?.["1000x1000"] ||
               "",
           }),
         }
@@ -350,7 +461,7 @@ function UserDashboard() {
       );
 
       alert(
-        `"${song.title}" added to ${playlist.name}`
+        `"${normalizedSong.title}" added to ${playlist.name}`
       );
 
       setPlaylistModalSong(null);
@@ -405,6 +516,10 @@ function UserDashboard() {
 
     playSong(convertedSong, queue);
   };
+
+  // =====================================================
+  // RENDER
+  // =====================================================
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
@@ -509,22 +624,6 @@ function UserDashboard() {
               </div>
             </Link>
 
-            {/* =================================================
-                ADMIN-ONLY PANEL BUTTON
-            ================================================= */}
-
-            {user?.role === "admin" && (
-              <Link
-                to="/admin"
-                className="mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-violet-400 transition hover:bg-violet-500/10"
-              >
-                <HiShieldCheck className="text-lg" />
-                Admin Panel
-              </Link>
-            )}
-
-            {/* Logout */}
-
             <button
               type="button"
               onClick={logout}
@@ -535,7 +634,6 @@ function UserDashboard() {
             </button>
 
           </div>
-
         </aside>
 
         {/* =====================================================
@@ -572,9 +670,9 @@ function UserDashboard() {
 
           <div className="mx-auto max-w-[1500px] space-y-10 px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
 
-            {/* =================================================
+            {/* =====================================================
                 MOOD HERO
-            ================================================= */}
+            ===================================================== */}
 
             <section className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 sm:p-8 lg:p-10">
 
@@ -584,14 +682,21 @@ function UserDashboard() {
 
               <div className="relative z-10">
 
-                <div className="flex flex-wrap items-center gap-3">
+                {/* CHANGED:
+                    Exact mood instead of emoji */}
 
-                  <span className="rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1.5 text-xs font-medium text-violet-400">
+                <div className="flex items-center gap-3">
+
+                  <span className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
                     Your vibe
                   </span>
 
-                  <span className="text-2xl">
-                    {currentMood.emoji}
+                  <span className="text-sm font-semibold text-[var(--text-primary)]">
+                    :
+                  </span>
+
+                  <span className="text-sm font-semibold text-[var(--text-primary)]">
+                    {currentMood.name}
                   </span>
 
                 </div>
@@ -619,16 +724,15 @@ function UserDashboard() {
                 </Link>
 
               </div>
-
             </section>
 
-            {/* =================================================
+            {/* =====================================================
                 RECOMMENDED
-            ================================================= */}
+            ===================================================== */}
 
             <section>
 
-              <div className="mb-5 flex items-end justify-between">
+              <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
 
                 <div>
                   <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
@@ -640,11 +744,21 @@ function UserDashboard() {
                   </h2>
                 </div>
 
-                <span className="hidden text-sm text-[var(--text-muted)] sm:block">
-                  {tracks.length} songs
-                </span>
+                {/* VIEW MORE */}
+                <Link
+                  to="/discover"
+                  className="group flex items-center gap-2 text-sm font-medium text-violet-400 transition hover:text-violet-300"
+                >
+                  View more songs for{" "}
+                  {currentMood.name.toLowerCase()}
+                  <span className="transition-transform group-hover:translate-x-1">
+                    →
+                  </span>
+                </Link>
 
               </div>
+
+              {/* Loading */}
 
               {loadingTracks && (
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -663,6 +777,8 @@ function UserDashboard() {
                 </div>
               )}
 
+              {/* Error */}
+
               {!loadingTracks && trackError && (
                 <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center">
                   <p className="text-sm text-red-400">
@@ -670,6 +786,8 @@ function UserDashboard() {
                   </p>
                 </div>
               )}
+
+              {/* Songs */}
 
               {!loadingTracks &&
                 !trackError &&
@@ -697,6 +815,8 @@ function UserDashboard() {
                   </div>
                 )}
 
+              {/* No songs */}
+
               {!loadingTracks &&
                 !trackError &&
                 tracks.length === 0 && (
@@ -711,9 +831,9 @@ function UserDashboard() {
 
             </section>
 
-            {/* =================================================
+            {/* =====================================================
                 RECENTLY PLAYED
-            ================================================= */}
+            ===================================================== */}
 
             <section>
 
@@ -740,6 +860,8 @@ function UserDashboard() {
 
               </div>
 
+              {/* Loading */}
+
               {loadingHistory && (
                 <div className="space-y-3">
 
@@ -761,8 +883,11 @@ function UserDashboard() {
                 </div>
               )}
 
+              {/* History Error */}
+
               {!loadingHistory && historyError && (
                 <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center">
+
                   <HiClock className="mx-auto text-3xl text-red-400" />
 
                   <p className="mt-3 text-sm text-red-400">
@@ -776,8 +901,11 @@ function UserDashboard() {
                   >
                     Try again
                   </button>
+
                 </div>
               )}
+
+              {/* Empty History */}
 
               {!loadingHistory &&
                 !historyError &&
@@ -793,6 +921,8 @@ function UserDashboard() {
 
                   </div>
                 )}
+
+              {/* History Songs */}
 
               {!loadingHistory &&
                 !historyError &&
@@ -812,18 +942,44 @@ function UserDashboard() {
                         const artwork =
                           song.artwork || "";
 
+                        const songIsLiked =
+                          isLiked(songId);
+
+                        const isLiking =
+                          likingSong === songId;
+
                         return (
                           <div
                             key={
                               song._id ||
                               `${songId}-${index}`
                             }
-                            className="group flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3 transition hover:border-violet-500/30 hover:bg-violet-500/5"
+                            className={`
+                              group flex items-center gap-4
+                              rounded-2xl border
+                              bg-[var(--surface)]/60 p-3
+                              transition
+                              ${
+                                isCurrent
+                                  ? "border-violet-500/30 bg-violet-500/5"
+                                  : "border-[var(--border)] hover:border-violet-500/30 hover:bg-violet-500/5"
+                              }
+                            `}
                           >
 
+                            {/* NUMBER */}
+
                             <div className="hidden w-6 text-center text-sm text-[var(--text-muted)] sm:block">
-                              {index + 1}
+                              {isCurrent && isPlaying ? (
+                                <span className="text-violet-400">
+                                  ♪
+                                </span>
+                              ) : (
+                                index + 1
+                              )}
                             </div>
+
+                            {/* ARTWORK */}
 
                             <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-[var(--card)]">
 
@@ -831,7 +987,7 @@ function UserDashboard() {
                                 <img
                                   src={artwork}
                                   alt={song.title}
-                                  className="h-full w-full object-cover"
+                                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                                 />
                               ) : (
                                 <div className="flex h-full w-full items-center justify-center text-violet-400">
@@ -842,11 +998,15 @@ function UserDashboard() {
                               <button
                                 type="button"
                                 onClick={() =>
-                                  handlePlayHistorySong(
-                                    song
-                                  )
+                                  handlePlayHistorySong(song)
                                 }
                                 className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition group-hover:opacity-100"
+                                aria-label={
+                                  isCurrent &&
+                                  isPlaying
+                                    ? "Pause"
+                                    : "Play"
+                                }
                               >
                                 {isCurrent &&
                                 isPlaying ? (
@@ -858,14 +1018,19 @@ function UserDashboard() {
 
                             </div>
 
+                            {/* SONG INFO */}
+
                             <div className="min-w-0 flex-1">
 
                               <h3
-                                className={`truncate text-sm font-semibold ${
-                                  isCurrent
-                                    ? "text-violet-400"
-                                    : ""
-                                }`}
+                                className={`
+                                  truncate text-sm font-semibold
+                                  ${
+                                    isCurrent
+                                      ? "text-violet-400"
+                                      : ""
+                                  }
+                                `}
                               >
                                 {song.title}
                               </h3>
@@ -878,14 +1043,88 @@ function UserDashboard() {
 
                             </div>
 
+                            {/* LIKE */}
+
                             <button
                               type="button"
                               onClick={() =>
-                                handlePlayHistorySong(
-                                  song
-                                )
+                                handleLike(song)
                               }
-                              className="hidden h-10 w-10 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:flex"
+                              disabled={isLiking}
+                              className={`
+                                flex h-10 w-10 shrink-0
+                                items-center justify-center
+                                rounded-full
+                                transition-all duration-200
+                                ${
+                                  songIsLiked
+                                    ? "text-violet-400 bg-violet-500/10"
+                                    : "text-[var(--text-muted)] hover:bg-violet-500/10 hover:text-violet-400"
+                                }
+                                ${
+                                  isLiking
+                                    ? "cursor-wait opacity-50"
+                                    : ""
+                                }
+                              `}
+                              aria-label={
+                                songIsLiked
+                                  ? "Unlike song"
+                                  : "Like song"
+                              }
+                              title={
+                                songIsLiked
+                                  ? "Unlike"
+                                  : "Like"
+                              }
+                            >
+                              <HiHeart
+                                className={`
+                                  text-xl transition-transform
+                                  ${
+                                    songIsLiked
+                                      ? "scale-110 fill-current"
+                                      : ""
+                                  }
+                                `}
+                              />
+                            </button>
+
+                            {/* ADD TO PLAYLIST */}
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const normalizedSong =
+                                  normalizeSong(song);
+
+                                setPlaylistModalSong(
+                                  normalizedSong
+                                );
+
+                                fetchPlaylists();
+                              }}
+                              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-violet-500/10 hover:text-violet-400"
+                              aria-label="Add to playlist"
+                              title="Add to playlist"
+                            >
+                              <HiPlus className="text-xl" />
+                            </button>
+
+                            {/* PLAY */}
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handlePlayHistorySong(song)
+                              }
+                              className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:flex"
+                              aria-label={
+                                isCurrent &&
+                                isPlaying
+                                  ? "Pause"
+                                  : "Play"
+                              }
                             >
                               {isCurrent &&
                               isPlaying ? (
@@ -908,7 +1147,6 @@ function UserDashboard() {
           </div>
 
         </section>
-
       </div>
 
       {/* =====================================================
@@ -924,6 +1162,7 @@ function UserDashboard() {
             }
           }}
         >
+
           <div
             className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl"
             onClick={(event) =>
@@ -1089,43 +1328,10 @@ function UserDashboard() {
               )}
 
             </div>
-
           </div>
         </div>
       )}
-
     </main>
-  );
-}
-
-/* =====================================================
-   DASHBOARD LINK
-===================================================== */
-
-function DashboardLink({
-  icon,
-  label,
-  active = false,
-}) {
-  return (
-    <button
-      type="button"
-      className={`
-        flex w-full items-center gap-3 rounded-xl
-        px-3 py-3 text-sm font-medium transition
-        ${
-          active
-            ? "bg-violet-500/10 text-violet-400"
-            : "text-[var(--text-secondary)] hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-        }
-      `}
-    >
-      <span className="text-lg">
-        {icon}
-      </span>
-
-      {label}
-    </button>
   );
 }
 
@@ -1193,8 +1399,6 @@ function SongCard({
           </div>
         )}
 
-        {/* Overlay */}
-
         <div
           className={`
             absolute inset-0 bg-black/30 transition
@@ -1206,59 +1410,74 @@ function SongCard({
           `}
         />
 
-        {/* Like Button */}
+        {/* =================================================
+            TOP LEFT ACTIONS
+            LIKE + PLAYLIST
+        ================================================= */}
 
-        <button
-          type="button"
-          onClick={handleLike}
-          disabled={likingSong === track.id}
-          className={`
-            absolute left-3 top-3
-            flex h-10 w-10 items-center justify-center
-            rounded-full backdrop-blur-md
-            transition-all duration-200
-            ${
-              isLiked
-                ? "bg-violet-600 text-white opacity-100"
-                : "bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-violet-600"
-            }
-            ${
-              likingSong === track.id
-                ? "cursor-wait opacity-70"
-                : ""
-            }
-          `}
-          aria-label={
-            isLiked
-              ? "Unlike song"
-              : "Like song"
-          }
-        >
-          <HiHeart
+        <div className="absolute left-3 top-3 flex items-center gap-2">
+
+          {/* Like */}
+
+          <button
+            type="button"
+            onClick={handleLike}
+            disabled={likingSong === track.id}
             className={`
-              text-lg transition-transform
+              flex h-10 w-10 items-center justify-center
+              rounded-full backdrop-blur-md
+              transition-all duration-200
               ${
                 isLiked
-                  ? "scale-110 fill-current"
+                  ? "bg-violet-600 text-white opacity-100"
+                  : "bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-violet-600"
+              }
+              ${
+                likingSong === track.id
+                  ? "cursor-wait opacity-70"
                   : ""
               }
             `}
-          />
-        </button>
+            aria-label={
+              isLiked
+                ? "Unlike song"
+                : "Like song"
+            }
+            title={
+              isLiked
+                ? "Unlike"
+                : "Like"
+            }
+          >
+            <HiHeart
+              className={`
+                text-lg transition-transform
+                ${
+                  isLiked
+                    ? "scale-110 fill-current"
+                    : ""
+                }
+              `}
+            />
+          </button>
 
-        {/* Add To Playlist */}
+          {/* Add to Playlist */}
 
-        <button
-          type="button"
-          onClick={handlePlaylist}
-          className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white opacity-0 backdrop-blur-md transition-all duration-200 group-hover:opacity-100 hover:bg-violet-600"
-          aria-label="Add to playlist"
-          title="Add to playlist"
-        >
-          <HiPlus className="text-lg" />
-        </button>
+          <button
+            type="button"
+            onClick={handlePlaylist}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white opacity-0 backdrop-blur-md transition-all duration-200 group-hover:opacity-100 hover:bg-violet-600"
+            aria-label="Add to playlist"
+            title="Add to playlist"
+          >
+            <HiPlus className="text-lg" />
+          </button>
 
-        {/* Play Button */}
+        </div>
+
+        {/* =================================================
+            PLAY BUTTON
+        ================================================= */}
 
         <button
           type="button"
@@ -1292,7 +1511,7 @@ function SongCard({
         {/* Playing Indicator */}
 
         {isCurrentSong && isPlaying && (
-          <div className="absolute bottom-3 left-14 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1.5 backdrop-blur">
+          <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1.5 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-400" />
 
             <span className="text-[10px] font-medium text-white">
