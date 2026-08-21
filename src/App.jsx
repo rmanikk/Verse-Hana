@@ -15,6 +15,7 @@ import RecentlyPlayed from "./pages/RecentlyPlayed";
 import Playlists from "./pages/Playlists";
 import PlaylistDetails from "./pages/PlaylistDetails";
 import Discover from "./pages/Discover";
+import Genre from "./pages/Genre";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
            <Route path="/playlists" element={<Playlists />} />
             <Route path="/playlists/:playlistId" element={<PlaylistDetails />} />
             <Route path="/discover" element={<Discover />} />
+            <Route path="/genres" element={<Genre />} />
            
         </Route>
 

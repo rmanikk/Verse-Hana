@@ -242,5 +242,165 @@ router.get("/search", async (req, res) => {
     });
   }
 });
+// =====================================================
+// GENRE MAPPING
+// =====================================================
+
+const genreMapping = {
+  electronic: {
+    searchTerms: [
+      "electronic",
+      "edm",
+      "electro",
+    ],
+  },
+
+  hiphop: {
+    searchTerms: [
+      "hip hop",
+      "hiphop",
+      "rap",
+    ],
+  },
+
+  pop: {
+    searchTerms: [
+      "pop",
+      "pop music",
+    ],
+  },
+
+  rock: {
+    searchTerms: [
+      "rock",
+      "alternative rock",
+    ],
+  },
+
+  rnb: {
+    searchTerms: [
+      "rnb",
+      "r&b",
+      "soul",
+    ],
+  },
+
+  jazz: {
+    searchTerms: [
+      "jazz",
+      "smooth jazz",
+    ],
+  },
+
+  classical: {
+    searchTerms: [
+      "classical",
+      "orchestra",
+      "piano",
+    ],
+  },
+
+  lofi: {
+    searchTerms: [
+      "lofi",
+      "lo-fi",
+      "lofi beats",
+    ],
+  },
+
+  metal: {
+    searchTerms: [
+      "metal",
+      "heavy metal",
+    ],
+  },
+
+  indie: {
+    searchTerms: [
+      "indie",
+      "indie music",
+    ],
+  },
+};
+
+// =====================================================
+// GET MUSIC BY GENRE
+// GET /api/music/genre/:genre
+// =====================================================
+
+router.get("/genre/:genre", async (req, res) => {
+  try {
+    const genre = req.params.genre.toLowerCase();
+
+    const genreConfig = genreMapping[genre];
+
+    if (!genreConfig) {
+      return res.status(400).json({
+        message: "Invalid genre.",
+        availableGenres: Object.keys(genreMapping),
+      });
+    }
+
+    const limit = Math.min(
+      Number(req.query.limit) || 20,
+      100
+    );
+
+    const tracks = [];
+
+    // =================================================
+    // SEARCH AUDIUS USING GENRE TERMS
+    // =================================================
+
+    for (const searchTerm of genreConfig.searchTerms) {
+      const params = new URLSearchParams({
+        query: searchTerm,
+        limit: String(limit),
+        sort_method: "popular",
+      });
+
+      const data = await fetchAudius(
+        `/tracks/search?${params.toString()}`
+      );
+
+      if (data.data) {
+        tracks.push(...data.data);
+      }
+
+      // Stop once we have enough songs
+      if (tracks.length >= limit) {
+        break;
+      }
+    }
+
+    // =================================================
+    // REMOVE DUPLICATES
+    // =================================================
+
+    const uniqueTracks = [
+      ...new Map(
+        tracks.map((track) => [
+          track.id,
+          track,
+        ])
+      ).values(),
+    ];
+
+    return res.status(200).json({
+      message: "Genre music fetched successfully.",
+      genre,
+      tracks: uniqueTracks.slice(0, limit),
+    });
+  } catch (error) {
+    console.error(
+      "Audius genre error:",
+      error
+    );
+
+    return res.status(500).json({
+      message: "Failed to fetch genre music.",
+    });
+  }
+});
 
 export default router;

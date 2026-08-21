@@ -29,6 +29,12 @@ const songSchema = new mongoose.Schema(
         ref: "Mood",
       },
     ],
+    genres: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Genre",
+  },
+],
 
     artwork: {
       type: String,

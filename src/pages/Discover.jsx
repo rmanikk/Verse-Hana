@@ -829,18 +829,13 @@ function Discover() {
               Discover
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                setSearch("");
-                setActiveMood("");
-                fetchTracks("");
-              }}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiMusicalNote className="text-lg" />
-              Moods
-            </button>
+            <Link
+  to="/genres"
+  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+>
+  <HiMusicalNote className="text-lg" />
+  Genres
+</Link>
 
             <Link
               to="/liked-songs"
