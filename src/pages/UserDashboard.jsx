@@ -12,6 +12,7 @@ import {
   HiPause,
   HiPlus,
   HiXMark,
+  HiShieldCheck,
 } from "react-icons/hi2";
 
 import { useAuth } from "../context/AuthContext";
@@ -443,20 +444,20 @@ function UserDashboard() {
             </Link>
 
             <Link
-  to="/discover"
-  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
->
-  <HiMagnifyingGlass className="text-lg" />
-  Discover
-</Link>
+              to="/discover"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiMagnifyingGlass className="text-lg" />
+              Discover
+            </Link>
 
-           <Link
-  to="/genres"
-  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
->
-  <HiMusicalNote className="text-lg" />
-  Genres
-</Link>
+            <Link
+              to="/genres"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiMusicalNote className="text-lg" />
+              Genres
+            </Link>
 
             <Link
               to="/liked-songs"
@@ -466,8 +467,6 @@ function UserDashboard() {
               Liked Songs
             </Link>
 
-            {/* PLAYLISTS */}
-
             <Link
               to="/playlists"
               className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
@@ -475,8 +474,6 @@ function UserDashboard() {
               <HiQueueList className="text-lg" />
               Playlists
             </Link>
-
-            {/* RECENTLY PLAYED */}
 
             <Link
               to="/recently-played"
@@ -511,6 +508,22 @@ function UserDashboard() {
                 </p>
               </div>
             </Link>
+
+            {/* =================================================
+                ADMIN-ONLY PANEL BUTTON
+            ================================================= */}
+
+            {user?.role === "admin" && (
+              <Link
+                to="/admin"
+                className="mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-violet-400 transition hover:bg-violet-500/10"
+              >
+                <HiShieldCheck className="text-lg" />
+                Admin Panel
+              </Link>
+            )}
+
+            {/* Logout */}
 
             <button
               type="button"
@@ -559,9 +572,9 @@ function UserDashboard() {
 
           <div className="mx-auto max-w-[1500px] space-y-10 px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
 
-            {/* =====================================================
+            {/* =================================================
                 MOOD HERO
-            ===================================================== */}
+            ================================================= */}
 
             <section className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 sm:p-8 lg:p-10">
 
@@ -609,9 +622,9 @@ function UserDashboard() {
 
             </section>
 
-            {/* =====================================================
+            {/* =================================================
                 RECOMMENDED
-            ===================================================== */}
+            ================================================= */}
 
             <section>
 
@@ -633,8 +646,6 @@ function UserDashboard() {
 
               </div>
 
-              {/* Loading */}
-
               {loadingTracks && (
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                   {[1, 2, 3, 4, 5].map((item) => (
@@ -652,8 +663,6 @@ function UserDashboard() {
                 </div>
               )}
 
-              {/* Error */}
-
               {!loadingTracks && trackError && (
                 <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center">
                   <p className="text-sm text-red-400">
@@ -661,8 +670,6 @@ function UserDashboard() {
                   </p>
                 </div>
               )}
-
-              {/* Songs */}
 
               {!loadingTracks &&
                 !trackError &&
@@ -690,8 +697,6 @@ function UserDashboard() {
                   </div>
                 )}
 
-              {/* No songs */}
-
               {!loadingTracks &&
                 !trackError &&
                 tracks.length === 0 && (
@@ -706,9 +711,9 @@ function UserDashboard() {
 
             </section>
 
-            {/* =====================================================
+            {/* =================================================
                 RECENTLY PLAYED
-            ===================================================== */}
+            ================================================= */}
 
             <section>
 
@@ -735,8 +740,6 @@ function UserDashboard() {
 
               </div>
 
-              {/* Loading History */}
-
               {loadingHistory && (
                 <div className="space-y-3">
 
@@ -758,8 +761,6 @@ function UserDashboard() {
                 </div>
               )}
 
-              {/* History Error */}
-
               {!loadingHistory && historyError && (
                 <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center">
                   <HiClock className="mx-auto text-3xl text-red-400" />
@@ -778,8 +779,6 @@ function UserDashboard() {
                 </div>
               )}
 
-              {/* Empty History */}
-
               {!loadingHistory &&
                 !historyError &&
                 recentSongs.length === 0 && (
@@ -794,8 +793,6 @@ function UserDashboard() {
 
                   </div>
                 )}
-
-              {/* History Songs */}
 
               {!loadingHistory &&
                 !historyError &&
