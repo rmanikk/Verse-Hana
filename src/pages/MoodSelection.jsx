@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { HiArrowRight } from "react-icons/hi2";
+import {
+  HiArrowRight,
+  HiXMark,
+} from "react-icons/hi2";
 
 const moods = [
   {
@@ -53,38 +55,71 @@ const moods = [
   },
 ];
 
-function MoodSelection() {
-  const navigate = useNavigate();
-
-  const [selectedMood, setSelectedMood] = useState(null);
+function MoodSelection({
+  onClose,
+  onMoodChange,
+  currentMood,
+}) {
+  // Local state so clicking a mood does not immediately
+  // reload or change the dashboard.
+  const [selectedMood, setSelectedMood] = useState(
+    currentMood || "calm"
+  );
 
   const handleContinue = () => {
     if (!selectedMood) return;
 
-    // Temporary storage.
-    // Later this will be saved to MongoDB.
-    localStorage.setItem("versehana_mood", selectedMood);
+    // Save selected mood
+    localStorage.setItem(
+      "versehana_mood",
+      selectedMood
+    );
 
-    navigate("/dashboard");
+    // Update dashboard
+    if (onMoodChange) {
+      onMoodChange(selectedMood);
+    }
+
+    // Close modal
+    if (onClose) {
+      onClose();
+    }
+  };
+
+  const handleBackdropClick = (event) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
   };
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12 sm:px-6">
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-md"
+      onClick={handleBackdropClick}
+    >
+      <div className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-[32px] border border-[var(--border)] bg-[var(--background)] shadow-2xl shadow-black/50">
 
         {/* Ambient Background */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[32px]">
+          <div className="absolute left-[-120px] top-[-120px] h-[350px] w-[350px] rounded-full bg-violet-600/15 blur-[130px]" />
 
-          <div className="absolute left-[-180px] top-[-150px] h-[450px] w-[450px] rounded-full bg-violet-600/15 blur-[150px]" />
+          <div className="absolute bottom-[-150px] right-[-120px] h-[350px] w-[350px] rounded-full bg-fuchsia-600/10 blur-[130px]" />
 
-          <div className="absolute bottom-[-180px] right-[-150px] h-[450px] w-[450px] rounded-full bg-fuchsia-600/10 blur-[150px]" />
-
-          <div className="absolute left-1/2 top-1/2 h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/5 blur-[150px]" />
-
+          <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/5 blur-[130px]" />
         </div>
 
+        {/* Close */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-5 top-5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]/80 text-[var(--text-secondary)] backdrop-blur-md transition hover:bg-violet-500/10 hover:text-white"
+          aria-label="Close mood selection"
+        >
+          <HiXMark className="text-xl" />
+        </button>
+
         {/* Content */}
-        <div className="relative z-10 w-full max-w-4xl">
+        <div className="relative z-10 px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
 
           {/* Heading */}
           <div className="mx-auto max-w-2xl text-center">
@@ -93,37 +128,40 @@ function MoodSelection() {
               🎧 Let's set the vibe
             </span>
 
-            <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
               How are you feeling
               <span className="block bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
                 today?
               </span>
             </h1>
 
-            <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
-              Tell VerseHana your mood and we'll create a musical experience
-              that feels right for you.
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-[var(--text-secondary)]">
+              Choose a mood and we'll update your
+              music recommendations to match.
             </p>
 
           </div>
 
           {/* Mood Grid */}
-          <div className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
 
             {moods.map((mood) => {
-              const isSelected = selectedMood === mood.id;
+              const isSelected =
+                selectedMood === mood.id;
 
               return (
                 <button
                   key={mood.id}
                   type="button"
-                  onClick={() => setSelectedMood(mood.id)}
+                  onClick={() =>
+                    setSelectedMood(mood.id)
+                  }
                   className={`
-                    group relative rounded-3xl border p-5 text-left
+                    group relative rounded-2xl border p-4 text-left
                     transition-all duration-300
                     ${
                       isSelected
-                        ? "border-violet-500 bg-violet-500/15 shadow-xl shadow-violet-500/10"
+                        ? "border-violet-500 bg-violet-500/15 shadow-lg shadow-violet-500/10"
                         : "border-[var(--border)] bg-[var(--surface)]/70 hover:-translate-y-1 hover:border-violet-500/50 hover:bg-violet-500/5"
                     }
                   `}
@@ -131,18 +169,18 @@ function MoodSelection() {
 
                   {/* Selected Indicator */}
                   {isSelected && (
-                    <span className="absolute right-4 top-4 flex h-5 w-5 items-center justify-center rounded-full bg-violet-500 text-xs text-white">
+                    <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-violet-500 text-xs text-white">
                       ✓
                     </span>
                   )}
 
                   {/* Emoji */}
-                  <div className="text-4xl transition-transform duration-300 group-hover:scale-110">
+                  <div className="text-3xl transition-transform duration-300 group-hover:scale-110">
                     {mood.emoji}
                   </div>
 
                   {/* Mood Name */}
-                  <h2 className="mt-4 text-sm font-semibold">
+                  <h2 className="mt-3 text-sm font-semibold">
                     {mood.name}
                   </h2>
 
@@ -157,8 +195,8 @@ function MoodSelection() {
 
           </div>
 
-          {/* Continue Button */}
-          <div className="mt-10 flex justify-center">
+          {/* Continue */}
+          <div className="mt-8 flex justify-center">
 
             <button
               type="button"
@@ -188,7 +226,7 @@ function MoodSelection() {
 
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
