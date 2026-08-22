@@ -58,27 +58,34 @@ function MusicPlayer() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[100] border-t border-[var(--border)] bg-[var(--surface)]/95 shadow-2xl backdrop-blur-2xl">
 
-      {/* Progress bar */}
+      {/* =====================================================
+          PROGRESS INDICATOR
+      ===================================================== */}
 
       <div className="absolute left-0 right-0 top-0 h-1 bg-[var(--border)]">
-
         <div
           className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all"
           style={{
             width:
               duration > 0
-                ? `${(progress / duration) * 100}%`
+                ? `${Math.min(
+                    (progress / duration) * 100,
+                    100
+                  )}%`
                 : "0%",
           }}
         />
-
       </div>
 
-      <div className="mx-auto flex h-[82px] max-w-[1600px] items-center gap-4 px-4 sm:px-6 lg:px-8">
+      {/* =====================================================
+          DESKTOP / TABLET PLAYER
+      ===================================================== */}
 
-        {/* =====================================================
+      <div className="mx-auto hidden h-[82px] max-w-[1600px] items-center gap-4 px-4 sm:flex sm:px-6 lg:px-8">
+
+        {/* ===================================================
             SONG INFO
-        ===================================================== */}
+        =================================================== */}
 
         <div className="flex min-w-0 flex-1 items-center gap-3">
 
@@ -115,25 +122,26 @@ function MusicPlayer() {
               className="mt-1 truncate text-xs text-[var(--text-muted)]"
               title={currentSong.user?.name}
             >
-              {currentSong.user?.name || "Unknown artist"}
+              {currentSong.user?.name ||
+                "Unknown artist"}
             </p>
 
           </div>
 
         </div>
 
-        {/* =====================================================
+        {/* ===================================================
             PLAYER CONTROLS
-        ===================================================== */}
+        =================================================== */}
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
 
           {/* Previous */}
 
           <button
             type="button"
             onClick={previousSong}
-            className="hidden h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)] sm:flex"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
             aria-label="Previous song"
           >
             <HiBackward className="text-lg" />
@@ -145,7 +153,9 @@ function MusicPlayer() {
             type="button"
             onClick={togglePlay}
             className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-500/30 transition hover:scale-105"
-            aria-label={isPlaying ? "Pause" : "Play"}
+            aria-label={
+              isPlaying ? "Pause" : "Play"
+            }
           >
             {isPlaying ? (
               <HiPause className="text-lg" />
@@ -159,7 +169,7 @@ function MusicPlayer() {
           <button
             type="button"
             onClick={nextSong}
-            className="hidden h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)] sm:flex"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
             aria-label="Next song"
           >
             <HiForward className="text-lg" />
@@ -167,9 +177,9 @@ function MusicPlayer() {
 
         </div>
 
-        {/* =====================================================
-            PROGRESS
-        ===================================================== */}
+        {/* ===================================================
+            DESKTOP PROGRESS
+        =================================================== */}
 
         <div className="hidden w-[280px] items-center gap-3 md:flex lg:w-[360px]">
 
@@ -184,6 +194,7 @@ function MusicPlayer() {
             value={progress || 0}
             onChange={handleSeek}
             className="h-1 w-full cursor-pointer accent-violet-500"
+            aria-label="Song progress"
           />
 
           <span className="w-10 text-[10px] text-[var(--text-muted)]">
@@ -192,11 +203,11 @@ function MusicPlayer() {
 
         </div>
 
-        {/* =====================================================
+        {/* ===================================================
             VOLUME
-        ===================================================== */}
+        =================================================== */}
 
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
 
           <button
             type="button"
@@ -205,9 +216,7 @@ function MusicPlayer() {
             }
             className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
             aria-label={
-              volume > 0
-                ? "Mute"
-                : "Unmute"
+              volume > 0 ? "Mute" : "Unmute"
             }
           >
             {volume > 0 ? (
@@ -225,13 +234,14 @@ function MusicPlayer() {
             value={volume}
             onChange={handleVolume}
             className="w-20 cursor-pointer accent-violet-500"
+            aria-label="Volume"
           />
 
         </div>
 
-        {/* =====================================================
+        {/* ===================================================
             CLOSE
-        ===================================================== */}
+        =================================================== */}
 
         <button
           type="button"
@@ -244,13 +254,124 @@ function MusicPlayer() {
 
       </div>
 
-      {/* Mobile progress */}
+      {/* =====================================================
+          MOBILE PLAYER
+      ===================================================== */}
 
-      <div className="px-4 pb-1 md:hidden">
+      <div className="flex flex-col px-3 pb-2 pt-3 sm:hidden">
 
-        <div className="flex items-center gap-2">
+        {/* ===================================================
+            MOBILE TOP ROW
+        =================================================== */}
 
-          <span className="text-[9px] text-[var(--text-muted)]">
+        <div className="flex items-center gap-3">
+
+          {/* Artwork */}
+
+          <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[var(--card)] shadow-md">
+
+            {artwork ? (
+              <img
+                src={artwork}
+                alt={currentSong.title}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-violet-400">
+                ♪
+              </div>
+            )}
+
+          </div>
+
+          {/* Song information */}
+
+          <div className="min-w-0 flex-1">
+
+            <h3
+              className="truncate text-sm font-semibold text-[var(--text-primary)]"
+              title={currentSong.title}
+            >
+              {currentSong.title}
+            </h3>
+
+            <p
+              className="mt-0.5 truncate text-xs text-[var(--text-muted)]"
+              title={currentSong.user?.name}
+            >
+              {currentSong.user?.name ||
+                "Unknown artist"}
+            </p>
+
+          </div>
+
+          {/* =================================================
+              MOBILE CONTROLS
+          ================================================= */}
+
+          <div className="flex shrink-0 items-center gap-1">
+
+            {/* Previous */}
+
+            <button
+              type="button"
+              onClick={previousSong}
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)]"
+              aria-label="Previous song"
+            >
+              <HiBackward className="text-base" />
+            </button>
+
+            {/* Play / Pause */}
+
+            <button
+              type="button"
+              onClick={togglePlay}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-500/30"
+              aria-label={
+                isPlaying ? "Pause" : "Play"
+              }
+            >
+              {isPlaying ? (
+                <HiPause className="text-base" />
+              ) : (
+                <HiPlay className="ml-0.5 text-base" />
+              )}
+            </button>
+
+            {/* Next */}
+
+            <button
+              type="button"
+              onClick={nextSong}
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)]"
+              aria-label="Next song"
+            >
+              <HiForward className="text-base" />
+            </button>
+
+            {/* Close */}
+
+            <button
+              type="button"
+              onClick={closePlayer}
+              className="ml-1 flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-muted)]"
+              aria-label="Close player"
+            >
+              <HiXMark className="text-lg" />
+            </button>
+
+          </div>
+
+        </div>
+
+        {/* ===================================================
+            MOBILE PROGRESS
+        =================================================== */}
+
+        <div className="mt-2 flex items-center gap-2">
+
+          <span className="w-7 shrink-0 text-[9px] text-[var(--text-muted)]">
             {formatTime(progress)}
           </span>
 
@@ -260,10 +381,11 @@ function MusicPlayer() {
             max={duration || 0}
             value={progress || 0}
             onChange={handleSeek}
-            className="h-1 flex-1 cursor-pointer accent-violet-500"
+            className="h-1 min-w-0 flex-1 cursor-pointer accent-violet-500"
+            aria-label="Song progress"
           />
 
-          <span className="text-[9px] text-[var(--text-muted)]">
+          <span className="w-7 shrink-0 text-right text-[9px] text-[var(--text-muted)]">
             {formatTime(duration)}
           </span>
 

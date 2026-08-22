@@ -13,6 +13,7 @@ import {
   HiTrash,
   HiPlus,
   HiXMark,
+  HiBars3,
 } from "react-icons/hi2";
 
 import { useAuth } from "../context/AuthContext";
@@ -37,10 +38,19 @@ function RecentlyPlayed() {
   const [error, setError] = useState("");
 
   // =====================================================
+  // MOBILE SIDEBAR
+  // =====================================================
+
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false);
+
+  // =====================================================
   // LIKES
   // =====================================================
 
-  const [likedSongs, setLikedSongs] = useState(new Set());
+  const [likedSongs, setLikedSongs] = useState(
+    new Set()
+  );
 
   // =====================================================
   // PLAYLISTS
@@ -346,7 +356,6 @@ function RecentlyPlayed() {
         "Song added to playlist."
       );
 
-      // Refresh playlist data so song count updates
       await fetchPlaylists();
 
       setTimeout(() => {
@@ -515,6 +524,46 @@ function RecentlyPlayed() {
   };
 
   // =====================================================
+  // CLOSE MOBILE MENU
+  // =====================================================
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
+  // =====================================================
+  // NAVIGATION CONTENT
+  // =====================================================
+
+  const navigation = [
+    {
+      name: "Home",
+      path: "/dashboard",
+      icon: HiHome,
+    },
+    {
+      name: "Discover",
+      path: "/discover",
+      icon: HiMagnifyingGlass,
+    },
+    {
+      name: "Genres",
+      path: "/genres",
+      icon: HiMusicalNote,
+    },
+    {
+      name: "Liked Songs",
+      path: "/liked-songs",
+      icon: HiHeart,
+    },
+    {
+      name: "Playlists",
+      path: "/playlists",
+      icon: HiQueueList,
+    },
+  ];
+
+  // =====================================================
   // RENDER
   // =====================================================
 
@@ -524,7 +573,7 @@ function RecentlyPlayed() {
       <div className="flex min-h-screen">
 
         {/* =====================================================
-            SIDEBAR
+            DESKTOP SIDEBAR
         ===================================================== */}
 
         <aside className="hidden w-64 shrink-0 border-r border-[var(--border)] bg-[var(--surface)]/60 lg:flex lg:flex-col">
@@ -533,7 +582,7 @@ function RecentlyPlayed() {
 
           <div className="flex h-20 items-center gap-3 border-b border-[var(--border)] px-6">
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
               <HiMusicalNote className="text-xl" />
             </div>
 
@@ -550,45 +599,22 @@ function RecentlyPlayed() {
 
           <nav className="flex-1 space-y-2 p-4">
 
-            <Link
-              to="/dashboard"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiHome className="text-lg" />
-              Home
-            </Link>
-
-            <Link
-              to="/discover"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiMagnifyingGlass className="text-lg" />
-              Discover
-            </Link>
-
-            <Link
-              to="/genres"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiMusicalNote className="text-lg" />
-              Genres
-            </Link>
-
-            <Link
-              to="/liked-songs"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiHeart className="text-lg" />
-              Liked Songs
-            </Link>
-
-            <Link
-              to="/playlists"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiQueueList className="text-lg" />
-              Playlists
-            </Link>
+            {navigation.map(
+              ({
+                name,
+                path,
+                icon: Icon,
+              }) => (
+                <Link
+                  key={name}
+                  to={path}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                >
+                  <Icon className="text-lg" />
+                  {name}
+                </Link>
+              )
+            )}
 
             {/* ACTIVE */}
 
@@ -608,7 +634,134 @@ function RecentlyPlayed() {
               className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
             >
 
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+                {user?.name
+                  ?.charAt(0)
+                  ?.toUpperCase() || "U"}
+              </div>
+
+              <div className="min-w-0">
+
+                <p className="truncate text-sm font-semibold">
+                  {user?.name || "User"}
+                </p>
+
+                <p className="truncate text-xs text-[var(--text-muted)]">
+                  {user?.email}
+                </p>
+
+              </div>
+
+            </Link>
+
+            <button
+              type="button"
+              onClick={logout}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] transition hover:bg-red-500/10 hover:text-red-400"
+            >
+              <HiArrowRightOnRectangle className="text-lg" />
+              Logout
+            </button>
+
+          </div>
+
+        </aside>
+
+        {/* =====================================================
+            MOBILE SIDEBAR OVERLAY
+        ===================================================== */}
+
+        {mobileMenuOpen && (
+          <div
+            className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm lg:hidden"
+            onClick={closeMobileMenu}
+          />
+        )}
+
+        {/* =====================================================
+            MOBILE SIDEBAR
+        ===================================================== */}
+
+        <aside
+          className={`fixed left-0 top-0 z-[100] flex h-full w-[280px] max-w-[85vw] flex-col border-r border-[var(--border)] bg-[var(--surface)] shadow-2xl transition-transform duration-300 lg:hidden ${
+            mobileMenuOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
+          }`}
+        >
+
+          {/* MOBILE LOGO */}
+
+          <div className="flex h-20 shrink-0 items-center justify-between border-b border-[var(--border)] px-5">
+
+            <div className="flex items-center gap-3">
+
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                <HiMusicalNote className="text-xl" />
+              </div>
+
+              <span className="text-xl font-extrabold tracking-tight">
+                Verse
+                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                  Hana
+                </span>
+              </span>
+
+            </div>
+
+            <button
+              type="button"
+              onClick={closeMobileMenu}
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
+              aria-label="Close menu"
+            >
+              <HiXMark className="text-xl" />
+            </button>
+
+          </div>
+
+          {/* MOBILE NAVIGATION */}
+
+          <nav className="flex-1 space-y-2 overflow-y-auto p-4">
+
+            {navigation.map(
+              ({
+                name,
+                path,
+                icon: Icon,
+              }) => (
+                <Link
+                  key={name}
+                  to={path}
+                  onClick={closeMobileMenu}
+                  className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                >
+                  <Icon className="text-lg" />
+                  {name}
+                </Link>
+              )
+            )}
+
+            {/* ACTIVE */}
+
+            <div className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-4 py-3 text-sm font-medium text-violet-400">
+              <HiClock className="text-lg" />
+              Recently Played
+            </div>
+
+          </nav>
+
+          {/* MOBILE USER */}
+
+          <div className="border-t border-[var(--border)] p-4">
+
+            <Link
+              to="/profile"
+              onClick={closeMobileMenu}
+              className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+            >
+
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
                 {user?.name
                   ?.charAt(0)
                   ?.toUpperCase() || "U"}
@@ -647,33 +800,59 @@ function RecentlyPlayed() {
 
         <section className="min-w-0 flex-1">
 
-          {/* HEADER */}
+          {/* =====================================================
+              RESPONSIVE HEADER
+          ===================================================== */}
 
-          <header className="flex h-20 items-center justify-between border-b border-[var(--border)] px-5 sm:px-8 lg:px-10">
+          <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--background)]/90 px-4 backdrop-blur-xl sm:h-20 sm:px-6 lg:px-10">
 
-            <div>
+            {/* LEFT */}
 
-              <p className="text-sm text-[var(--text-secondary)]">
-                Your listening history
-              </p>
+            <div className="flex min-w-0 items-center gap-3">
 
-              <h1 className="text-lg font-bold sm:text-xl">
-                Recently Played
-              </h1>
+              {/* MOBILE HAMBURGER */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  setMobileMenuOpen(true)
+                }
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-violet-400 lg:hidden"
+                aria-label="Open menu"
+              >
+                <HiBars3 className="text-2xl" />
+              </button>
+
+              {/* MOBILE / TABLET TITLE */}
+
+              <div className="min-w-0">
+
+                <p className="hidden truncate text-xs font-medium uppercase tracking-[0.18em] text-violet-400 sm:block">
+                  Your listening history
+                </p>
+
+                <h1 className="truncate text-base font-bold sm:text-xl">
+                  Recently Played
+                </h1>
+
+              </div>
 
             </div>
 
-            <div className="flex items-center gap-3">
+            {/* RIGHT */}
+
+            <div className="flex shrink-0 items-center gap-1 sm:gap-2">
 
               {recentlyPlayed.length > 0 && (
                 <button
                   type="button"
                   onClick={handleClearHistory}
-                  className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--text-secondary)] transition hover:bg-red-500/10 hover:text-red-400"
+                  className="flex h-10 items-center justify-center gap-2 rounded-xl px-2.5 text-sm text-[var(--text-secondary)] transition hover:bg-red-500/10 hover:text-red-400 sm:px-3"
+                  title="Clear history"
                 >
                   <HiTrash className="text-lg" />
 
-                  <span className="hidden sm:inline">
+                  <span className="hidden md:inline">
                     Clear history
                   </span>
                 </button>
@@ -681,7 +860,8 @@ function RecentlyPlayed() {
 
               <Link
                 to="/profile"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white ring-2 ring-violet-500/10 transition hover:ring-violet-500/30"
+                title="Profile"
               >
                 {user?.name
                   ?.charAt(0)
@@ -692,34 +872,47 @@ function RecentlyPlayed() {
 
           </header>
 
-          {/* CONTENT */}
+          {/* =====================================================
+              CONTENT
+          ===================================================== */}
 
-          <div className="mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
+          <div className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
 
             {/* =====================================================
                 HERO
             ===================================================== */}
 
-            <section className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 sm:p-8 lg:p-10">
+            <section className="relative overflow-hidden rounded-[24px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-5 sm:rounded-[28px] sm:p-8 lg:rounded-[32px] lg:p-10">
 
-              <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-[100px]" />
+              <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-violet-500/20 blur-[80px] sm:h-64 sm:w-64 sm:blur-[100px]" />
 
-              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[100px]" />
+              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-fuchsia-500/10 blur-[80px] sm:h-64 sm:w-64 sm:blur-[100px]" />
 
               <div className="relative z-10">
 
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
-                  Your history
-                </p>
+                <div className="flex items-center gap-2">
 
-                <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400 sm:h-9 sm:w-9">
+                    <HiClock className="text-lg" />
+                  </div>
+
+                  <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-violet-400 sm:text-xs sm:tracking-[0.2em]">
+                    Your history
+                  </p>
+
+                </div>
+
+                <h2 className="mt-4 max-w-3xl text-2xl font-bold leading-tight tracking-tight sm:mt-3 sm:text-4xl lg:text-5xl">
+
                   Music you've{" "}
+
                   <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                     recently played.
                   </span>
+
                 </h2>
 
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
+                <p className="mt-3 max-w-2xl text-xs leading-6 text-[var(--text-secondary)] sm:mt-4 sm:text-base sm:leading-7">
                   Quickly return to songs you've
                   listened to recently and keep
                   your favorite tracks organized.
@@ -734,38 +927,34 @@ function RecentlyPlayed() {
             ===================================================== */}
 
             {loading && (
+              <section className="mt-6 sm:mt-10">
 
-              <section className="mt-10">
-
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
 
                   {[1, 2, 3, 4, 5, 6].map(
                     (item) => (
-
                       <div
                         key={item}
-                        className="flex animate-pulse items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3"
+                        className="flex animate-pulse items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-2.5 sm:gap-4 sm:p-3"
                       >
 
-                        <div className="h-14 w-14 shrink-0 rounded-xl bg-[var(--card)]" />
+                        <div className="h-12 w-12 shrink-0 rounded-xl bg-[var(--card)] sm:h-[68px] sm:w-[68px]" />
 
-                        <div className="flex-1">
+                        <div className="min-w-0 flex-1">
 
-                          <div className="h-4 w-1/3 rounded bg-[var(--card)]" />
+                          <div className="h-4 w-2/3 rounded bg-[var(--card)] sm:w-1/3" />
 
-                          <div className="mt-2 h-3 w-1/5 rounded bg-[var(--card)]" />
+                          <div className="mt-2 h-3 w-1/3 rounded bg-[var(--card)] sm:w-1/5" />
 
                         </div>
 
                       </div>
-
                     )
                   )}
 
                 </div>
 
               </section>
-
             )}
 
             {/* =====================================================
@@ -773,10 +962,9 @@ function RecentlyPlayed() {
             ===================================================== */}
 
             {!loading && error && (
+              <section className="mt-6 sm:mt-10">
 
-              <section className="mt-10">
-
-                <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-8 text-center">
+                <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center sm:p-8">
 
                   <HiClock className="mx-auto text-4xl text-red-400" />
 
@@ -784,10 +972,19 @@ function RecentlyPlayed() {
                     {error}
                   </p>
 
+                  <button
+                    type="button"
+                    onClick={() =>
+                      window.location.reload()
+                    }
+                    className="mt-5 rounded-xl bg-red-500/10 px-5 py-2.5 text-sm font-semibold text-red-400 transition hover:bg-red-500/20"
+                  >
+                    Try again
+                  </button>
+
                 </div>
 
               </section>
-
             )}
 
             {/* =====================================================
@@ -797,36 +994,42 @@ function RecentlyPlayed() {
             {!loading &&
               !error &&
               recentlyPlayed.length === 0 && (
+                <section className="mt-6 sm:mt-10">
 
-                <section className="mt-10">
+                  <div className="relative flex min-h-[360px] flex-col items-center justify-center overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)]/60 px-5 text-center sm:min-h-[400px]">
 
-                  <div className="flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]/60 text-center">
+                    <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/10 blur-[90px]" />
 
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-violet-500/10">
-                      <HiClock className="text-4xl text-violet-400" />
+                    <div className="relative z-10">
+
+                      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-500/10 sm:h-20 sm:w-20 sm:rounded-full">
+
+                        <HiClock className="text-3xl text-violet-400 sm:text-4xl" />
+
+                      </div>
+
+                      <h2 className="mt-5 text-xl font-bold sm:mt-6 sm:text-2xl">
+                        Nothing played yet
+                      </h2>
+
+                      <p className="mx-auto mt-2 max-w-md text-xs leading-6 text-[var(--text-secondary)] sm:text-sm">
+                        Songs you listen to will appear
+                        here so you can quickly find
+                        and replay your recent music.
+                      </p>
+
+                      <Link
+                        to="/dashboard"
+                        className="mt-5 inline-flex rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02] sm:mt-6"
+                      >
+                        Start listening
+                      </Link>
+
                     </div>
-
-                    <h2 className="mt-6 text-2xl font-bold">
-                      Nothing played yet
-                    </h2>
-
-                    <p className="mt-2 max-w-md text-sm leading-6 text-[var(--text-secondary)]">
-                      Songs you listen to will appear
-                      here so you can quickly find
-                      and replay your recent music.
-                    </p>
-
-                    <Link
-                      to="/dashboard"
-                      className="mt-6 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02]"
-                    >
-                      Start listening
-                    </Link>
 
                   </div>
 
                 </section>
-
               )}
 
             {/* =====================================================
@@ -836,34 +1039,36 @@ function RecentlyPlayed() {
             {!loading &&
               !error &&
               recentlyPlayed.length > 0 && (
-
-                <section className="mt-10">
+                <section className="mt-7 sm:mt-10">
 
                   {/* SECTION HEADER */}
 
-                  <div className="mb-5 flex items-end justify-between">
+                  <div className="mb-4 flex items-end justify-between gap-4 sm:mb-5">
 
-                    <div>
+                    <div className="min-w-0">
 
-                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-violet-400 sm:text-xs sm:tracking-[0.2em]">
                         Listening history
                       </p>
 
-                      <h2 className="mt-2 text-2xl font-bold">
+                      <h2 className="mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl">
                         Recently played
                       </h2>
 
                     </div>
 
-                    <span className="text-sm text-[var(--text-muted)]">
-                      {recentlyPlayed.length} songs
+                    <span className="shrink-0 text-xs text-[var(--text-muted)] sm:text-sm">
+                      {recentlyPlayed.length}{" "}
+                      {recentlyPlayed.length === 1
+                        ? "song"
+                        : "songs"}
                     </span>
 
                   </div>
 
                   {/* SONG LIST */}
 
-                  <div className="space-y-3">
+                  <div className="space-y-2.5 sm:space-y-3">
 
                     {paginatedSongs.map(
                       (song, index) => {
@@ -883,13 +1088,12 @@ function RecentlyPlayed() {
                           index;
 
                         return (
-
                           <div
                             key={
                               song._id ||
                               `${song.songId}-${globalIndex}`
                             }
-                            className="group relative flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/70 p-3 transition-all duration-300 hover:-translate-y-[1px] hover:border-violet-500/30 hover:bg-violet-500/5 hover:shadow-lg hover:shadow-violet-500/5 sm:gap-4"
+                            className="group relative flex min-w-0 items-center gap-2.5 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/70 p-2.5 transition-all duration-300 hover:-translate-y-[1px] hover:border-violet-500/30 hover:bg-violet-500/5 hover:shadow-lg hover:shadow-violet-500/5 sm:gap-4 sm:p-3"
                           >
 
                             {/* NUMBER */}
@@ -900,22 +1104,18 @@ function RecentlyPlayed() {
 
                             {/* ARTWORK */}
 
-                            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-[var(--card)] sm:h-[68px] sm:w-[68px]">
+                            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[var(--card)] sm:h-[68px] sm:w-[68px]">
 
                               {song.artwork ? (
-
                                 <img
                                   src={song.artwork}
                                   alt={song.title}
                                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                                 />
-
                               ) : (
-
                                 <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 text-violet-400">
-                                  <HiMusicalNote className="text-2xl" />
+                                  <HiMusicalNote className="text-xl sm:text-2xl" />
                                 </div>
-
                               )}
 
                               {/* PLAY OVERLAY */}
@@ -933,14 +1133,12 @@ function RecentlyPlayed() {
                                     : "Play"
                                 }
                               >
-
                                 {isCurrent &&
                                 isPlaying ? (
-                                  <HiPause className="text-xl text-white" />
+                                  <HiPause className="text-lg text-white sm:text-xl" />
                                 ) : (
-                                  <HiPlay className="ml-0.5 text-xl text-white" />
+                                  <HiPlay className="ml-0.5 text-lg text-white sm:text-xl" />
                                 )}
-
                               </button>
 
                             </div>
@@ -950,7 +1148,7 @@ function RecentlyPlayed() {
                             <div className="min-w-0 flex-1">
 
                               <h3
-                                className={`truncate text-sm font-semibold sm:text-[15px] ${
+                                className={`truncate text-[13px] font-semibold sm:text-[15px] ${
                                   isCurrent
                                     ? "text-violet-400"
                                     : "text-[var(--text-primary)]"
@@ -959,7 +1157,7 @@ function RecentlyPlayed() {
                                 {song.title}
                               </h3>
 
-                              <p className="mt-1 truncate text-xs text-[var(--text-muted)] sm:text-sm">
+                              <p className="mt-0.5 truncate text-[11px] text-[var(--text-muted)] sm:mt-1 sm:text-sm">
                                 {song.artist ||
                                   "Unknown artist"}
                               </p>
@@ -970,7 +1168,7 @@ function RecentlyPlayed() {
 
                                     <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-400" />
 
-                                    <span className="text-[11px] font-medium text-violet-400">
+                                    <span className="text-[9px] font-medium text-violet-400 sm:text-[11px]">
                                       Playing now
                                     </span>
 
@@ -991,7 +1189,7 @@ function RecentlyPlayed() {
 
                             {/* ACTIONS */}
 
-                            <div className="flex shrink-0 items-center gap-1">
+                            <div className="flex shrink-0 items-center gap-0 sm:gap-1">
 
                               {/* LIKE */}
 
@@ -1000,7 +1198,7 @@ function RecentlyPlayed() {
                                 onClick={() =>
                                   handleLike(song)
                                 }
-                                className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 ${
+                                className={`flex h-9 w-9 items-center justify-center rounded-full transition-all duration-200 sm:h-10 sm:w-10 ${
                                   isLiked
                                     ? "text-violet-500 hover:bg-violet-500/10"
                                     : "text-[var(--text-muted)] hover:bg-violet-500/10 hover:text-violet-400"
@@ -1016,15 +1214,13 @@ function RecentlyPlayed() {
                                     : "Like song"
                                 }
                               >
-
                                 <HiHeart
-                                  className={`text-xl ${
+                                  className={`text-lg sm:text-xl ${
                                     isLiked
                                       ? "fill-current"
                                       : ""
                                   }`}
                                 />
-
                               </button>
 
                               {/* PLAYLIST */}
@@ -1036,11 +1232,11 @@ function RecentlyPlayed() {
                                     song
                                   )
                                 }
-                                className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--text-muted)] transition-all duration-200 hover:bg-violet-500/10 hover:text-violet-400"
+                                className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-muted)] transition-all duration-200 hover:bg-violet-500/10 hover:text-violet-400 sm:h-10 sm:w-10"
                                 title="Add to playlist"
                                 aria-label="Add to playlist"
                               >
-                                <HiPlus className="text-xl" />
+                                <HiPlus className="text-lg sm:text-xl" />
                               </button>
 
                               {/* PLAY */}
@@ -1064,20 +1260,17 @@ function RecentlyPlayed() {
                                     : "Play"
                                 }
                               >
-
                                 {isCurrent &&
                                 isPlaying ? (
                                   <HiPause className="text-lg" />
                                 ) : (
                                   <HiPlay className="ml-0.5 text-lg" />
                                 )}
-
                               </button>
 
                             </div>
 
                           </div>
-
                         );
                       }
                     )}
@@ -1089,8 +1282,7 @@ function RecentlyPlayed() {
                   ================================================= */}
 
                   {totalPages > 1 && (
-
-                    <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+                    <div className="mt-8 flex items-center justify-center gap-1.5 sm:mt-10 sm:gap-2">
 
                       {/* PREVIOUS */}
 
@@ -1104,27 +1296,32 @@ function RecentlyPlayed() {
                             currentPage - 1
                           )
                         }
-                        className={`rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                        className={`flex h-9 items-center justify-center rounded-xl border px-3 text-xs font-medium transition sm:h-10 sm:px-4 sm:text-sm ${
                           currentPage === 1
                             ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
                             : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
                         }`}
                       >
-                        ← Previous
+                        <span className="sm:hidden">
+                          ←
+                        </span>
+
+                        <span className="hidden sm:inline">
+                          ← Previous
+                        </span>
                       </button>
 
                       {/* PAGE NUMBERS */}
 
                       {getPageNumbers().map(
                         (page) => (
-
                           <button
                             key={page}
                             type="button"
                             onClick={() =>
                               goToPage(page)
                             }
-                            className={`flex h-10 w-10 items-center justify-center rounded-xl border text-sm font-semibold transition ${
+                            className={`flex h-9 w-9 items-center justify-center rounded-xl border text-xs font-semibold transition sm:h-10 sm:w-10 sm:text-sm ${
                               currentPage === page
                                 ? "border-violet-500 bg-violet-600 text-white shadow-lg shadow-violet-500/20"
                                 : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
@@ -1132,7 +1329,6 @@ function RecentlyPlayed() {
                           >
                             {page}
                           </button>
-
                         )
                       )}
 
@@ -1149,25 +1345,29 @@ function RecentlyPlayed() {
                             currentPage + 1
                           )
                         }
-                        className={`rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                        className={`flex h-9 items-center justify-center rounded-xl border px-3 text-xs font-medium transition sm:h-10 sm:px-4 sm:text-sm ${
                           currentPage ===
                           totalPages
                             ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
                             : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
                         }`}
                       >
-                        Next →
+                        <span className="sm:hidden">
+                          →
+                        </span>
+
+                        <span className="hidden sm:inline">
+                          Next →
+                        </span>
                       </button>
 
                     </div>
-
                   )}
 
                   {/* PAGE INFO */}
 
                   {totalPages > 1 && (
-
-                    <p className="mt-4 text-center text-xs text-[var(--text-muted)]">
+                    <p className="mt-3 text-center text-[10px] text-[var(--text-muted)] sm:mt-4 sm:text-xs">
                       Showing{" "}
                       {(currentPage - 1) *
                         SONGS_PER_PAGE +
@@ -1182,11 +1382,9 @@ function RecentlyPlayed() {
                       {recentlyPlayed.length}{" "}
                       songs
                     </p>
-
                   )}
 
                 </section>
-
               )}
 
           </div>
@@ -1200,21 +1398,18 @@ function RecentlyPlayed() {
       ===================================================== */}
 
       {playlistModalOpen && (
-
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-3 backdrop-blur-sm sm:p-4"
           onClick={() => {
-
             if (!playlistLoading) {
               setPlaylistModalOpen(false);
               setSelectedSong(null);
             }
-
           }}
         >
 
           <div
-            className="w-full max-w-md overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl"
+            className="w-full max-w-md overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl sm:rounded-3xl"
             onClick={(event) =>
               event.stopPropagation()
             }
@@ -1222,15 +1417,15 @@ function RecentlyPlayed() {
 
             {/* MODAL HEADER */}
 
-            <div className="flex items-center justify-between border-b border-[var(--border)] px-6 py-5">
+            <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-4 sm:px-6 sm:py-5">
 
-              <div>
+              <div className="min-w-0">
 
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-violet-400 sm:text-xs sm:tracking-[0.2em]">
                   Save music
                 </p>
 
-                <h3 className="mt-1 text-xl font-bold">
+                <h3 className="mt-1 truncate text-lg font-bold sm:text-xl">
                   Add to playlist
                 </h3>
 
@@ -1243,7 +1438,8 @@ function RecentlyPlayed() {
                   setPlaylistModalOpen(false);
                   setSelectedSong(null);
                 }}
-                className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
+                aria-label="Close modal"
               >
                 <HiXMark className="text-xl" />
               </button>
@@ -1253,25 +1449,20 @@ function RecentlyPlayed() {
             {/* SELECTED SONG */}
 
             {selectedSong && (
+              <div className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3 sm:px-6 sm:py-4">
 
-              <div className="flex items-center gap-3 border-b border-[var(--border)] px-6 py-4">
-
-                <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[var(--card)]">
+                <div className="h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-[var(--card)] sm:h-12 sm:w-12">
 
                   {selectedSong.artwork ? (
-
                     <img
                       src={selectedSong.artwork}
                       alt={selectedSong.title}
                       className="h-full w-full object-cover"
                     />
-
                   ) : (
-
                     <div className="flex h-full w-full items-center justify-center">
                       <HiMusicalNote className="text-violet-400" />
                     </div>
-
                   )}
 
                 </div>
@@ -1290,15 +1481,13 @@ function RecentlyPlayed() {
                 </div>
 
               </div>
-
             )}
 
             {/* PLAYLISTS */}
 
-            <div className="max-h-[320px] overflow-y-auto p-4">
+            <div className="max-h-[55vh] overflow-y-auto p-3 sm:max-h-[320px] sm:p-4">
 
               {playlists.length === 0 ? (
-
                 <div className="py-8 text-center">
 
                   <HiQueueList className="mx-auto text-4xl text-[var(--text-muted)]" />
@@ -1323,14 +1512,11 @@ function RecentlyPlayed() {
                   </Link>
 
                 </div>
-
               ) : (
-
                 <div className="space-y-2">
 
                   {playlists.map(
                     (playlist) => (
-
                       <button
                         key={playlist._id}
                         type="button"
@@ -1343,7 +1529,7 @@ function RecentlyPlayed() {
                         className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 p-3 text-left transition hover:border-violet-500/40 hover:bg-violet-500/10 disabled:cursor-not-allowed disabled:opacity-50"
                       >
 
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400 sm:h-11 sm:w-11">
                           <HiQueueList className="text-xl" />
                         </div>
 
@@ -1356,20 +1542,20 @@ function RecentlyPlayed() {
                           <p className="text-xs text-[var(--text-muted)]">
                             {playlist.songs?.length ||
                               0}{" "}
-                            songs
+                            {playlist.songs?.length === 1
+                              ? "song"
+                              : "songs"}
                           </p>
 
                         </div>
 
-                        <HiPlus className="text-lg text-[var(--text-muted)]" />
+                        <HiPlus className="shrink-0 text-lg text-[var(--text-muted)]" />
 
                       </button>
-
                     )
                   )}
 
                 </div>
-
               )}
 
             </div>
@@ -1377,11 +1563,10 @@ function RecentlyPlayed() {
             {/* ACTION MESSAGE */}
 
             {actionMessage && (
-
-              <div className="border-t border-[var(--border)] px-6 py-4">
+              <div className="border-t border-[var(--border)] px-4 py-3 sm:px-6 sm:py-4">
 
                 <p
-                  className={`text-center text-sm ${
+                  className={`text-center text-xs sm:text-sm ${
                     actionMessage.includes(
                       "successfully"
                     ) ||
@@ -1396,13 +1581,11 @@ function RecentlyPlayed() {
                 </p>
 
               </div>
-
             )}
 
           </div>
 
         </div>
-
       )}
 
     </main>

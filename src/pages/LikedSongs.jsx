@@ -12,6 +12,7 @@ import {
   HiPause,
   HiPlus,
   HiXMark,
+  HiBars3,
 } from "react-icons/hi2";
 
 import { useAuth } from "../context/AuthContext";
@@ -33,6 +34,13 @@ function LikedSongs() {
   const [likedSongs, setLikedSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // =====================================================
+  // MOBILE MENU
+  // =====================================================
+
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false);
 
   // =====================================================
   // PAGINATION
@@ -59,12 +67,16 @@ function LikedSongs() {
   // =====================================================
 
   const [playlists, setPlaylists] = useState([]);
+
   const [playlistModalOpen, setPlaylistModalOpen] =
     useState(false);
+
   const [selectedSong, setSelectedSong] =
     useState(null);
+
   const [playlistLoading, setPlaylistLoading] =
     useState(false);
+
   const [actionMessage, setActionMessage] =
     useState("");
 
@@ -175,8 +187,6 @@ function LikedSongs() {
             String(songId)
         );
 
-        // If deleting the last song on a page,
-        // move back one page.
         const newTotalPages = Math.ceil(
           updatedSongs.length /
             SONGS_PER_PAGE
@@ -388,6 +398,32 @@ function LikedSongs() {
   };
 
   // =====================================================
+  // MOBILE NAVIGATION ITEM
+  // =====================================================
+
+  const MobileNavLink = ({
+    to,
+    icon,
+    children,
+    active = false,
+  }) => (
+    <Link
+      to={to}
+      onClick={() =>
+        setMobileMenuOpen(false)
+      }
+      className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
+        active
+          ? "bg-violet-500/10 text-violet-400"
+          : "text-[var(--text-secondary)] hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+      }`}
+    >
+      {icon}
+      {children}
+    </Link>
+  );
+
+  // =====================================================
   // RENDER
   // =====================================================
 
@@ -397,7 +433,7 @@ function LikedSongs() {
       <div className="flex min-h-screen">
 
         {/* =====================================================
-            SIDEBAR
+            DESKTOP SIDEBAR
         ===================================================== */}
 
         <aside className="hidden w-64 shrink-0 border-r border-[var(--border)] bg-[var(--surface)]/60 lg:flex lg:flex-col">
@@ -522,25 +558,52 @@ function LikedSongs() {
 
         <section className="min-w-0 flex-1">
 
-          {/* HEADER */}
+          {/* =====================================================
+              HEADER
+          ===================================================== */}
 
-          <header className="flex h-20 items-center justify-between border-b border-[var(--border)] px-5 sm:px-8 lg:px-10">
+          <header className="relative flex h-16 items-center justify-between border-b border-[var(--border)] px-4 sm:h-20 sm:px-6 lg:px-10">
 
-            <div>
+            {/* MOBILE HAMBURGER */}
+
+            <button
+              type="button"
+              onClick={() =>
+                setMobileMenuOpen(
+                  !mobileMenuOpen
+                )
+              }
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)] lg:hidden"
+              aria-label="Open navigation"
+            >
+              <HiBars3 className="text-2xl" />
+            </button>
+
+            {/* DESKTOP HEADER */}
+
+            <div className="hidden lg:block">
 
               <p className="text-sm text-[var(--text-secondary)]">
                 Your personal collection
               </p>
 
-              <h1 className="text-lg font-bold sm:text-xl">
+              <h1 className="text-xl font-bold">
                 Liked Songs
               </h1>
 
             </div>
 
+            {/* MOBILE TITLE */}
+
+            <h1 className="absolute left-1/2 -translate-x-1/2 text-base font-bold sm:text-lg lg:hidden">
+              Liked Songs
+            </h1>
+
+            {/* PROFILE */}
+
             <Link
               to="/profile"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white sm:h-10 sm:w-10"
             >
               {user?.name
                 ?.charAt(0)
@@ -550,13 +613,186 @@ function LikedSongs() {
 
           </header>
 
-          {/* CONTENT */}
+          {/* =====================================================
+              MOBILE MENU
+          ===================================================== */}
 
-          <div className="mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
+          {mobileMenuOpen && (
+            <>
 
-            {/* HERO */}
+              {/* BACKDROP */}
 
-            <section className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 sm:p-8 lg:p-10">
+              <button
+                type="button"
+                aria-label="Close navigation"
+                onClick={() =>
+                  setMobileMenuOpen(false)
+                }
+                className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+              />
+
+              {/* DRAWER */}
+
+              <aside className="fixed left-0 top-0 z-50 flex h-full w-[280px] max-w-[85vw] flex-col border-r border-[var(--border)] bg-[var(--surface)] shadow-2xl lg:hidden">
+
+                {/* DRAWER HEADER */}
+
+                <div className="flex h-20 shrink-0 items-center justify-between border-b border-[var(--border)] px-5">
+
+                  <div className="flex items-center gap-3">
+
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                      <HiMusicalNote className="text-xl" />
+                    </div>
+
+                    <span className="text-xl font-extrabold tracking-tight">
+                      Verse
+                      <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                        Hana
+                      </span>
+                    </span>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setMobileMenuOpen(false)
+                    }
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] hover:bg-white/10 hover:text-white"
+                    aria-label="Close navigation"
+                  >
+                    <HiXMark className="text-xl" />
+                  </button>
+
+                </div>
+
+                {/* MOBILE NAVIGATION */}
+
+                <nav className="flex-1 space-y-2 overflow-y-auto p-4">
+
+                  <MobileNavLink
+                    to="/dashboard"
+                    icon={
+                      <HiHome className="text-lg" />
+                    }
+                  >
+                    Home
+                  </MobileNavLink>
+
+                  <MobileNavLink
+                    to="/discover"
+                    icon={
+                      <HiMagnifyingGlass className="text-lg" />
+                    }
+                  >
+                    Discover
+                  </MobileNavLink>
+
+                  <MobileNavLink
+                    to="/genres"
+                    icon={
+                      <HiMusicalNote className="text-lg" />
+                    }
+                  >
+                    Genres
+                  </MobileNavLink>
+
+                  <MobileNavLink
+                    to="/liked-songs"
+                    active
+                    icon={
+                      <HiHeart className="text-lg" />
+                    }
+                  >
+                    Liked Songs
+                  </MobileNavLink>
+
+                  <MobileNavLink
+                    to="/playlists"
+                    icon={
+                      <HiQueueList className="text-lg" />
+                    }
+                  >
+                    Playlists
+                  </MobileNavLink>
+
+                  <MobileNavLink
+                    to="/recently-played"
+                    icon={
+                      <HiClock className="text-lg" />
+                    }
+                  >
+                    Recently Played
+                  </MobileNavLink>
+
+                </nav>
+
+                {/* MOBILE USER */}
+
+                <div className="border-t border-[var(--border)] p-4">
+
+                  <Link
+                    to="/profile"
+                    onClick={() =>
+                      setMobileMenuOpen(false)
+                    }
+                    className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+                  >
+
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+                      {user?.name
+                        ?.charAt(0)
+                        ?.toUpperCase() ||
+                        "U"}
+                    </div>
+
+                    <div className="min-w-0">
+
+                      <p className="truncate text-sm font-semibold">
+                        {user?.name ||
+                          "User"}
+                      </p>
+
+                      <p className="truncate text-xs text-[var(--text-muted)]">
+                        {user?.email}
+                      </p>
+
+                    </div>
+
+                  </Link>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      logout();
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] transition hover:bg-red-500/10 hover:text-red-400"
+                  >
+                    <HiArrowRightOnRectangle className="text-lg" />
+                    Logout
+                  </button>
+
+                </div>
+
+              </aside>
+
+            </>
+          )}
+
+          {/* =====================================================
+              CONTENT
+          ===================================================== */}
+
+          <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
+
+            {/* =====================================================
+                HERO
+                HIDDEN ON MOBILE/TABLET
+            ===================================================== */}
+
+            <section className="relative hidden overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 sm:p-8 lg:block lg:p-10">
 
               <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-[100px]" />
 
@@ -597,45 +833,86 @@ function LikedSongs() {
 
             </section>
 
-            {/* LOADING */}
+            {/* =====================================================
+                MOBILE COLLECTION SUMMARY
+            ===================================================== */}
+
+            {!loading &&
+              !error &&
+              likedSongs.length > 0 && (
+                <div className="mb-6 flex items-center justify-between lg:hidden">
+
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.18em] text-violet-400">
+                      Your collection
+                    </p>
+
+                    <h2 className="mt-1 text-xl font-bold">
+                      Favorite music
+                    </h2>
+                  </div>
+
+                  <div className="flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1.5 text-xs font-medium text-violet-300">
+                    <HiHeart className="text-violet-400" />
+
+                    {likedSongs.length}
+                  </div>
+
+                </div>
+              )}
+
+            {/* =====================================================
+                LOADING
+            ===================================================== */}
 
             {loading && (
-              <div className="mt-10 space-y-3">
+              <div className="mt-6 space-y-3 sm:mt-8">
 
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-                  (item) => (
-                    <div
-                      key={item}
-                      className="flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3"
-                    >
+                {[
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9,
+                  10,
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3 sm:gap-4"
+                  >
 
-                      <div className="hidden h-5 w-6 animate-pulse rounded bg-[var(--card)] sm:block" />
+                    <div className="hidden h-5 w-6 animate-pulse rounded bg-[var(--card)] sm:block" />
 
-                      <div className="h-14 w-14 shrink-0 animate-pulse rounded-xl bg-[var(--card)]" />
+                    <div className="h-14 w-14 shrink-0 animate-pulse rounded-xl bg-[var(--card)] sm:h-16 sm:w-16" />
 
-                      <div className="flex-1">
+                    <div className="min-w-0 flex-1">
 
-                        <div className="h-4 w-2/5 animate-pulse rounded bg-[var(--card)]" />
+                      <div className="h-4 w-3/5 animate-pulse rounded bg-[var(--card)] sm:w-2/5" />
 
-                        <div className="mt-2 h-3 w-1/4 animate-pulse rounded bg-[var(--card)]" />
-
-                      </div>
-
-                      <div className="h-10 w-10 animate-pulse rounded-full bg-[var(--card)]" />
-
-                      <div className="h-10 w-10 animate-pulse rounded-full bg-[var(--card)]" />
+                      <div className="mt-2 h-3 w-2/5 animate-pulse rounded bg-[var(--card)] sm:w-1/4" />
 
                     </div>
-                  )
-                )}
+
+                    <div className="h-9 w-9 animate-pulse rounded-full bg-[var(--card)] sm:h-10 sm:w-10" />
+
+                    <div className="hidden h-10 w-10 animate-pulse rounded-full bg-[var(--card)] sm:block" />
+
+                  </div>
+                ))}
 
               </div>
             )}
 
-            {/* ERROR */}
+            {/* =====================================================
+                ERROR
+            ===================================================== */}
 
             {!loading && error && (
-              <div className="mt-10 rounded-2xl border border-red-500/20 bg-red-500/10 p-8 text-center">
+              <div className="mt-8 rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center sm:mt-10 sm:p-8">
 
                 <HiMusicalNote className="mx-auto text-4xl text-red-400" />
 
@@ -646,22 +923,24 @@ function LikedSongs() {
               </div>
             )}
 
-            {/* EMPTY */}
+            {/* =====================================================
+                EMPTY
+            ===================================================== */}
 
             {!loading &&
               !error &&
               likedSongs.length === 0 && (
-                <div className="mt-10 flex min-h-[350px] flex-col items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]/60 text-center">
+                <div className="mt-6 flex min-h-[300px] flex-col items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]/60 px-5 text-center sm:mt-10 sm:min-h-[350px]">
 
                   <div className="flex h-20 w-20 items-center justify-center rounded-full bg-violet-500/10">
                     <HiHeart className="text-4xl text-violet-400" />
                   </div>
 
-                  <h2 className="mt-6 text-2xl font-bold">
+                  <h2 className="mt-6 text-xl font-bold sm:text-2xl">
                     No liked songs yet
                   </h2>
 
-                  <p className="mt-2 max-w-md text-sm text-[var(--text-secondary)]">
+                  <p className="mt-2 max-w-md text-sm leading-6 text-[var(--text-secondary)]">
                     Songs you like will appear here.
                     Start exploring and build your
                     personal collection.
@@ -677,26 +956,32 @@ function LikedSongs() {
                 </div>
               )}
 
-            {/* SONG LIST */}
+            {/* =====================================================
+                SONG LIST
+            ===================================================== */}
 
             {!loading &&
               !error &&
               likedSongs.length > 0 && (
 
-                <section className="mt-10">
+                <section className="mt-6 sm:mt-10">
 
                   {/* SECTION HEADER */}
 
-                  <div className="mb-5 flex items-end justify-between">
+                  <div className="mb-4 flex items-end justify-between sm:mb-5">
 
                     <div>
 
-                      <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                      <p className="hidden text-xs font-medium uppercase tracking-[0.2em] text-violet-400 sm:block">
                         Collection
                       </p>
 
-                      <h2 className="mt-2 text-2xl font-bold">
+                      <h2 className="hidden mt-2 text-2xl font-bold sm:block">
                         Your liked music
+                      </h2>
+
+                      <h2 className="text-lg font-bold sm:hidden">
+                        Songs
                       </h2>
 
                     </div>
@@ -708,9 +993,11 @@ function LikedSongs() {
 
                   </div>
 
-                  {/* SONGS */}
+                  {/* =================================================
+                      SONGS
+                  ================================================= */}
 
-                  <div className="space-y-3">
+                  <div className="space-y-2.5 sm:space-y-3">
 
                     {paginatedSongs.map(
                       (song, index) => {
@@ -734,7 +1021,7 @@ function LikedSongs() {
                               song._id ||
                               song.songId
                             }
-                            className={`group relative flex items-center gap-3 overflow-hidden rounded-2xl border p-3 transition-all duration-300 sm:gap-4 ${
+                            className={`group relative flex min-w-0 items-center gap-2.5 overflow-hidden rounded-2xl border p-2.5 transition-all duration-300 sm:gap-4 sm:p-3 ${
                               isCurrent
                                 ? "border-violet-500/40 bg-violet-500/10 shadow-lg shadow-violet-500/5"
                                 : "border-[var(--border)] bg-[var(--surface)]/60 hover:border-violet-500/30 hover:bg-violet-500/5"
@@ -790,7 +1077,7 @@ function LikedSongs() {
                                 </div>
                               )}
 
-                              {/* PLAY OVERLAY */}
+                              {/* DESKTOP PLAY OVERLAY */}
 
                               <button
                                 type="button"
@@ -799,7 +1086,17 @@ function LikedSongs() {
                                     song
                                   )
                                 }
-                                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-[2px] transition group-hover:opacity-100"
+                                className={`absolute inset-0 hidden items-center justify-center bg-black/50 backdrop-blur-[2px] transition sm:flex ${
+                                  isCurrent
+                                    ? "opacity-100"
+                                    : "opacity-0 group-hover:opacity-100"
+                                }`}
+                                aria-label={
+                                  isCurrent &&
+                                  isPlaying
+                                    ? "Pause"
+                                    : "Play"
+                                }
                               >
                                 {isCurrent &&
                                 isPlaying ? (
@@ -816,7 +1113,7 @@ function LikedSongs() {
                             <div className="min-w-0 flex-1">
 
                               <h3
-                                className={`truncate text-sm font-semibold sm:text-[15px] ${
+                                className={`truncate text-[13px] font-semibold sm:text-[15px] ${
                                   isCurrent
                                     ? "text-violet-400"
                                     : "text-[var(--text-primary)]"
@@ -825,16 +1122,18 @@ function LikedSongs() {
                                 {song.title}
                               </h3>
 
-                              <p className="mt-1 truncate text-xs text-[var(--text-muted)] sm:text-sm">
+                              <p className="mt-1 truncate text-[11px] text-[var(--text-muted)] sm:text-sm">
                                 {song.artist ||
                                   "Unknown artist"}
                               </p>
 
                             </div>
 
-                            {/* ACTIONS */}
+                            {/* =================================================
+                                ACTIONS
+                            ================================================= */}
 
-                            <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+                            <div className="flex shrink-0 items-center gap-0.5 sm:gap-2">
 
                               {/* PLAY */}
 
@@ -845,8 +1144,14 @@ function LikedSongs() {
                                     song
                                   )
                                 }
-                                className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:h-10 sm:w-10"
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:h-10 sm:w-10"
                                 title={
+                                  isCurrent &&
+                                  isPlaying
+                                    ? "Pause"
+                                    : "Play"
+                                }
+                                aria-label={
                                   isCurrent &&
                                   isPlaying
                                     ? "Pause"
@@ -855,9 +1160,9 @@ function LikedSongs() {
                               >
                                 {isCurrent &&
                                 isPlaying ? (
-                                  <HiPause className="text-lg" />
+                                  <HiPause className="text-base sm:text-lg" />
                                 ) : (
-                                  <HiPlay className="text-lg" />
+                                  <HiPlay className="text-base sm:text-lg" />
                                 )}
                               </button>
 
@@ -870,13 +1175,14 @@ function LikedSongs() {
                                     song
                                   )
                                 }
-                                className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:h-10 sm:w-10"
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:h-10 sm:w-10"
                                 title="Add to playlist"
+                                aria-label="Add to playlist"
                               >
-                                <HiPlus className="text-lg" />
+                                <HiPlus className="text-base sm:text-lg" />
                               </button>
 
-                              {/* LIKE */}
+                              {/* LIKE / UNLIKE */}
 
                               <button
                                 type="button"
@@ -885,10 +1191,11 @@ function LikedSongs() {
                                     song.songId
                                   )
                                 }
-                                className="flex h-9 w-9 items-center justify-center rounded-full text-violet-400 transition hover:bg-red-500/10 hover:text-red-400 sm:h-10 sm:w-10"
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-violet-400 transition hover:bg-red-500/10 hover:text-red-400 sm:h-10 sm:w-10"
                                 title="Unlike"
+                                aria-label="Unlike song"
                               >
-                                <HiHeart className="fill-current text-lg" />
+                                <HiHeart className="fill-current text-base sm:text-lg" />
                               </button>
 
                             </div>
@@ -905,7 +1212,7 @@ function LikedSongs() {
                   ================================================= */}
 
                   {totalPages > 1 && (
-                    <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+                    <div className="mt-8 flex w-full items-center justify-center gap-1.5 overflow-x-auto pb-1 sm:mt-10 sm:gap-2">
 
                       {/* PREVIOUS */}
 
@@ -919,13 +1226,19 @@ function LikedSongs() {
                             currentPage - 1
                           )
                         }
-                        className={`rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                        className={`shrink-0 rounded-xl border px-3 py-2 text-xs font-medium transition sm:px-4 sm:text-sm ${
                           currentPage === 1
                             ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
                             : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
                         }`}
                       >
-                        ← Previous
+                        <span className="sm:hidden">
+                          ←
+                        </span>
+
+                        <span className="hidden sm:inline">
+                          ← Previous
+                        </span>
                       </button>
 
                       {/* PAGE NUMBERS */}
@@ -940,7 +1253,7 @@ function LikedSongs() {
                                 page
                               )
                             }
-                            className={`flex h-10 w-10 items-center justify-center rounded-xl border text-sm font-semibold transition ${
+                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border text-xs font-semibold transition sm:h-10 sm:w-10 sm:text-sm ${
                               currentPage ===
                               page
                                 ? "border-violet-500 bg-violet-600 text-white shadow-lg shadow-violet-500/20"
@@ -965,23 +1278,31 @@ function LikedSongs() {
                             currentPage + 1
                           )
                         }
-                        className={`rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                        className={`shrink-0 rounded-xl border px-3 py-2 text-xs font-medium transition sm:px-4 sm:text-sm ${
                           currentPage ===
                           totalPages
                             ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
                             : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
                         }`}
                       >
-                        Next →
+                        <span className="sm:hidden">
+                          →
+                        </span>
+
+                        <span className="hidden sm:inline">
+                          Next →
+                        </span>
                       </button>
 
                     </div>
                   )}
 
-                  {/* PAGE INFO */}
+                  {/* =================================================
+                      PAGE INFO
+                  ================================================= */}
 
                   {totalPages > 1 && (
-                    <p className="mt-4 text-center text-xs text-[var(--text-muted)]">
+                    <p className="mt-3 text-center text-[11px] text-[var(--text-muted)] sm:mt-4 sm:text-xs">
                       Showing{" "}
                       {(currentPage - 1) *
                         SONGS_PER_PAGE +
@@ -1031,7 +1352,7 @@ function LikedSongs() {
 
             {/* HEADER */}
 
-            <div className="flex items-center justify-between border-b border-[var(--border)] px-6 py-5">
+            <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4 sm:px-6 sm:py-5">
 
               <div>
 
@@ -1039,7 +1360,7 @@ function LikedSongs() {
                   Save music
                 </p>
 
-                <h3 className="mt-1 text-xl font-bold">
+                <h3 className="mt-1 text-lg font-bold sm:text-xl">
                   Add to playlist
                 </h3>
 
@@ -1059,6 +1380,7 @@ function LikedSongs() {
                   );
                 }}
                 className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
+                aria-label="Close playlist modal"
               >
                 <HiXMark className="text-xl" />
               </button>
@@ -1068,7 +1390,7 @@ function LikedSongs() {
             {/* SELECTED SONG */}
 
             {selectedSong && (
-              <div className="flex items-center gap-3 border-b border-[var(--border)] px-6 py-4">
+              <div className="flex items-center gap-3 border-b border-[var(--border)] px-5 py-4 sm:px-6">
 
                 <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[var(--card)]">
 
@@ -1108,7 +1430,7 @@ function LikedSongs() {
 
             {/* PLAYLISTS */}
 
-            <div className="max-h-[320px] overflow-y-auto p-4">
+            <div className="max-h-[320px] overflow-y-auto p-3 sm:p-4">
 
               {playlists.length === 0 ? (
                 <div className="py-8 text-center">
@@ -1190,7 +1512,7 @@ function LikedSongs() {
             {/* ACTION MESSAGE */}
 
             {actionMessage && (
-              <div className="border-t border-[var(--border)] px-6 py-4">
+              <div className="border-t border-[var(--border)] px-5 py-4 sm:px-6">
 
                 <p
                   className={`text-center text-sm ${
