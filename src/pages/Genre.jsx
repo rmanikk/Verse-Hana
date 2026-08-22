@@ -97,7 +97,7 @@ function Genre() {
   const [error, setError] = useState("");
 
   // =====================================================
-  // MOBILE SIDEBAR
+  // MOBILE MENU
   // =====================================================
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -258,8 +258,20 @@ function Genre() {
 
       setTracks(data.tracks || []);
 
-      // Close mobile menu after selecting a genre.
-      setMobileMenuOpen(false);
+      // Keep selected genre results visible
+      setTimeout(() => {
+        const resultsSection =
+          document.getElementById(
+            "genre-results"
+          );
+
+        if (resultsSection) {
+          resultsSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }, 100);
     } catch (error) {
       console.error(
         "Genre music error:",
@@ -475,10 +487,17 @@ function Genre() {
 
     setCurrentPage(page);
 
-    window.scrollTo({
-      top: 700,
-      behavior: "smooth",
-    });
+    const resultsSection =
+      document.getElementById(
+        "genre-results"
+      );
+
+    if (resultsSection) {
+      resultsSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   };
 
   // =====================================================
@@ -524,169 +543,17 @@ function Genre() {
     (genre) => genre.id === selectedGenre
   );
 
+  // =====================================================
+  // CLOSE MOBILE MENU
+  // =====================================================
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[var(--background)] text-[var(--text-primary)]">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
       <div className="flex min-h-screen">
-
-        {/* =====================================================
-            MOBILE OVERLAY
-        ===================================================== */}
-
-        {mobileMenuOpen && (
-          <button
-            type="button"
-            aria-label="Close menu"
-            onClick={() =>
-              setMobileMenuOpen(false)
-            }
-            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm lg:hidden"
-          />
-        )}
-
-        {/* =====================================================
-            MOBILE SIDEBAR
-        ===================================================== */}
-
-        <aside
-          className={`fixed inset-y-0 left-0 z-[90] flex w-[280px] max-w-[85vw] flex-col border-r border-[var(--border)] bg-[var(--surface)] shadow-2xl transition-transform duration-300 lg:hidden ${
-            mobileMenuOpen
-              ? "translate-x-0"
-              : "-translate-x-full"
-          }`}
-        >
-          <div className="flex h-20 shrink-0 items-center justify-between border-b border-[var(--border)] px-5">
-
-            <div className="flex min-w-0 items-center gap-3">
-
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
-                <HiMusicalNote className="text-xl" />
-              </div>
-
-              <span className="text-xl font-extrabold tracking-tight">
-                Verse
-                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-                  Hana
-                </span>
-              </span>
-
-            </div>
-
-            <button
-              type="button"
-              onClick={() =>
-                setMobileMenuOpen(false)
-              }
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
-              aria-label="Close menu"
-            >
-              <HiXMark className="text-xl" />
-            </button>
-
-          </div>
-
-          <nav className="flex-1 space-y-2 overflow-y-auto p-4">
-
-            <Link
-              to="/dashboard"
-              onClick={() =>
-                setMobileMenuOpen(false)
-              }
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiHome className="text-lg" />
-              Home
-            </Link>
-
-            <Link
-              to="/discover"
-              onClick={() =>
-                setMobileMenuOpen(false)
-              }
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiMagnifyingGlass className="text-lg" />
-              Discover
-            </Link>
-
-            <div className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400">
-              <HiMusicalNote className="text-lg" />
-              Genres
-            </div>
-
-            <Link
-              to="/liked-songs"
-              onClick={() =>
-                setMobileMenuOpen(false)
-              }
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiHeart className="text-lg" />
-              Liked Songs
-            </Link>
-
-            <Link
-              to="/playlists"
-              onClick={() =>
-                setMobileMenuOpen(false)
-              }
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiQueueList className="text-lg" />
-              Playlists
-            </Link>
-
-            <Link
-              to="/recently-played"
-              onClick={() =>
-                setMobileMenuOpen(false)
-              }
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
-            >
-              <HiClock className="text-lg" />
-              Recently Played
-            </Link>
-
-          </nav>
-
-          <div className="shrink-0 border-t border-[var(--border)] p-4">
-
-            <Link
-              to="/profile"
-              onClick={() =>
-                setMobileMenuOpen(false)
-              }
-              className="mb-3 flex min-w-0 items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
-            >
-
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
-                {user?.name
-                  ?.charAt(0)
-                  ?.toUpperCase() || "U"}
-              </div>
-
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold">
-                  {user?.name || "User"}
-                </p>
-
-                <p className="truncate text-xs text-[var(--text-muted)]">
-                  {user?.email}
-                </p>
-              </div>
-
-            </Link>
-
-            <button
-              type="button"
-              onClick={logout}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] transition hover:bg-red-500/10 hover:text-red-400"
-            >
-              <HiArrowRightOnRectangle className="text-lg" />
-              Logout
-            </button>
-
-          </div>
-        </aside>
 
         {/* =====================================================
             DESKTOP SIDEBAR
@@ -764,7 +631,6 @@ function Genre() {
               to="/profile"
               className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
             >
-
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
                 {user?.name
                   ?.charAt(0)
@@ -780,13 +646,161 @@ function Genre() {
                   {user?.email}
                 </p>
               </div>
-
             </Link>
 
             <button
               type="button"
               onClick={logout}
               className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] transition hover:bg-red-500/10 hover:text-red-400"
+            >
+              <HiArrowRightOnRectangle className="text-lg" />
+              Logout
+            </button>
+
+          </div>
+
+        </aside>
+
+        {/* =====================================================
+            MOBILE SIDEBAR OVERLAY
+        ===================================================== */}
+
+        {mobileMenuOpen && (
+          <div
+            className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm lg:hidden"
+            onClick={closeMobileMenu}
+          />
+        )}
+
+        {/* =====================================================
+            MOBILE SIDEBAR
+        ===================================================== */}
+
+        <aside
+          className={`fixed left-0 top-0 z-[100] flex h-full w-[280px] max-w-[85vw] flex-col border-r border-[var(--border)] bg-[var(--surface)] shadow-2xl transition-transform duration-300 lg:hidden ${
+            mobileMenuOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
+          }`}
+        >
+
+          <div className="flex h-20 shrink-0 items-center justify-between border-b border-[var(--border)] px-5">
+
+            <div className="flex items-center gap-3">
+
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                <HiMusicalNote className="text-xl" />
+              </div>
+
+              <span className="text-xl font-extrabold tracking-tight">
+                Verse
+                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                  Hana
+                </span>
+              </span>
+
+            </div>
+
+            <button
+              type="button"
+              onClick={closeMobileMenu}
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
+              aria-label="Close menu"
+            >
+              <HiXMark className="text-xl" />
+            </button>
+
+          </div>
+
+          <nav className="flex-1 space-y-2 overflow-y-auto p-4">
+
+            <Link
+              to="/dashboard"
+              onClick={closeMobileMenu}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+            >
+              <HiHome className="text-lg" />
+              Home
+            </Link>
+
+            <Link
+              to="/discover"
+              onClick={closeMobileMenu}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+            >
+              <HiMagnifyingGlass className="text-lg" />
+              Discover
+            </Link>
+
+            <div className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400">
+              <HiMusicalNote className="text-lg" />
+              Genres
+            </div>
+
+            <Link
+              to="/liked-songs"
+              onClick={closeMobileMenu}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+            >
+              <HiHeart className="text-lg" />
+              Liked Songs
+            </Link>
+
+            <Link
+              to="/playlists"
+              onClick={closeMobileMenu}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+            >
+              <HiQueueList className="text-lg" />
+              Playlists
+            </Link>
+
+            <Link
+              to="/recently-played"
+              onClick={closeMobileMenu}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+            >
+              <HiClock className="text-lg" />
+              Recently Played
+            </Link>
+
+          </nav>
+
+          <div className="shrink-0 border-t border-[var(--border)] p-4">
+
+            <Link
+              to="/profile"
+              onClick={closeMobileMenu}
+              className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3"
+            >
+
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+                {user?.name
+                  ?.charAt(0)
+                  ?.toUpperCase() || "U"}
+              </div>
+
+              <div className="min-w-0">
+
+                <p className="truncate text-sm font-semibold">
+                  {user?.name || "User"}
+                </p>
+
+                <p className="truncate text-xs text-[var(--text-muted)]">
+                  {user?.email}
+                </p>
+
+              </div>
+
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => {
+                closeMobileMenu();
+                logout();
+              }}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] transition active:bg-red-500/10 active:text-red-400"
             >
               <HiArrowRightOnRectangle className="text-lg" />
               Logout
@@ -806,9 +820,9 @@ function Genre() {
               HEADER
           ===================================================== */}
 
-          <header className="flex min-h-20 items-center justify-between gap-4 border-b border-[var(--border)] px-4 py-3 sm:px-6 lg:px-10">
+          <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--background)]/90 px-4 backdrop-blur-xl sm:h-20 sm:px-6 lg:static lg:px-10">
 
-            <div className="flex min-w-0 items-center gap-3">
+            <div className="flex items-center gap-3">
 
               {/* MOBILE HAMBURGER */}
 
@@ -817,29 +831,21 @@ function Genre() {
                 onClick={() =>
                   setMobileMenuOpen(true)
                 }
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)] lg:hidden"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition active:bg-violet-500/10 active:text-violet-400 lg:hidden"
                 aria-label="Open menu"
               >
                 <HiBars3 className="text-xl" />
               </button>
 
-              <div className="min-w-0">
-
-                <p className="truncate text-xs text-[var(--text-secondary)] sm:text-sm">
-                  Explore music by style
-                </p>
-
-                <h1 className="text-lg font-bold sm:text-xl">
-                  Genres
-                </h1>
-
-              </div>
+              <h1 className="text-lg font-bold sm:text-xl">
+                Genres
+              </h1>
 
             </div>
 
             <Link
               to="/profile"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white sm:h-10 sm:w-10"
             >
               {user?.name
                 ?.charAt(0)
@@ -854,11 +860,11 @@ function Genre() {
                 HERO
             ===================================================== */}
 
-            <section className="relative overflow-hidden rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-5 sm:rounded-[28px] sm:p-8 lg:rounded-[32px] lg:p-10">
+            <section className="relative overflow-hidden rounded-3xl border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-5 sm:rounded-[32px] sm:p-8 lg:p-10">
 
-              <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-[100px]" />
+              <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-violet-500/20 blur-[90px] sm:h-64 sm:w-64" />
 
-              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[100px]" />
+              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-fuchsia-500/10 blur-[90px] sm:h-64 sm:w-64" />
 
               <div className="relative z-10">
 
@@ -866,14 +872,14 @@ function Genre() {
                   Explore your sound
                 </p>
 
-                <h2 className="mt-3 max-w-3xl text-2xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+                <h2 className="mt-3 max-w-3xl text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                   Find music by{" "}
                   <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                     genre.
                   </span>
                 </h2>
 
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)] sm:mt-4 sm:text-base sm:leading-7">
+                <p className="mt-3 max-w-2xl text-xs leading-6 text-[var(--text-secondary)] sm:mt-4 sm:text-base sm:leading-7">
                   From electronic beats to classical
                   compositions, discover music based on
                   the sound you love.
@@ -896,12 +902,12 @@ function Genre() {
                 </p>
 
                 <h2 className="mt-2 text-xl font-bold sm:text-2xl">
-                  Explore genres
+                  Genres
                 </h2>
 
               </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5">
 
                 {genres.map((genre) => (
 
@@ -911,7 +917,7 @@ function Genre() {
                     onClick={() =>
                       fetchGenreMusic(genre.id)
                     }
-                    className={`group relative min-w-0 overflow-hidden rounded-2xl border p-4 text-left transition duration-300 hover:-translate-y-1 sm:p-5 ${
+                    className={`group relative min-w-0 overflow-hidden rounded-2xl border p-4 text-left transition duration-300 sm:p-5 lg:hover:-translate-y-1 ${
                       selectedGenre === genre.id
                         ? "border-violet-500/50 bg-violet-500/15"
                         : "border-[var(--border)] bg-[var(--surface)]/60 hover:border-violet-500/30 hover:bg-violet-500/5"
@@ -926,7 +932,7 @@ function Genre() {
                       {genre.name}
                     </h3>
 
-                    <p className="mt-1.5 line-clamp-2 text-[11px] leading-4 text-[var(--text-muted)] sm:mt-2 sm:text-xs sm:leading-5">
+                    <p className="mt-1.5 line-clamp-2 text-[11px] leading-5 text-[var(--text-muted)] sm:mt-2 sm:text-xs">
                       {genre.description}
                     </p>
 
@@ -944,7 +950,10 @@ function Genre() {
 
             {selectedGenre && (
 
-              <section className="mt-10 sm:mt-12">
+              <section
+                id="genre-results"
+                className="mt-10 scroll-mt-24 sm:mt-12"
+              >
 
                 <div className="mb-5 flex items-end justify-between gap-4">
 
@@ -976,7 +985,7 @@ function Genre() {
 
                 {loading && (
 
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
 
                     {[1, 2, 3, 4, 5, 6, 7, 8].map(
                       (item) => (
@@ -1020,7 +1029,7 @@ function Genre() {
                           selectedGenre
                         )
                       }
-                      className="mt-4 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white"
+                      className="mt-4 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
                     >
                       Try again
                     </button>
@@ -1035,7 +1044,7 @@ function Genre() {
                   !error &&
                   tracks.length === 0 && (
 
-                    <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 px-5 text-center">
+                    <div className="flex min-h-[260px] flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 px-4 text-center sm:min-h-[300px]">
 
                       <HiMusicalNote className="text-5xl text-[var(--text-muted)]" />
 
@@ -1043,7 +1052,7 @@ function Genre() {
                         No music found
                       </h3>
 
-                      <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                      <p className="mt-2 text-xs text-[var(--text-secondary)] sm:text-sm">
                         Try selecting another genre.
                       </p>
 
@@ -1059,7 +1068,7 @@ function Genre() {
 
                     <>
 
-                      <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
 
                         {paginatedTracks.map(
                           (track) => (
@@ -1156,7 +1165,7 @@ function Genre() {
 
                       {totalPages > 1 && (
 
-                        <p className="mt-4 text-center text-xs text-[var(--text-muted)]">
+                        <p className="mt-4 text-center text-[10px] text-[var(--text-muted)] sm:text-xs">
                           Showing{" "}
                           {(currentPage - 1) *
                             SONGS_PER_PAGE +
@@ -1193,7 +1202,7 @@ function Genre() {
       {playlistModalOpen && (
 
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-3 backdrop-blur-sm sm:p-4"
           onClick={() => {
             if (!playlistLoading) {
               setPlaylistModalOpen(false);
@@ -1203,7 +1212,7 @@ function Genre() {
         >
 
           <div
-            className="w-full max-w-md overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl"
+            className="w-full max-w-md overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl sm:rounded-3xl"
             onClick={(event) =>
               event.stopPropagation()
             }
@@ -1211,9 +1220,9 @@ function Genre() {
 
             {/* MODAL HEADER */}
 
-            <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4 sm:px-6 sm:py-5">
+            <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-4 sm:px-6 sm:py-5">
 
-              <div className="min-w-0">
+              <div>
 
                 <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
                   Save music
@@ -1232,7 +1241,7 @@ function Genre() {
                   setPlaylistModalOpen(false);
                   setSelectedTrack(null);
                 }}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
               >
                 <HiXMark className="text-xl" />
               </button>
@@ -1243,9 +1252,9 @@ function Genre() {
 
             {selectedTrack && (
 
-              <div className="flex items-center gap-3 border-b border-[var(--border)] px-5 py-4 sm:px-6">
+              <div className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3 sm:px-6 sm:py-4">
 
-                <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[var(--card)]">
+                <div className="h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-[var(--card)] sm:h-12 sm:w-12">
 
                   {selectedTrack.artwork?.[
                     "150x150"
@@ -1374,7 +1383,7 @@ function Genre() {
 
             {actionMessage && (
 
-              <div className="border-t border-[var(--border)] px-5 py-4 sm:px-6">
+              <div className="border-t border-[var(--border)] px-4 py-3 sm:px-6 sm:py-4">
 
                 <p
                   className={`text-center text-sm ${
@@ -1471,17 +1480,17 @@ function GenreCard({
 
         {/* =====================================================
             LIKE BUTTON
-            Desktop: hover
-            Mobile: always visible
+            DESKTOP: HOVER
+            TABLET/MOBILE: ALWAYS VISIBLE
         ===================================================== */}
 
         <button
           type="button"
           onClick={() => onLike(track)}
-          className={`absolute left-2.5 top-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 sm:left-3 sm:top-3 ${
+          className={`absolute left-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 lg:opacity-0 lg:group-hover:opacity-100 ${
             isLiked
               ? "bg-violet-600 text-white opacity-100 shadow-lg shadow-violet-500/30"
-              : "bg-black/50 text-white opacity-100 hover:bg-violet-600 sm:opacity-0 sm:group-hover:opacity-100"
+              : "bg-black/50 text-white opacity-100 hover:bg-violet-600 lg:opacity-0 lg:group-hover:opacity-100"
           }`}
           aria-label={
             isLiked
@@ -1500,8 +1509,9 @@ function GenreCard({
 
         {/* =====================================================
             ADD TO PLAYLIST
-            Desktop: hover
-            Mobile: always visible
+            HORIZONTAL WITH LIKE
+            DESKTOP: HOVER
+            TABLET/MOBILE: ALWAYS VISIBLE
         ===================================================== */}
 
         <button
@@ -1509,7 +1519,7 @@ function GenreCard({
           onClick={() =>
             onAddToPlaylist(track)
           }
-          className="absolute left-13 top-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white opacity-100 backdrop-blur-md transition-all duration-300 hover:bg-violet-600 sm:left-14 sm:top-3 sm:opacity-0 sm:group-hover:opacity-100"
+          className="absolute left-14 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-md transition-all duration-300 hover:bg-violet-600 lg:opacity-0 lg:group-hover:opacity-100"
           aria-label="Add to playlist"
         >
           <HiPlus className="text-lg" />
@@ -1517,8 +1527,8 @@ function GenreCard({
 
         {/* =====================================================
             PLAY BUTTON
-            Desktop: hover
-            Mobile: always visible
+            DESKTOP: HOVER
+            TABLET/MOBILE: ALWAYS VISIBLE
         ===================================================== */}
 
         <button
@@ -1526,10 +1536,10 @@ function GenreCard({
           onClick={() =>
             onPlay(track, tracks)
           }
-          className={`absolute bottom-2.5 right-2.5 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg shadow-violet-500/30 transition-all duration-300 hover:scale-105 sm:bottom-3 sm:right-3 sm:h-11 sm:w-11 ${
+          className={`absolute bottom-3 right-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg shadow-violet-500/30 transition-all duration-300 hover:scale-105 sm:h-11 sm:w-11 ${
             isCurrent
               ? "translate-y-0 opacity-100"
-              : "translate-y-0 opacity-100 sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+              : "translate-y-0 opacity-100 lg:translate-y-2 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100"
           }`}
           aria-label={
             isCurrent && isPlaying
@@ -1549,7 +1559,7 @@ function GenreCard({
       {/* TITLE */}
 
       <h3
-        className="mt-2.5 truncate text-sm font-semibold sm:mt-3"
+        className="mt-2 truncate text-xs font-semibold sm:mt-3 sm:text-sm"
         title={track.title}
       >
         {track.title}
@@ -1558,7 +1568,7 @@ function GenreCard({
       {/* ARTIST */}
 
       <p
-        className="mt-1 truncate text-[11px] text-[var(--text-muted)] sm:text-xs"
+        className="mt-1 truncate text-[10px] text-[var(--text-muted)] sm:text-xs"
         title={
           track.user?.name ||
           track.artist
