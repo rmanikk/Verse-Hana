@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   HiHome,
@@ -53,7 +53,7 @@ function Discover() {
   const [artists, setArtists] = useState([]);
   const [loadingArtists, setLoadingArtists] = useState(true);
 
-  const SONGS_PER_PAGE = 8;
+  const SONGS_PER_PAGE = 6;
   const ARTISTS_PER_PAGE = 4;
 
   const [trackPage, setTrackPage] = useState(1);
@@ -63,12 +63,23 @@ function Discover() {
   const [likingSong, setLikingSong] = useState(null);
 
   const [playlists, setPlaylists] = useState([]);
-  const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+  const [showPlaylistModal, setShowPlaylistModal] =
+    useState(false);
   const [selectedTrack, setSelectedTrack] = useState(null);
-  const [addingToPlaylist, setAddingToPlaylist] = useState(null);
+  const [addingToPlaylist, setAddingToPlaylist] =
+    useState(null);
 
   // MOBILE SIDEBAR
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false);
+
+  // =====================================================
+  // RESULTS SECTION REF
+  // Used to scroll back to Discover/Explore results
+  // on mobile and tablet after selecting an artist.
+  // =====================================================
+
+  const resultsSectionRef = useRef(null);
 
   // =====================================================
   // SAFE JSON RESPONSE
@@ -96,7 +107,9 @@ function Discover() {
     } catch (error) {
       console.error("Invalid JSON response:", text);
 
-      throw new Error("The server returned invalid JSON.");
+      throw new Error(
+        "The server returned invalid JSON."
+      );
     }
   };
 
@@ -135,7 +148,11 @@ function Discover() {
 
       return music;
     } catch (error) {
-      console.error("Fetch all music error:", error);
+      console.error(
+        "Fetch all music error:",
+        error
+      );
+
       throw error;
     }
   };
@@ -191,7 +208,10 @@ function Discover() {
           []
       );
     } catch (error) {
-      console.error("Discover music error:", error);
+      console.error(
+        "Discover music error:",
+        error
+      );
 
       setError(
         error.message ||
@@ -245,7 +265,9 @@ function Discover() {
       try {
         const music = await fetchAllMusic();
 
-        setTrendingTracks(music.slice(0, 6));
+        setTrendingTracks(
+          music.slice(0, 6)
+        );
       } catch (fallbackError) {
         console.error(
           "Trending fallback error:",
@@ -299,11 +321,15 @@ function Discover() {
             songCount: 1,
           });
         } else {
-          const existing = artistMap.get(artist);
+          const existing =
+            artistMap.get(artist);
 
           existing.songCount += 1;
 
-          if (!existing.artwork && artwork) {
+          if (
+            !existing.artwork &&
+            artwork
+          ) {
             existing.artwork = artwork;
           }
         }
@@ -315,7 +341,11 @@ function Discover() {
         )
       );
     } catch (error) {
-      console.error("Artists error:", error);
+      console.error(
+        "Artists error:",
+        error
+      );
+
       setArtists([]);
     } finally {
       setLoadingArtists(false);
@@ -361,7 +391,10 @@ function Discover() {
           .filter(Boolean)
       );
     } catch (error) {
-      console.error("Fetch likes error:", error);
+      console.error(
+        "Fetch likes error:",
+        error
+      );
     }
   };
 
@@ -388,7 +421,9 @@ function Discover() {
 
       const data = await getJson(response);
 
-      setPlaylists(data.playlists || []);
+      setPlaylists(
+        data.playlists || []
+      );
     } catch (error) {
       console.error(
         "Fetch playlists error:",
@@ -408,40 +443,6 @@ function Discover() {
     fetchLikedSongs();
     fetchPlaylists();
   }, []);
-
-  // =====================================================
-  // CLOSE MOBILE MENU ON ESC
-  // =====================================================
-
-  useEffect(() => {
-    const handleEscape = (event) => {
-      if (event.key === "Escape") {
-        setMobileMenuOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", handleEscape);
-
-    return () => {
-      window.removeEventListener(
-        "keydown",
-        handleEscape
-      );
-    };
-  }, []);
-
-  // Prevent background scroll while mobile menu is open.
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileMenuOpen]);
 
   // =====================================================
   // RESET PAGINATION
@@ -504,8 +505,6 @@ function Discover() {
           data.songs ||
           []
       );
-
-      setMobileMenuOpen(false);
     } catch (error) {
       console.error(
         "Mood discover error:",
@@ -527,11 +526,35 @@ function Discover() {
   // ARTIST SEARCH
   // =====================================================
 
-  const handleArtist = (artistName) => {
+  const handleArtist = async (artistName) => {
     setSearch(artistName);
     setActiveMood("");
 
-    fetchTracks(artistName);
+    // Keep the existing behavior:
+    // artist name is searched exactly as before.
+    await fetchTracks(artistName);
+
+    // ===================================================
+    // MOBILE + TABLET ONLY
+    //
+    // Tailwind's lg breakpoint is 1024px.
+    // Below 1024px = mobile/tablet.
+    //
+    // Desktop keeps the existing behavior and does NOT
+    // scroll anywhere.
+    // ===================================================
+
+    if (
+      typeof window !== "undefined" &&
+      window.innerWidth < 1024
+    ) {
+      requestAnimationFrame(() => {
+        resultsSectionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    }
   };
 
   // =====================================================
@@ -557,7 +580,8 @@ function Discover() {
       return;
     }
 
-    const alreadyLiked = isLiked(track.id);
+    const alreadyLiked =
+      isLiked(track.id);
 
     try {
       setLikingSong(track.id);
@@ -624,7 +648,10 @@ function Discover() {
         );
       }
     } catch (error) {
-      console.error("Like error:", error);
+      console.error(
+        "Like error:",
+        error
+      );
 
       alert(
         error.message ||
@@ -636,7 +663,7 @@ function Discover() {
   };
 
   // =====================================================
-  // PLAYLIST MODAL
+  // OPEN PLAYLIST MODAL
   // =====================================================
 
   const openPlaylistModal = (track) => {
@@ -702,7 +729,8 @@ function Discover() {
         );
       }
 
-      const title = selectedTrack.title;
+      const title =
+        selectedTrack.title;
 
       setShowPlaylistModal(false);
       setSelectedTrack(null);
@@ -758,6 +786,10 @@ function Discover() {
       return "Discover music";
     }, [activeMood, search]);
 
+  // =====================================================
+  // PAGINATION
+  // =====================================================
+
   const totalTrackPages = Math.max(
     1,
     Math.ceil(
@@ -795,110 +827,107 @@ function Discover() {
   }, [artists, artistPage]);
 
   // =====================================================
-  // SIDEBAR CONTENT
+  // CLOSE MOBILE MENU
   // =====================================================
 
-  const sidebarContent = (
-    <>
-      {/* LOGO */}
-      <div className="flex h-20 shrink-0 items-center justify-between border-b border-[var(--border)] px-5 sm:px-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
-            <HiMusicalNote className="text-xl" />
-          </div>
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
 
-          <span className="text-xl font-extrabold tracking-tight">
-            Verse
-            <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-              Hana
-            </span>
-          </span>
+  // =====================================================
+  // SIDEBAR
+  // =====================================================
+
+  const SidebarContent = ({ mobile = false }) => (
+    <>
+      <div className="flex h-20 shrink-0 items-center gap-3 border-b border-[var(--border)] px-5 sm:px-6">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+          <HiMusicalNote className="text-xl" />
         </div>
 
-        {/* MOBILE CLOSE */}
-        <button
-          type="button"
-          onClick={() =>
-            setMobileMenuOpen(false)
-          }
-          className="flex h-9 w-9 items-center justify-center rounded-xl text-[var(--text-secondary)] transition hover:bg-[var(--card)] hover:text-white lg:hidden"
-          aria-label="Close menu"
-        >
-          <HiXMark className="text-xl" />
-        </button>
+        <span className="text-xl font-extrabold tracking-tight">
+          Verse
+          <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+            Hana
+          </span>
+        </span>
+
+        {mobile && (
+          <button
+            type="button"
+            onClick={closeMobileMenu}
+            className="ml-auto flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-secondary)] hover:bg-[var(--card)] hover:text-white"
+            aria-label="Close menu"
+          >
+            <HiXMark className="text-2xl" />
+          </button>
+        )}
       </div>
 
-      {/* NAV */}
-      <nav className="flex-1 space-y-2 overflow-y-auto p-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto p-3 sm:p-4">
+
         <Link
           to="/dashboard"
-          onClick={() =>
-            setMobileMenuOpen(false)
-          }
+          onClick={mobile ? closeMobileMenu : undefined}
           className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
         >
-          <HiHome className="text-lg" />
+          <HiHome className="shrink-0 text-lg" />
           Home
         </Link>
 
-        <div className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400">
-          <HiMagnifyingGlass className="text-lg" />
+        <Link
+          to="/discover"
+          onClick={mobile ? closeMobileMenu : undefined}
+          className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400"
+        >
+          <HiMagnifyingGlass className="shrink-0 text-lg" />
           Discover
-        </div>
+        </Link>
 
         <Link
           to="/genres"
-          onClick={() =>
-            setMobileMenuOpen(false)
-          }
+          onClick={mobile ? closeMobileMenu : undefined}
           className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
         >
-          <HiMusicalNote className="text-lg" />
+          <HiMusicalNote className="shrink-0 text-lg" />
           Genres
         </Link>
 
         <Link
           to="/liked-songs"
-          onClick={() =>
-            setMobileMenuOpen(false)
-          }
+          onClick={mobile ? closeMobileMenu : undefined}
           className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
         >
-          <HiHeart className="text-lg" />
+          <HiHeart className="shrink-0 text-lg" />
           Liked Songs
         </Link>
 
         <Link
           to="/playlists"
-          onClick={() =>
-            setMobileMenuOpen(false)
-          }
+          onClick={mobile ? closeMobileMenu : undefined}
           className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
         >
-          <HiQueueList className="text-lg" />
+          <HiQueueList className="shrink-0 text-lg" />
           Playlists
         </Link>
 
         <Link
           to="/recently-played"
-          onClick={() =>
-            setMobileMenuOpen(false)
-          }
+          onClick={mobile ? closeMobileMenu : undefined}
           className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
         >
-          <HiClock className="text-lg" />
+          <HiClock className="shrink-0 text-lg" />
           Recently Played
         </Link>
+
       </nav>
 
-      {/* USER */}
-      <div className="shrink-0 border-t border-[var(--border)] p-4">
+      <div className="shrink-0 border-t border-[var(--border)] p-3 sm:p-4">
+
         <Link
           to="/profile"
-          onClick={() =>
-            setMobileMenuOpen(false)
-          }
-          className="mb-3 flex min-w-0 items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+          onClick={mobile ? closeMobileMenu : undefined}
+          className="mb-2 flex min-w-0 items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
         >
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
             {user?.name
@@ -907,7 +936,7 @@ function Discover() {
               "U"}
           </div>
 
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold">
               {user?.name || "User"}
             </p>
@@ -920,18 +949,23 @@ function Discover() {
 
         <button
           type="button"
-          onClick={logout}
+          onClick={() => {
+            closeMobileMenu();
+            logout();
+          }}
           className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] transition hover:bg-red-500/10 hover:text-red-400"
         >
-          <HiArrowRightOnRectangle className="text-lg" />
+          <HiArrowRightOnRectangle className="shrink-0 text-lg" />
           Logout
         </button>
+
       </div>
     </>
   );
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[var(--background)] text-[var(--text-primary)]">
+
       <div className="flex min-h-screen">
 
         {/* =====================================================
@@ -939,7 +973,7 @@ function Discover() {
         ===================================================== */}
 
         <aside className="hidden w-60 shrink-0 border-r border-[var(--border)] bg-[var(--surface)]/60 lg:flex lg:flex-col xl:w-64">
-          {sidebarContent}
+          <SidebarContent />
         </aside>
 
         {/* =====================================================
@@ -949,9 +983,7 @@ function Discover() {
         {mobileMenuOpen && (
           <div
             className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm lg:hidden"
-            onClick={() =>
-              setMobileMenuOpen(false)
-            }
+            onClick={closeMobileMenu}
           />
         )}
 
@@ -960,13 +992,13 @@ function Discover() {
         ===================================================== */}
 
         <aside
-          className={`fixed inset-y-0 left-0 z-[70] flex w-[min(82vw,320px)] flex-col border-r border-[var(--border)] bg-[var(--surface)] shadow-2xl transition-transform duration-300 ease-out lg:hidden ${
+          className={`fixed inset-y-0 left-0 z-[70] flex w-[min(82vw,320px)] flex-col border-r border-[var(--border)] bg-[var(--surface)] shadow-2xl transition-transform duration-300 lg:hidden ${
             mobileMenuOpen
               ? "translate-x-0"
               : "-translate-x-full"
           }`}
         >
-          {sidebarContent}
+          <SidebarContent mobile />
         </aside>
 
         {/* =====================================================
@@ -975,29 +1007,33 @@ function Discover() {
 
         <section className="min-w-0 flex-1">
 
-          {/* HEADER */}
-          <header className="flex min-h-20 items-center justify-between gap-4 border-b border-[var(--border)] px-4 sm:px-6 lg:px-8 xl:px-10">
+          {/* =====================================================
+              HEADER
+          ===================================================== */}
+
+          <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--background)]/90 px-3 backdrop-blur-xl sm:h-20 sm:px-6 lg:px-8 xl:px-10">
 
             <div className="flex min-w-0 items-center gap-3">
 
-              {/* HAMBURGER */}
+              {/* MOBILE HAMBURGER */}
+
               <button
                 type="button"
                 onClick={() =>
                   setMobileMenuOpen(true)
                 }
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400 lg:hidden"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:text-violet-400 lg:hidden"
                 aria-label="Open menu"
               >
-                <HiBars3 className="text-xl" />
+                <HiBars3 className="text-2xl" />
               </button>
 
               <div className="min-w-0">
-                <p className="hidden truncate text-sm text-[var(--text-secondary)] sm:block">
+                <p className="hidden truncate text-xs text-[var(--text-secondary)] sm:block sm:text-sm">
                   Explore your music
                 </p>
 
-                <h1 className="text-lg font-bold sm:text-xl">
+                <h1 className="truncate text-base font-bold sm:text-xl">
                   Discover
                 </h1>
               </div>
@@ -1006,7 +1042,7 @@ function Discover() {
 
             <Link
               to="/profile"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white sm:h-10 sm:w-10"
             >
               {user?.name
                 ?.charAt(0)
@@ -1016,15 +1052,13 @@ function Discover() {
 
           </header>
 
-          {/* PAGE CONTAINER */}
-          <div className="mx-auto w-full max-w-[1440px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-9 xl:px-10">
+          {/* =====================================================
+              CONTENT
+          ===================================================== */}
 
-            {/* 
-              Desktop:
-              LEFT = flexible
-              RIGHT = 320px
-            */}
-            <div className="grid min-w-0 gap-8 xl:grid-cols-[minmax(0,1fr)_320px] 2xl:gap-10">
+          <div className="mx-auto w-full max-w-[1400px] px-3 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10 xl:px-10">
+
+            <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px] 2xl:grid-cols-[minmax(0,1fr)_350px]">
 
               {/* =================================================
                   LEFT
@@ -1032,40 +1066,45 @@ function Discover() {
 
               <div className="min-w-0 space-y-8">
 
-                {/* SEARCH HERO */}
-                <section className="relative overflow-hidden rounded-[24px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-5 sm:rounded-[28px] sm:p-7 lg:p-8">
+                {/* =================================================
+                    SEARCH
+                ================================================= */}
 
-                  <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-violet-500/20 blur-[90px]" />
+                <section className="relative overflow-hidden rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-4 sm:rounded-[28px] sm:p-6 lg:p-8">
 
-                  <div className="pointer-events-none absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-fuchsia-500/10 blur-[90px]" />
+                  <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-violet-500/20 blur-[90px] sm:h-64 sm:w-64" />
+
+                  <div className="pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-fuchsia-500/10 blur-[90px] sm:h-64 sm:w-64" />
 
                   <div className="relative z-10">
 
-                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-violet-400 sm:text-xs sm:tracking-[0.2em]">
                       Find your next favorite
                     </p>
 
-                    <h2 className="mt-3 max-w-2xl text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl xl:text-[42px]">
+                    <h2 className="mt-2 text-2xl font-bold leading-tight tracking-tight sm:mt-3 sm:text-4xl lg:text-5xl">
                       What are you{" "}
                       <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                         feeling?
                       </span>
                     </h2>
 
-                    <p className="mt-3 max-w-xl text-sm leading-6 text-[var(--text-secondary)] sm:mt-4 sm:text-base sm:leading-7">
+                    <p className="mt-3 max-w-xl text-xs leading-6 text-[var(--text-secondary)] sm:mt-4 sm:text-base sm:leading-7">
                       Search for songs and artists,
                       or explore music based on your
                       mood.
                     </p>
 
-                    {/* SEARCH */}
+                    {/* MOBILE SEARCH STACK */}
+
                     <form
                       onSubmit={handleSearch}
-                      className="mt-6 flex w-full max-w-2xl flex-col gap-3 sm:mt-7 sm:flex-row"
+                      className="mt-5 flex w-full max-w-2xl flex-col gap-2.5 sm:mt-7 sm:flex-row sm:gap-3"
                     >
+
                       <div className="relative min-w-0 flex-1">
 
-                        <HiMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-[var(--text-muted)]" />
+                        <HiMagnifyingGlass className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base text-[var(--text-muted)] sm:left-4 sm:text-lg" />
 
                         <input
                           type="text"
@@ -1076,7 +1115,7 @@ function Discover() {
                             )
                           }
                           placeholder="Search songs or artists..."
-                          className="w-full rounded-xl border border-[var(--border)] bg-[var(--card)] py-3.5 pl-11 pr-4 text-sm outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500"
+                          className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--card)] py-3 pl-10 pr-3 text-xs outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 sm:h-auto sm:py-3.5 sm:pl-11 sm:pr-4 sm:text-sm"
                         />
 
                       </div>
@@ -1084,12 +1123,13 @@ function Discover() {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="w-full shrink-0 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.01] disabled:cursor-wait disabled:opacity-60 sm:w-auto"
+                        className="h-11 shrink-0 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 text-xs font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02] disabled:cursor-wait disabled:opacity-60 sm:h-auto sm:text-sm"
                       >
                         {loading
                           ? "Searching..."
                           : "Search"}
                       </button>
+
                     </form>
 
                   </div>
@@ -1101,12 +1141,12 @@ function Discover() {
 
                 <section>
 
-                  <div className="mb-5">
-                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                  <div className="mb-4 sm:mb-5">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-violet-400 sm:text-xs sm:tracking-[0.2em]">
                       Explore by feeling
                     </p>
 
-                    <h2 className="mt-2 text-xl font-bold sm:text-2xl">
+                    <h2 className="mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl">
                       Browse moods
                     </h2>
                   </div>
@@ -1120,13 +1160,13 @@ function Discover() {
                         onClick={() =>
                           handleMood(mood.id)
                         }
-                        className={`flex min-h-[92px] flex-col items-center justify-center gap-2 rounded-2xl border p-3 transition duration-300 sm:min-h-[100px] sm:p-4 ${
+                        className={`flex min-h-[82px] flex-col items-center justify-center gap-1.5 rounded-xl border p-3 transition duration-300 sm:min-h-0 sm:gap-2 sm:rounded-2xl sm:p-4 ${
                           activeMood === mood.id
                             ? "border-violet-500/50 bg-violet-500/15 text-violet-400"
                             : "border-[var(--border)] bg-[var(--surface)]/60 hover:-translate-y-1 hover:border-violet-500/30 hover:bg-violet-500/5"
                         }`}
                       >
-                        <span className="text-2xl">
+                        <span className="text-xl sm:text-2xl">
                           {mood.emoji}
                         </span>
 
@@ -1143,13 +1183,16 @@ function Discover() {
                     RESULTS
                 ================================================= */}
 
-                <section>
+                <section
+                  ref={resultsSectionRef}
+                  className="scroll-mt-20"
+                >
 
-                  <div className="mb-5 flex items-end justify-between gap-4">
+                  <div className="mb-4 flex min-w-0 items-end justify-between gap-3 sm:mb-5">
 
                     <div className="min-w-0">
 
-                      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-violet-400 sm:text-xs sm:tracking-[0.2em]">
                         {activeMood
                           ? "Mood selection"
                           : search
@@ -1157,14 +1200,14 @@ function Discover() {
                             : "Explore"}
                       </p>
 
-                      <h2 className="mt-2 truncate text-xl font-bold sm:text-2xl">
+                      <h2 className="mt-1 truncate text-xl font-bold sm:mt-2 sm:text-2xl">
                         {currentResultTitle}
                       </h2>
 
                     </div>
 
                     {tracks.length > 0 && (
-                      <span className="shrink-0 text-xs text-[var(--text-muted)] sm:text-sm">
+                      <span className="shrink-0 text-[10px] text-[var(--text-muted)] sm:text-sm">
                         {tracks.length} songs
                       </span>
                     )}
@@ -1172,10 +1215,11 @@ function Discover() {
                   </div>
 
                   {/* LOADING */}
-                  {loading && (
-                    <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 lg:grid-cols-4">
 
-                      {[1, 2, 3, 4, 5, 6, 7, 8].map(
+                  {loading && (
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+
+                      {[1, 2, 3, 4, 5, 6].map(
                         (item) => (
                           <div
                             key={item}
@@ -1183,9 +1227,9 @@ function Discover() {
                           >
                             <div className="aspect-square rounded-xl bg-[var(--card)] sm:rounded-2xl" />
 
-                            <div className="mt-3 h-4 w-3/4 rounded bg-[var(--card)]" />
+                            <div className="mt-2 h-3 w-3/4 rounded bg-[var(--card)] sm:mt-3 sm:h-4" />
 
-                            <div className="mt-2 h-3 w-1/2 rounded bg-[var(--card)]" />
+                            <div className="mt-1.5 h-2.5 w-1/2 rounded bg-[var(--card)] sm:mt-2 sm:h-3" />
                           </div>
                         )
                       )}
@@ -1194,12 +1238,13 @@ function Discover() {
                   )}
 
                   {/* ERROR */}
+
                   {!loading && error && (
                     <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center sm:p-8">
 
                       <HiMusicalNote className="mx-auto text-4xl text-red-400" />
 
-                      <p className="mt-3 text-sm text-red-400">
+                      <p className="mt-3 text-xs text-red-400 sm:text-sm">
                         {error}
                       </p>
 
@@ -1208,7 +1253,7 @@ function Discover() {
                         onClick={() =>
                           fetchTracks(search)
                         }
-                        className="mt-4 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white"
+                        className="mt-4 rounded-xl bg-violet-600 px-5 py-2.5 text-xs font-semibold text-white sm:text-sm"
                       >
                         Try again
                       </button>
@@ -1217,18 +1262,19 @@ function Discover() {
                   )}
 
                   {/* EMPTY */}
+
                   {!loading &&
                     !error &&
                     tracks.length === 0 && (
-                      <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 px-5 text-center">
+                      <div className="flex min-h-[260px] flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 px-5 text-center sm:min-h-[300px]">
 
                         <HiMusicalNote className="text-5xl text-[var(--text-muted)]" />
 
-                        <h3 className="mt-4 text-xl font-semibold">
+                        <h3 className="mt-4 text-lg font-semibold sm:text-xl">
                           No music found
                         </h3>
 
-                        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                        <p className="mt-2 text-xs text-[var(--text-secondary)] sm:text-sm">
                           Try another search or
                           explore a different mood.
                         </p>
@@ -1237,11 +1283,13 @@ function Discover() {
                     )}
 
                   {/* TRACKS */}
+
                   {!loading &&
                     !error &&
                     tracks.length > 0 && (
                       <>
-                        <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 xl:gap-x-4 2xl:grid-cols-4">
+
+                        <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-4">
 
                           {visibleTracks.map(
                             (track) => (
@@ -1249,21 +1297,13 @@ function Discover() {
                                 key={track.id}
                                 track={track}
                                 tracks={tracks}
-                                currentSong={
-                                  currentSong
-                                }
-                                isPlaying={
-                                  isPlaying
-                                }
-                                onPlay={
-                                  handlePlay
-                                }
+                                currentSong={currentSong}
+                                isPlaying={isPlaying}
+                                onPlay={handlePlay}
                                 isLiked={isLiked(
                                   track.id
                                 )}
-                                onLike={
-                                  handleLike
-                                }
+                                onLike={handleLike}
                                 likingSong={
                                   likingSong
                                 }
@@ -1278,7 +1318,9 @@ function Discover() {
 
                         {totalTrackPages > 1 && (
                           <PaginationControls
-                            currentPage={trackPage}
+                            currentPage={
+                              trackPage
+                            }
                             totalPages={
                               totalTrackPages
                             }
@@ -1308,10 +1350,12 @@ function Discover() {
                             }
                           />
                         )}
+
                       </>
                     )}
 
                 </section>
+
               </div>
 
               {/* =================================================
@@ -1321,21 +1365,22 @@ function Discover() {
               <aside className="min-w-0 space-y-8">
 
                 {/* TRENDING */}
+
                 <section>
 
-                  <div className="mb-5 flex items-end justify-between">
+                  <div className="mb-4 flex items-end justify-between sm:mb-5">
 
                     <div>
-                      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-violet-400 sm:text-xs sm:tracking-[0.2em]">
                         Popular right now
                       </p>
 
-                      <h2 className="mt-2 text-xl font-bold sm:text-2xl">
+                      <h2 className="mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl">
                         Trending
                       </h2>
                     </div>
 
-                    <span className="text-xs text-[var(--text-muted)]">
+                    <span className="text-[10px] text-[var(--text-muted)] sm:text-xs">
                       Now
                     </span>
 
@@ -1350,9 +1395,9 @@ function Discover() {
                             key={item}
                             className="flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3"
                           >
-                            <div className="h-12 w-12 shrink-0 animate-pulse rounded-xl bg-[var(--card)]" />
+                            <div className="h-11 w-11 animate-pulse rounded-xl bg-[var(--card)] sm:h-12 sm:w-12" />
 
-                            <div className="min-w-0 flex-1">
+                            <div className="flex-1">
                               <div className="h-3 w-3/4 animate-pulse rounded bg-[var(--card)]" />
 
                               <div className="mt-2 h-2 w-1/2 animate-pulse rounded bg-[var(--card)]" />
@@ -1378,7 +1423,10 @@ function Discover() {
                       {trendingTracks
                         .slice(0, 6)
                         .map(
-                          (track, index) => (
+                          (
+                            track,
+                            index
+                          ) => (
                             <TrendingCard
                               key={track.id}
                               track={track}
@@ -1401,18 +1449,20 @@ function Discover() {
 
                     </div>
                   )}
+
                 </section>
 
                 {/* ARTISTS */}
+
                 <section>
 
-                  <div className="mb-5">
+                  <div className="mb-4 sm:mb-5">
 
-                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-violet-400 sm:text-xs sm:tracking-[0.2em]">
                       From your music library
                     </p>
 
-                    <h2 className="mt-2 text-xl font-bold sm:text-2xl">
+                    <h2 className="mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl">
                       Artists
                     </h2>
 
@@ -1425,7 +1475,7 @@ function Discover() {
                         (item) => (
                           <div
                             key={item}
-                            className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-4"
+                            className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3 sm:p-4"
                           >
                             <div className="mx-auto h-14 w-14 animate-pulse rounded-full bg-[var(--card)] sm:h-16 sm:w-16" />
 
@@ -1452,7 +1502,9 @@ function Discover() {
                         {visibleArtists.map(
                           (artist) => (
                             <button
-                              key={artist.name}
+                              key={
+                                artist.name
+                              }
                               type="button"
                               onClick={() =>
                                 handleArtist(
@@ -1480,12 +1532,16 @@ function Discover() {
 
                               </div>
 
-                              <h3 className="mt-3 truncate text-xs font-semibold sm:text-sm">
-                                {artist.name}
+                              <h3 className="mt-2 truncate text-xs font-semibold sm:mt-3 sm:text-sm">
+                                {
+                                  artist.name
+                                }
                               </h3>
 
                               <p className="mt-1 text-[10px] text-[var(--text-muted)] sm:text-xs">
-                                {artist.songCount}{" "}
+                                {
+                                  artist.songCount
+                                }{" "}
                                 {artist.songCount ===
                                 1
                                   ? "song"
@@ -1539,9 +1595,13 @@ function Discover() {
                 </section>
 
               </aside>
+
             </div>
+
           </div>
+
         </section>
+
       </div>
 
       {/* =====================================================
@@ -1550,7 +1610,7 @@ function Discover() {
 
       {showPlaylistModal && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/70 px-4 py-6 backdrop-blur-sm sm:px-5"
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/70 px-3 py-5 backdrop-blur-sm sm:px-5"
           onClick={() =>
             !addingToPlaylist &&
             setShowPlaylistModal(false)
@@ -1558,25 +1618,25 @@ function Discover() {
         >
 
           <div
-            className="my-auto max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-2xl sm:p-6"
+            className="my-auto max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-2xl sm:rounded-3xl sm:p-6"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
 
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-3">
 
               <div className="min-w-0">
 
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-violet-400 sm:text-xs sm:tracking-[0.2em]">
                   Save song
                 </p>
 
-                <h2 className="mt-2 text-xl font-bold sm:text-2xl">
+                <h2 className="mt-1.5 text-xl font-bold sm:mt-2 sm:text-2xl">
                   Add to Playlist
                 </h2>
 
-                <p className="mt-2 truncate text-sm text-[var(--text-secondary)]">
+                <p className="mt-2 truncate text-xs text-[var(--text-secondary)] sm:text-sm">
                   {selectedTrack?.title}
                 </p>
 
@@ -1597,20 +1657,20 @@ function Discover() {
 
             </div>
 
-            <div className="mt-6 space-y-2">
+            <div className="mt-5 space-y-2 sm:mt-6">
 
               {playlists.length === 0 ? (
-                <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 text-center">
+                <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 text-center sm:p-6">
 
                   <HiQueueList className="mx-auto text-3xl text-[var(--text-muted)]" />
 
-                  <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                  <p className="mt-3 text-xs text-[var(--text-secondary)] sm:text-sm">
                     You don't have any playlists yet.
                   </p>
 
                   <Link
                     to="/playlists"
-                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-xs font-semibold text-white sm:text-sm"
                   >
                     <HiPlus />
                     Create Playlist
@@ -1621,7 +1681,9 @@ function Discover() {
                 playlists.map(
                   (playlist) => (
                     <button
-                      key={playlist._id}
+                      key={
+                        playlist._id
+                      }
                       type="button"
                       onClick={() =>
                         handleAddToPlaylist(
@@ -1632,7 +1694,7 @@ function Discover() {
                         addingToPlaylist ===
                         playlist._id
                       }
-                      className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3 text-left transition hover:border-violet-500/40 hover:bg-violet-500/10 disabled:cursor-wait disabled:opacity-60 sm:gap-4"
+                      className="flex w-full min-w-0 items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3 text-left transition hover:border-violet-500/40 hover:bg-violet-500/10 disabled:cursor-wait disabled:opacity-60"
                     >
 
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 sm:h-12 sm:w-12">
@@ -1641,8 +1703,7 @@ function Discover() {
                           ?.artwork ? (
                           <img
                             src={
-                              playlist
-                                .songs[0]
+                              playlist.songs[0]
                                 .artwork
                             }
                             alt={
@@ -1658,14 +1719,18 @@ function Discover() {
 
                       <div className="min-w-0 flex-1">
 
-                        <p className="truncate text-sm font-semibold">
-                          {playlist.name}
+                        <p className="truncate text-xs font-semibold sm:text-sm">
+                          {
+                            playlist.name
+                          }
                         </p>
 
-                        <p className="mt-1 text-xs text-[var(--text-muted)]">
-                          {playlist.songs
-                            ?.length ||
-                            0}{" "}
+                        <p className="mt-1 text-[10px] text-[var(--text-muted)] sm:text-xs">
+                          {
+                            playlist.songs
+                              ?.length ||
+                            0
+                          }{" "}
                           songs
                         </p>
 
@@ -1673,7 +1738,7 @@ function Discover() {
 
                       {addingToPlaylist ===
                       playlist._id ? (
-                        <span className="shrink-0 text-xs text-violet-400">
+                        <span className="shrink-0 text-[10px] text-violet-400 sm:text-xs">
                           Adding...
                         </span>
                       ) : (
@@ -1686,9 +1751,12 @@ function Discover() {
               )}
 
             </div>
+
           </div>
+
         </div>
       )}
+
     </main>
   );
 }
@@ -1720,15 +1788,12 @@ function DiscoverCard({
   return (
     <div className="group min-w-0">
 
-      {/* ARTWORK */}
-
       <div className="relative aspect-square overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] sm:rounded-2xl">
 
         {artwork ? (
           <img
             src={artwork}
             alt={track.title}
-            loading="lazy"
             className={`h-full w-full object-cover transition duration-500 ${
               isCurrent
                 ? "scale-105"
@@ -1741,8 +1806,6 @@ function DiscoverCard({
           </div>
         )}
 
-        {/* OVERLAY */}
-
         <div
           className={`absolute inset-0 bg-black/30 transition ${
             isCurrent
@@ -1751,7 +1814,9 @@ function DiscoverCard({
           }`}
         />
 
-        {/* LIKE */}
+        {/* =================================================
+            LIKE
+        ================================================= */}
 
         <button
           type="button"
@@ -1761,10 +1826,10 @@ function DiscoverCard({
           disabled={
             likingSong === track.id
           }
-          className={`absolute left-2.5 top-2.5 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all sm:left-3 sm:top-3 sm:h-9 sm:w-9 ${
+          className={`absolute left-2 top-2 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-md transition-all sm:left-3 sm:top-3 sm:h-10 sm:w-10 ${
             isLiked
               ? "bg-violet-600 text-white opacity-100"
-              : "bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-violet-600"
+              : "bg-black/55 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:hover:bg-violet-600"
           }`}
           aria-label={
             isLiked
@@ -1773,7 +1838,7 @@ function DiscoverCard({
           }
         >
           <HiHeart
-            className={`text-base sm:text-lg ${
+            className={`text-sm sm:text-lg ${
               isLiked
                 ? "scale-110 fill-current"
                 : ""
@@ -1781,31 +1846,35 @@ function DiscoverCard({
           />
         </button>
 
-        {/* PLAYLIST */}
+        {/* =================================================
+            PLAYLIST
+        ================================================= */}
 
         <button
           type="button"
           onClick={() =>
             onPlaylist(track)
           }
-          className="absolute left-12 top-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-md transition group-hover:opacity-100 hover:bg-violet-600 sm:left-14 sm:top-3 sm:h-9 sm:w-9"
+          className="absolute left-[44px] top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/55 text-white opacity-100 backdrop-blur-md transition sm:left-14 sm:top-3 sm:h-10 sm:w-10 sm:opacity-0 sm:group-hover:opacity-100 sm:hover:bg-violet-600"
           aria-label="Add to playlist"
           title="Add to playlist"
         >
-          <HiPlus className="text-base sm:text-lg" />
+          <HiPlus className="text-sm sm:text-lg" />
         </button>
 
-        {/* PLAY */}
+        {/* =================================================
+            PLAY BUTTON
+        ================================================= */}
 
         <button
           type="button"
           onClick={() =>
             onPlay(track, tracks)
           }
-          className={`absolute bottom-2.5 right-2.5 flex h-9 w-9 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg shadow-violet-500/30 transition-all duration-300 hover:scale-105 sm:bottom-3 sm:right-3 sm:h-10 sm:w-10 ${
+          className={`absolute bottom-2 right-2 flex h-9 w-9 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg shadow-violet-500/30 transition-all duration-300 sm:bottom-3 sm:right-3 sm:h-11 sm:w-11 sm:hover:scale-105 ${
             isCurrent
               ? "translate-y-0 opacity-100"
-              : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+              : "translate-y-0 opacity-100 sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
           }`}
           aria-label={
             isCurrent && isPlaying
@@ -1819,21 +1888,18 @@ function DiscoverCard({
             <HiPlay className="ml-0.5 text-base sm:text-lg" />
           )}
         </button>
+
       </div>
 
-      {/* TITLE */}
-
       <h3
-        className="mt-2.5 truncate text-xs font-semibold sm:mt-3 sm:text-sm"
+        className="mt-2 truncate text-xs font-semibold sm:mt-3 sm:text-sm"
         title={track.title}
       >
         {track.title}
       </h3>
 
-      {/* ARTIST */}
-
       <p
-        className="mt-1 truncate text-[11px] text-[var(--text-muted)] sm:text-xs"
+        className="mt-0.5 truncate text-[10px] text-[var(--text-muted)] sm:mt-1 sm:text-xs"
         title={
           track.user?.name ||
           track.artist
@@ -1843,6 +1909,7 @@ function DiscoverCard({
           track.artist ||
           "Unknown artist"}
       </p>
+
     </div>
   );
 }
@@ -1871,20 +1938,19 @@ function TrendingCard({
     <button
       type="button"
       onClick={onPlay}
-      className="group flex w-full min-w-0 items-center gap-2.5 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-2.5 text-left transition hover:border-violet-500/30 hover:bg-violet-500/5 sm:gap-3 sm:p-3"
+      className="group flex w-full min-w-0 items-center gap-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)]/60 p-2.5 text-left transition hover:border-violet-500/30 hover:bg-violet-500/5 sm:gap-3 sm:rounded-2xl sm:p-3"
     >
 
-      <span className="w-4 shrink-0 text-center text-[11px] font-bold text-[var(--text-muted)] sm:w-5 sm:text-xs">
+      <span className="w-4 shrink-0 text-center text-[10px] font-bold text-[var(--text-muted)] sm:w-5 sm:text-xs">
         {index + 1}
       </span>
 
-      <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-[var(--card)] sm:h-12 sm:w-12">
+      <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg bg-[var(--card)] sm:h-12 sm:w-12 sm:rounded-xl">
 
         {artwork ? (
           <img
             src={artwork}
             alt={track.title}
-            loading="lazy"
             className="h-full w-full object-cover transition group-hover:scale-105"
           />
         ) : (
@@ -1894,14 +1960,13 @@ function TrendingCard({
         )}
 
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition group-hover:opacity-100">
-
           {isCurrent && isPlaying ? (
             <HiPause className="text-lg text-white" />
           ) : (
             <HiPlay className="text-lg text-white" />
           )}
-
         </div>
+
       </div>
 
       <div className="min-w-0 flex-1">
@@ -1923,6 +1988,7 @@ function TrendingCard({
         </p>
 
       </div>
+
     </button>
   );
 }
@@ -1952,9 +2018,9 @@ function PaginationControls({
   );
 
   return (
-    <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-3 sm:p-4">
+    <div className="mt-5 flex items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)]/60 p-2.5 sm:mt-6 sm:rounded-2xl sm:p-4">
 
-      <p className="text-[10px] text-[var(--text-muted)] sm:text-sm">
+      <p className="truncate text-[10px] text-[var(--text-muted)] sm:text-sm">
         Showing {firstItem}-{lastItem} of{" "}
         {totalItems}
       </p>
@@ -1965,10 +2031,10 @@ function PaginationControls({
           type="button"
           onClick={onPrevious}
           disabled={currentPage === 1}
-          className="flex h-8 w-8 items-center justify-center rounded-xl border border-[var(--border)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400 disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9"
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400 disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9 sm:rounded-xl"
           aria-label="Previous page"
         >
-          <HiChevronLeft className="text-lg" />
+          <HiChevronLeft className="text-base sm:text-lg" />
         </button>
 
         <span className="min-w-[50px] text-center text-[10px] font-medium text-[var(--text-secondary)] sm:min-w-[70px] sm:text-sm">
@@ -1981,13 +2047,14 @@ function PaginationControls({
           disabled={
             currentPage === totalPages
           }
-          className="flex h-8 w-8 items-center justify-center rounded-xl border border-[var(--border)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400 disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9"
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400 disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9 sm:rounded-xl"
           aria-label="Next page"
         >
-          <HiChevronRight className="text-lg" />
+          <HiChevronRight className="text-base sm:text-lg" />
         </button>
 
       </div>
+
     </div>
   );
 }

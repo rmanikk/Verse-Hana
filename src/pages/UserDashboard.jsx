@@ -113,10 +113,7 @@ function UserDashboard() {
   // =====================================================
 
   const [selectedMood, setSelectedMood] = useState(() => {
-    return (
-      localStorage.getItem("versehana_mood") ||
-      "calm"
-    );
+    return localStorage.getItem("versehana_mood") || "calm";
   });
 
   const currentMood =
@@ -589,7 +586,7 @@ function UserDashboard() {
   }) => (
     <div className="flex h-full flex-col">
 
-      {/* Logo */}
+      {/* LOGO */}
 
       <div className="flex h-20 shrink-0 items-center justify-between border-b border-[var(--border)] px-5 sm:px-6">
 
@@ -621,7 +618,7 @@ function UserDashboard() {
 
       </div>
 
-      {/* Navigation */}
+      {/* NAVIGATION */}
 
       <nav className="flex-1 space-y-1.5 overflow-y-auto p-4">
 
@@ -635,7 +632,11 @@ function UserDashboard() {
             <Link
               key={item.to}
               to={item.to}
-              onClick={mobile ? closeMobileMenu : undefined}
+              onClick={
+                mobile
+                  ? closeMobileMenu
+                  : undefined
+              }
               className={`
                 group flex w-full items-center gap-3 rounded-xl
                 px-3 py-3 text-sm font-medium
@@ -665,19 +666,24 @@ function UserDashboard() {
 
       </nav>
 
-      {/* User */}
+      {/* USER */}
 
       <div className="shrink-0 border-t border-[var(--border)] p-4">
 
         <Link
           to="/profile"
-          onClick={mobile ? closeMobileMenu : undefined}
+          onClick={
+            mobile
+              ? closeMobileMenu
+              : undefined
+          }
           className="mb-3 flex min-w-0 items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
         >
 
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white shadow-lg shadow-violet-500/10">
-            {user?.name?.charAt(0)?.toUpperCase() ||
-              "U"}
+            {user?.name
+              ?.charAt(0)
+              ?.toUpperCase() || "U"}
           </div>
 
           <div className="min-w-0 flex-1">
@@ -694,18 +700,24 @@ function UserDashboard() {
 
         </Link>
 
-        {/* ADMIN-ONLY PANEL BUTTON */}
+        {/* ADMIN */}
 
         {user?.role === "admin" && (
           <Link
             to="/admin"
-            onClick={mobile ? closeMobileMenu : undefined}
+            onClick={
+              mobile
+                ? closeMobileMenu
+                : undefined
+            }
             className="mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-violet-400 transition hover:bg-violet-500/10"
           >
             <HiShieldCheck className="text-lg" />
             Admin Panel
           </Link>
         )}
+
+        {/* LOGOUT */}
 
         <button
           type="button"
@@ -750,7 +762,7 @@ function UserDashboard() {
             aria-label="Navigation menu"
           >
 
-            {/* Overlay */}
+            {/* OVERLAY */}
 
             <button
               type="button"
@@ -759,7 +771,7 @@ function UserDashboard() {
               className="absolute inset-0 h-full w-full cursor-default bg-black/70 backdrop-blur-sm"
             />
 
-            {/* Drawer */}
+            {/* DRAWER */}
 
             <aside
               className="
@@ -781,9 +793,7 @@ function UserDashboard() {
 
         <section className="min-w-0 flex-1">
 
-          {/* =====================================================
-              TOP BAR
-          ===================================================== */}
+          {/* TOP BAR */}
 
           <header className="sticky top-0 z-40 flex min-h-20 items-center justify-between border-b border-[var(--border)] bg-[var(--background)]/90 px-4 backdrop-blur-xl sm:px-6 lg:px-10">
 
@@ -816,22 +826,21 @@ function UserDashboard() {
 
             </div>
 
-            {/* DESKTOP USER / MOBILE AVATAR */}
+            {/* PROFILE */}
 
             <Link
               to="/profile"
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white shadow-lg shadow-violet-500/10 ring-2 ring-violet-500/10 transition hover:scale-105"
               aria-label="Profile"
             >
-              {user?.name?.charAt(0)?.toUpperCase() ||
-                "U"}
+              {user?.name
+                ?.charAt(0)
+                ?.toUpperCase() || "U"}
             </Link>
 
           </header>
 
-          {/* =====================================================
-              DASHBOARD
-          ===================================================== */}
+          {/* DASHBOARD */}
 
           <div className="mx-auto w-full max-w-[1500px] space-y-10 px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
 
@@ -896,6 +905,7 @@ function UserDashboard() {
                 </button>
 
               </div>
+
             </section>
 
             {/* =====================================================
@@ -999,11 +1009,13 @@ function UserDashboard() {
                 !trackError &&
                 tracks.length === 0 && (
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-7 text-center sm:p-8">
+
                     <HiMusicalNote className="mx-auto text-3xl text-[var(--text-muted)]" />
 
                     <p className="mt-3 text-sm text-[var(--text-secondary)]">
                       We couldn't find songs for this mood yet.
                     </p>
+
                   </div>
                 )}
 
@@ -1300,7 +1312,7 @@ function UserDashboard() {
                               <HiPlus className="text-lg sm:text-xl" />
                             </button>
 
-                            {/* DESKTOP PLAY */}
+                            {/* PLAY */}
 
                             <button
                               type="button"
@@ -1558,7 +1570,8 @@ function SongCard({
   onOpenPlaylist,
 }) {
   const isCurrentSong =
-    currentSong?.id === track.id;
+    String(currentSong?.id) ===
+    String(track.id);
 
   const artwork =
     track.artwork?.["480x480"] ||
@@ -1582,6 +1595,10 @@ function SongCard({
   return (
     <div className="group min-w-0">
 
+      {/* =====================================================
+          ARTWORK
+      ===================================================== */}
+
       <div className="relative aspect-square overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-sm transition duration-300 group-hover:border-violet-500/20 group-hover:shadow-lg group-hover:shadow-violet-950/10 sm:rounded-2xl">
 
         {artwork ? (
@@ -1604,7 +1621,9 @@ function SongCard({
           </div>
         )}
 
-        {/* OVERLAY */}
+        {/* =====================================================
+            OVERLAY
+        ===================================================== */}
 
         <div
           className={`
@@ -1617,26 +1636,42 @@ function SongCard({
           `}
         />
 
-        {/* TOP LEFT ACTIONS */}
+        {/* =====================================================
+            TOP ACTIONS
+            MOBILE:
+            ALWAYS VISIBLE
+            DESKTOP:
+            HIDDEN UNTIL HOVER
+        ===================================================== */}
 
         <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5 sm:left-3 sm:top-3 sm:gap-2">
 
-          {/* LIKE */}
+          {/* =================================================
+              LIKE
+          ================================================= */}
 
           <button
             type="button"
             onClick={handleLike}
-            disabled={likingSong === track.id}
+            disabled={
+              likingSong === track.id
+            }
             className={`
               flex h-9 w-9 items-center justify-center
               rounded-full backdrop-blur-md
               transition-all duration-200
               sm:h-10 sm:w-10
+
               ${
                 isLiked
                   ? "bg-violet-600 text-white opacity-100"
-                  : "bg-black/50 text-white opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-violet-600"
+                  : "bg-black/60 text-white opacity-100 hover:bg-violet-600"
               }
+
+              sm:opacity-0
+              sm:group-hover:opacity-100
+              sm:focus:opacity-100
+
               ${
                 likingSong === track.id
                   ? "cursor-wait opacity-70"
@@ -1666,12 +1701,29 @@ function SongCard({
             />
           </button>
 
-          {/* PLAYLIST */}
+          {/* =================================================
+              ADD TO PLAYLIST
+          ================================================= */}
 
           <button
             type="button"
             onClick={handlePlaylist}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white opacity-0 backdrop-blur-md transition-all duration-200 group-hover:opacity-100 focus:opacity-100 hover:bg-violet-600 sm:h-10 sm:w-10"
+            className="
+              flex h-9 w-9
+              items-center justify-center
+              rounded-full
+              bg-black/60
+              text-white
+              opacity-100
+              backdrop-blur-md
+              transition-all duration-200
+              hover:bg-violet-600
+              sm:h-10
+              sm:w-10
+              sm:opacity-0
+              sm:group-hover:opacity-100
+              sm:focus:opacity-100
+            "
             aria-label="Add to playlist"
             title="Add to playlist"
           >
@@ -1680,7 +1732,9 @@ function SongCard({
 
         </div>
 
-        {/* PLAY BUTTON */}
+        {/* =====================================================
+            PLAY BUTTON
+        ===================================================== */}
 
         <button
           type="button"
@@ -1692,11 +1746,12 @@ function SongCard({
             shadow-lg shadow-violet-500/30
             transition-all duration-300
             hover:scale-105
-            sm:bottom-3 sm:right-3 sm:h-11 sm:w-11
+            sm:bottom-3 sm:right-3
+            sm:h-11 sm:w-11
             ${
               isCurrentSong
                 ? "translate-y-0 opacity-100"
-                : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 focus:translate-y-0 focus:opacity-100"
+                : "translate-y-2 opacity-100 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 sm:focus:translate-y-0 sm:focus:opacity-100"
             }
           `}
           aria-label={
@@ -1712,7 +1767,9 @@ function SongCard({
           )}
         </button>
 
-        {/* PLAYING INDICATOR */}
+        {/* =====================================================
+            PLAYING INDICATOR
+        ===================================================== */}
 
         {isCurrentSong && isPlaying && (
           <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 backdrop-blur sm:bottom-3 sm:left-3 sm:px-2.5 sm:py-1.5">
@@ -1728,7 +1785,9 @@ function SongCard({
 
       </div>
 
-      {/* TRACK INFORMATION */}
+      {/* =====================================================
+          TRACK INFORMATION
+      ===================================================== */}
 
       <h3
         className="mt-2.5 truncate text-xs font-semibold sm:mt-3 sm:text-sm"
@@ -1741,7 +1800,8 @@ function SongCard({
         className="mt-1 truncate text-[11px] text-[var(--text-muted)] sm:text-xs"
         title={track.user?.name}
       >
-        {track.user?.name || "Unknown artist"}
+        {track.user?.name ||
+          "Unknown artist"}
       </p>
 
     </div>
