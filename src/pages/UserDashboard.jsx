@@ -12,6 +12,7 @@ import {
   HiPause,
   HiPlus,
   HiXMark,
+  HiShieldCheck,
 } from "react-icons/hi2";
 
 import { useAuth } from "../context/AuthContext";
@@ -623,6 +624,19 @@ function UserDashboard() {
                 </p>
               </div>
             </Link>
+              {/* =================================================
+                ADMIN-ONLY PANEL BUTTON
+            ================================================= */}
+
+            {user?.role === "admin" && (
+              <Link
+                to="/admin"
+                className="mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-violet-400 transition hover:bg-violet-500/10"
+              >
+                <HiShieldCheck className="text-lg" />
+                Admin Panel
+              </Link>
+            )}
 
             <button
               type="button"
