@@ -1,42 +1,75 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { HiArrowRight, HiMusicalNote } from "react-icons/hi2";
+import { Eye, EyeOff, Loader2, Music2 } from "lucide-react";
+
 import { useAuth } from "../context/AuthContext";
 
-function Login() {
+export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] =
+    useState(false);
+
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError("");
 
-    // Frontend validation
-    if (!email || !password) {
-      setError("Please enter your email and password.");
+    const normalizedEmail =
+      email.trim().toLowerCase();
+
+    if (!normalizedEmail || !password) {
+      setError(
+        "Please enter your email and password."
+      );
+      return;
+    }
+
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(normalizedEmail)) {
+      setError(
+        "Please enter a valid email address."
+      );
       return;
     }
 
     try {
       setLoading(true);
 
-      const data = await login(email, password);
+      const data = await login(
+        normalizedEmail,
+        password,
+        rememberMe
+      );
 
-      // Send each account to its role-appropriate workspace.
-      navigate(data.user.role === "admin" ? "/admin" : "/dashboard");
-    } catch (error) {
-      console.error("Login error:", error);
-
+      if (data.user.role === "admin") {
+        navigate("/admin", {
+          replace: true,
+        });
+      } else {
+        navigate("/dashboard", {
+          replace: true,
+        });
+      }
+    } catch (err) {
       setError(
-        error.message || "Unable to login. Please try again."
+        err.message ||
+          "Unable to login. Please try again."
       );
     } finally {
       setLoading(false);
@@ -44,181 +77,195 @@ function Login() {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)] flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md">
 
-        {/* Ambient Background */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute left-[-180px] top-[-120px] h-[420px] w-[420px] rounded-full bg-violet-600/15 blur-[150px]" />
-
-          <div className="absolute bottom-[-160px] right-[-120px] h-[420px] w-[420px] rounded-full bg-fuchsia-600/10 blur-[150px]" />
-
-          <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/5 blur-[140px]" />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 w-full max-w-md">
-
-          {/* Brand */}
-          <div className="mb-8 text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
-                <HiMusicalNote className="text-xl" />
-              </div>
-
-              <span className="text-2xl font-extrabold tracking-tight">
-                Verse
-                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-                  Hana
-                </span>
-              </span>
-            </Link>
-          </div>
-
-          {/* Login Card */}
-          <div className="rounded-[32px] border border-[var(--border)] bg-[var(--surface)]/80 p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
-
-            {/* Heading */}
-            <div className="text-center">
-
-              <span className="inline-flex rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-1.5 text-xs font-medium text-violet-400">
-                🎧 Welcome back
-              </span>
-
-              <h1 className="mt-5 text-3xl font-bold sm:text-4xl">
-                Welcome back
-              </h1>
-
-              <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
-                Sign in and continue your musical journey.
-              </p>
-
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <Link
+            to="/"
+            className="flex items-center gap-3"
+          >
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600 shadow-lg shadow-violet-600/20">
+              <Music2
+                size={23}
+                className="text-white"
+              />
             </div>
 
-            {/* Form */}
-            <form
-              onSubmit={handleSubmit}
-              className="mt-8 space-y-5"
-            >
+            <span className="text-2xl font-bold">
+              VerseHana
+            </span>
+          </Link>
+        </div>
 
-              {/* Email */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="mb-2 block text-sm font-medium"
-                >
-                  Email address
-                </label>
+        {/* Card */}
+        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-2xl backdrop-blur-xl sm:p-8">
 
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3.5 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
-                />
-              </div>
+          <div className="mb-7 text-center">
+            <h1 className="text-2xl font-bold sm:text-3xl">
+              Welcome back
+            </h1>
 
-              {/* Password */}
-              <div>
-                <div className="mb-2 flex items-center justify-between">
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+              Sign in to continue to VerseHana
+            </p>
+          </div>
 
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium"
-                  >
-                    Password
-                  </label>
+          {/* Error */}
+          {error && (
+            <div className="mb-5 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              {error}
+            </div>
+          )}
 
-                  <Link
-                    to="/forgot-password"
-                    className="text-xs font-medium text-violet-400 transition hover:text-violet-300"
-                  >
-                    Forgot password?
-                  </Link>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-5"
+          >
 
-                </div>
-
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3.5 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
-                />
-              </div>
-
-              {/* Remember Me */}
-              <label className="flex cursor-pointer items-center gap-3 text-sm text-[var(--text-secondary)]">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 rounded accent-violet-600"
-                />
-
-                <span>
-                  Remember me
-                </span>
+            {/* Email */}
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-medium"
+              >
+                Email
               </label>
 
-              {/* Error */}
-              {error && (
-                <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                  {error}
-                </div>
-              )}
+              <input
+                id="email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) =>
+                  setEmail(e.target.value)
+                }
+                placeholder="you@example.com"
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+              />
+            </div>
 
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-violet-500/30 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
-              >
-                {loading ? "Logging in..." : "Login"}
+            {/* Password */}
+            <div>
+              <div className="mb-2 flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium"
+                >
+                  Password
+                </label>
 
-                {!loading && (
-                  <HiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
-                )}
-              </button>
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-violet-400 transition hover:text-violet-300"
+                >
+                  Forgot password?
+                </Link>
+              </div>
 
-            </form>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) =>
+                    setPassword(
+                      e.target.value
+                    )
+                  }
+                  placeholder="Enter your password"
+                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+                />
 
-            {/* Signup */}
-            <p className="mt-7 text-center text-sm text-[var(--text-secondary)]">
-              Don't have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPassword(
+                      (value) => !value
+                    )
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-white/50 transition hover:bg-white/10 hover:text-white"
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
+                >
+                  {showPassword ? (
+                    <EyeOff size={19} />
+                  ) : (
+                    <Eye size={19} />
+                  )}
+                </button>
+              </div>
+            </div>
 
-              <Link
-                to="/signup"
-                className="font-semibold text-violet-400 transition hover:text-violet-300"
-              >
-                Create account
-              </Link>
-            </p>
+            {/* Remember me */}
+            <label className="flex cursor-pointer items-center gap-3 text-sm text-[var(--text-secondary)]">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) =>
+                  setRememberMe(
+                    e.target.checked
+                  )
+                }
+                className="h-4 w-4 rounded border-white/20 bg-white/5 accent-violet-600"
+              />
 
-          </div>
+              <span>
+                Remember me
+              </span>
+            </label>
 
-          {/* Back */}
-          <div className="mt-6 text-center">
-            <Link
-              to="/"
-              className="text-xs text-[var(--text-muted)] transition hover:text-violet-400"
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              ← Back to VerseHana
-            </Link>
-          </div>
+              {loading ? (
+                <>
+                  <Loader2
+                    size={18}
+                    className="animate-spin"
+                  />
+                  Signing in...
+                </>
+              ) : (
+                "Sign in"
+              )}
+            </button>
+          </form>
 
+          {/* Signup */}
+          <p className="mt-7 text-center text-sm text-[var(--text-secondary)]">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="font-medium text-violet-400 hover:text-violet-300"
+            >
+              Create one
+            </Link>
+          </p>
+        </div>
+
+        {/* Back */}
+        <div className="mt-6 text-center">
+          <Link
+            to="/"
+            className="text-sm text-white/40 transition hover:text-white/70"
+          >
+            ← Back to home
+          </Link>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
-
-export default Login;

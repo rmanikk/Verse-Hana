@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
 import connectDB from "./config/db.js";
+
 import authRoutes from "./routes/authRoutes.js";
 import audiusRoutes from "./routes/audiusRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
@@ -18,44 +19,65 @@ connectDB();
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
+const PORT =
+  process.env.PORT || 5000;
 
-// ================= MIDDLEWARE =================
+const CLIENT_URL =
+  process.env.CLIENT_URL ||
+  "http://localhost:5173";
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: CLIENT_URL,
     credentials: true,
   })
 );
 
 app.use(express.json());
+
 app.use(cookieParser());
 
-// ================= ROUTES =================
+app.use(
+  "/api/auth",
+  authRoutes
+);
 
-// Authentication
-app.use("/api/auth", authRoutes);
-// Music
-app.use("/api/music", audiusRoutes);
-//Like
-app.use("/api/likes", likeRoutes);
-//playlist
-app.use("/api/playlists", playlistRoutes);
-//history
-app.use("/api/history", historyRoutes);
-// Admin
-app.use("/api/admin", adminRoutes);
-app.use("/api/admin", catalogRoutes);
+app.use(
+  "/api/music",
+  audiusRoutes
+);
 
-// Test route
+app.use(
+  "/api/likes",
+  likeRoutes
+);
+
+app.use(
+  "/api/playlists",
+  playlistRoutes
+);
+
+app.use(
+  "/api/history",
+  historyRoutes
+);
+
+app.use(
+  "/api/admin",
+  adminRoutes
+);
+
+app.use(
+  "/api/admin",
+  catalogRoutes
+);
+
 app.get("/", (req, res) => {
   res.json({
-    message: "VerseHana API is running 🎵",
+    message:
+      "VerseHana API is running 🎵",
   });
 });
-
-// ================= SERVER =================
 
 app.listen(PORT, () => {
   console.log(

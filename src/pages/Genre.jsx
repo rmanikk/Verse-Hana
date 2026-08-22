@@ -12,6 +12,7 @@ import {
   HiPause,
   HiPlus,
   HiXMark,
+  HiBars3,
 } from "react-icons/hi2";
 
 import { useAuth } from "../context/AuthContext";
@@ -94,6 +95,12 @@ function Genre() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // =====================================================
+  // MOBILE SIDEBAR
+  // =====================================================
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // =====================================================
   // PAGINATION
@@ -250,6 +257,9 @@ function Genre() {
       }
 
       setTracks(data.tracks || []);
+
+      // Close mobile menu after selecting a genre.
+      setMobileMenuOpen(false);
     } catch (error) {
       console.error(
         "Genre music error:",
@@ -515,11 +525,171 @@ function Genre() {
   );
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
+    <main className="min-h-screen overflow-x-hidden bg-[var(--background)] text-[var(--text-primary)]">
       <div className="flex min-h-screen">
 
         {/* =====================================================
-            SIDEBAR
+            MOBILE OVERLAY
+        ===================================================== */}
+
+        {mobileMenuOpen && (
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={() =>
+              setMobileMenuOpen(false)
+            }
+            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm lg:hidden"
+          />
+        )}
+
+        {/* =====================================================
+            MOBILE SIDEBAR
+        ===================================================== */}
+
+        <aside
+          className={`fixed inset-y-0 left-0 z-[90] flex w-[280px] max-w-[85vw] flex-col border-r border-[var(--border)] bg-[var(--surface)] shadow-2xl transition-transform duration-300 lg:hidden ${
+            mobileMenuOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
+          }`}
+        >
+          <div className="flex h-20 shrink-0 items-center justify-between border-b border-[var(--border)] px-5">
+
+            <div className="flex min-w-0 items-center gap-3">
+
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                <HiMusicalNote className="text-xl" />
+              </div>
+
+              <span className="text-xl font-extrabold tracking-tight">
+                Verse
+                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                  Hana
+                </span>
+              </span>
+
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
+              aria-label="Close menu"
+            >
+              <HiXMark className="text-xl" />
+            </button>
+
+          </div>
+
+          <nav className="flex-1 space-y-2 overflow-y-auto p-4">
+
+            <Link
+              to="/dashboard"
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiHome className="text-lg" />
+              Home
+            </Link>
+
+            <Link
+              to="/discover"
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiMagnifyingGlass className="text-lg" />
+              Discover
+            </Link>
+
+            <div className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400">
+              <HiMusicalNote className="text-lg" />
+              Genres
+            </div>
+
+            <Link
+              to="/liked-songs"
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiHeart className="text-lg" />
+              Liked Songs
+            </Link>
+
+            <Link
+              to="/playlists"
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiQueueList className="text-lg" />
+              Playlists
+            </Link>
+
+            <Link
+              to="/recently-played"
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            >
+              <HiClock className="text-lg" />
+              Recently Played
+            </Link>
+
+          </nav>
+
+          <div className="shrink-0 border-t border-[var(--border)] p-4">
+
+            <Link
+              to="/profile"
+              onClick={() =>
+                setMobileMenuOpen(false)
+              }
+              className="mb-3 flex min-w-0 items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+            >
+
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+                {user?.name
+                  ?.charAt(0)
+                  ?.toUpperCase() || "U"}
+              </div>
+
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold">
+                  {user?.name || "User"}
+                </p>
+
+                <p className="truncate text-xs text-[var(--text-muted)]">
+                  {user?.email}
+                </p>
+              </div>
+
+            </Link>
+
+            <button
+              type="button"
+              onClick={logout}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] transition hover:bg-red-500/10 hover:text-red-400"
+            >
+              <HiArrowRightOnRectangle className="text-lg" />
+              Logout
+            </button>
+
+          </div>
+        </aside>
+
+        {/* =====================================================
+            DESKTOP SIDEBAR
         ===================================================== */}
 
         <aside className="hidden w-64 shrink-0 border-r border-[var(--border)] bg-[var(--surface)]/60 lg:flex lg:flex-col">
@@ -594,6 +764,7 @@ function Genre() {
               to="/profile"
               className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
             >
+
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
                 {user?.name
                   ?.charAt(0)
@@ -609,6 +780,7 @@ function Genre() {
                   {user?.email}
                 </p>
               </div>
+
             </Link>
 
             <button
@@ -630,21 +802,44 @@ function Genre() {
 
         <section className="min-w-0 flex-1">
 
-          <header className="flex h-20 items-center justify-between border-b border-[var(--border)] px-5 sm:px-8 lg:px-10">
+          {/* =====================================================
+              HEADER
+          ===================================================== */}
 
-            <div>
-              <p className="text-sm text-[var(--text-secondary)]">
-                Explore music by style
-              </p>
+          <header className="flex min-h-20 items-center justify-between gap-4 border-b border-[var(--border)] px-4 py-3 sm:px-6 lg:px-10">
 
-              <h1 className="text-lg font-bold sm:text-xl">
-                Genres
-              </h1>
+            <div className="flex min-w-0 items-center gap-3">
+
+              {/* MOBILE HAMBURGER */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  setMobileMenuOpen(true)
+                }
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)] lg:hidden"
+                aria-label="Open menu"
+              >
+                <HiBars3 className="text-xl" />
+              </button>
+
+              <div className="min-w-0">
+
+                <p className="truncate text-xs text-[var(--text-secondary)] sm:text-sm">
+                  Explore music by style
+                </p>
+
+                <h1 className="text-lg font-bold sm:text-xl">
+                  Genres
+                </h1>
+
+              </div>
+
             </div>
 
             <Link
               to="/profile"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white"
             >
               {user?.name
                 ?.charAt(0)
@@ -653,13 +848,13 @@ function Genre() {
 
           </header>
 
-          <div className="mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
+          <div className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
 
             {/* =====================================================
                 HERO
             ===================================================== */}
 
-            <section className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 sm:p-8 lg:p-10">
+            <section className="relative overflow-hidden rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-5 sm:rounded-[28px] sm:p-8 lg:rounded-[32px] lg:p-10">
 
               <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-[100px]" />
 
@@ -667,18 +862,18 @@ function Genre() {
 
               <div className="relative z-10">
 
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
                   Explore your sound
                 </p>
 
-                <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+                <h2 className="mt-3 max-w-3xl text-2xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
                   Find music by{" "}
                   <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                     genre.
                   </span>
                 </h2>
 
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)] sm:mt-4 sm:text-base sm:leading-7">
                   From electronic beats to classical
                   compositions, discover music based on
                   the sound you love.
@@ -692,21 +887,21 @@ function Genre() {
                 GENRES
             ===================================================== */}
 
-            <section className="mt-10">
+            <section className="mt-8 sm:mt-10">
 
               <div className="mb-5">
 
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
                   Browse
                 </p>
 
-                <h2 className="mt-2 text-2xl font-bold">
+                <h2 className="mt-2 text-xl font-bold sm:text-2xl">
                   Explore genres
                 </h2>
 
               </div>
 
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
 
                 {genres.map((genre) => (
 
@@ -716,22 +911,22 @@ function Genre() {
                     onClick={() =>
                       fetchGenreMusic(genre.id)
                     }
-                    className={`group relative overflow-hidden rounded-2xl border p-5 text-left transition duration-300 hover:-translate-y-1 ${
+                    className={`group relative min-w-0 overflow-hidden rounded-2xl border p-4 text-left transition duration-300 hover:-translate-y-1 sm:p-5 ${
                       selectedGenre === genre.id
                         ? "border-violet-500/50 bg-violet-500/15"
                         : "border-[var(--border)] bg-[var(--surface)]/60 hover:border-violet-500/30 hover:bg-violet-500/5"
                     }`}
                   >
 
-                    <div className="text-3xl">
+                    <div className="text-2xl sm:text-3xl">
                       {genre.emoji}
                     </div>
 
-                    <h3 className="mt-4 text-sm font-bold">
+                    <h3 className="mt-3 truncate text-sm font-bold sm:mt-4">
                       {genre.name}
                     </h3>
 
-                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[var(--text-muted)]">
+                    <p className="mt-1.5 line-clamp-2 text-[11px] leading-4 text-[var(--text-muted)] sm:mt-2 sm:text-xs sm:leading-5">
                       {genre.description}
                     </p>
 
@@ -749,17 +944,17 @@ function Genre() {
 
             {selectedGenre && (
 
-              <section className="mt-12">
+              <section className="mt-10 sm:mt-12">
 
-                <div className="mb-5 flex items-end justify-between">
+                <div className="mb-5 flex items-end justify-between gap-4">
 
-                  <div>
+                  <div className="min-w-0">
 
-                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
                       Genre selection
                     </p>
 
-                    <h2 className="mt-2 text-2xl font-bold">
+                    <h2 className="mt-2 truncate text-xl font-bold sm:text-2xl">
                       {selectedGenreData?.emoji}{" "}
                       {selectedGenreData?.name}
                     </h2>
@@ -769,7 +964,7 @@ function Genre() {
                   {!loading &&
                     tracks.length > 0 && (
 
-                      <span className="text-sm text-[var(--text-muted)]">
+                      <span className="shrink-0 text-xs text-[var(--text-muted)] sm:text-sm">
                         {tracks.length} songs
                       </span>
 
@@ -781,7 +976,7 @@ function Genre() {
 
                 {loading && (
 
-                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
 
                     {[1, 2, 3, 4, 5, 6, 7, 8].map(
                       (item) => (
@@ -810,7 +1005,7 @@ function Genre() {
 
                 {!loading && error && (
 
-                  <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-8 text-center">
+                  <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center sm:p-8">
 
                     <HiMusicalNote className="mx-auto text-4xl text-red-400" />
 
@@ -840,11 +1035,11 @@ function Genre() {
                   !error &&
                   tracks.length === 0 && (
 
-                    <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 text-center">
+                    <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 px-5 text-center">
 
                       <HiMusicalNote className="text-5xl text-[var(--text-muted)]" />
 
-                      <h3 className="mt-4 text-xl font-semibold">
+                      <h3 className="mt-4 text-lg font-semibold sm:text-xl">
                         No music found
                       </h3>
 
@@ -864,7 +1059,7 @@ function Genre() {
 
                     <>
 
-                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
 
                         {paginatedTracks.map(
                           (track) => (
@@ -904,7 +1099,7 @@ function Genre() {
                                 currentPage - 1
                               )
                             }
-                            className={`rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                            className={`rounded-xl border px-3 py-2 text-xs font-medium transition sm:px-4 sm:text-sm ${
                               currentPage === 1
                                 ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
                                 : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
@@ -922,7 +1117,7 @@ function Genre() {
                                 onClick={() =>
                                   goToPage(page)
                                 }
-                                className={`flex h-10 w-10 items-center justify-center rounded-xl border text-sm font-semibold transition ${
+                                className={`flex h-9 w-9 items-center justify-center rounded-xl border text-xs font-semibold transition sm:h-10 sm:w-10 sm:text-sm ${
                                   currentPage === page
                                     ? "border-violet-500 bg-violet-600 text-white shadow-lg shadow-violet-500/20"
                                     : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
@@ -945,7 +1140,7 @@ function Genre() {
                                 currentPage + 1
                               )
                             }
-                            className={`rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                            className={`rounded-xl border px-3 py-2 text-xs font-medium transition sm:px-4 sm:text-sm ${
                               currentPage ===
                               totalPages
                                 ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
@@ -1016,15 +1211,15 @@ function Genre() {
 
             {/* MODAL HEADER */}
 
-            <div className="flex items-center justify-between border-b border-[var(--border)] px-6 py-5">
+            <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4 sm:px-6 sm:py-5">
 
-              <div>
+              <div className="min-w-0">
 
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
                   Save music
                 </p>
 
-                <h3 className="mt-1 text-xl font-bold">
+                <h3 className="mt-1 text-lg font-bold sm:text-xl">
                   Add to playlist
                 </h3>
 
@@ -1037,7 +1232,7 @@ function Genre() {
                   setPlaylistModalOpen(false);
                   setSelectedTrack(null);
                 }}
-                className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-white/10 hover:text-white"
               >
                 <HiXMark className="text-xl" />
               </button>
@@ -1048,7 +1243,7 @@ function Genre() {
 
             {selectedTrack && (
 
-              <div className="flex items-center gap-3 border-b border-[var(--border)] px-6 py-4">
+              <div className="flex items-center gap-3 border-b border-[var(--border)] px-5 py-4 sm:px-6">
 
                 <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[var(--card)]">
 
@@ -1096,7 +1291,7 @@ function Genre() {
 
             {/* PLAYLISTS */}
 
-            <div className="max-h-[320px] overflow-y-auto p-4">
+            <div className="max-h-[320px] overflow-y-auto p-3 sm:p-4">
 
               {playlists.length === 0 ? (
 
@@ -1179,7 +1374,7 @@ function Genre() {
 
             {actionMessage && (
 
-              <div className="border-t border-[var(--border)] px-6 py-4">
+              <div className="border-t border-[var(--border)] px-5 py-4 sm:px-6">
 
                 <p
                   className={`text-center text-sm ${
@@ -1275,16 +1470,18 @@ function GenreCard({
         />
 
         {/* =====================================================
-            LIKE BUTTON — TOP LEFT
+            LIKE BUTTON
+            Desktop: hover
+            Mobile: always visible
         ===================================================== */}
 
         <button
           type="button"
           onClick={() => onLike(track)}
-          className={`absolute left-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 ${
+          className={`absolute left-2.5 top-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 sm:left-3 sm:top-3 ${
             isLiked
               ? "bg-violet-600 text-white opacity-100 shadow-lg shadow-violet-500/30"
-              : "bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-violet-600"
+              : "bg-black/50 text-white opacity-100 hover:bg-violet-600 sm:opacity-0 sm:group-hover:opacity-100"
           }`}
           aria-label={
             isLiked
@@ -1302,7 +1499,9 @@ function GenreCard({
         </button>
 
         {/* =====================================================
-            ADD TO PLAYLIST — TOP LEFT
+            ADD TO PLAYLIST
+            Desktop: hover
+            Mobile: always visible
         ===================================================== */}
 
         <button
@@ -1310,14 +1509,16 @@ function GenreCard({
           onClick={() =>
             onAddToPlaylist(track)
           }
-          className="absolute left-14 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 hover:bg-violet-600"
+          className="absolute left-13 top-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white opacity-100 backdrop-blur-md transition-all duration-300 hover:bg-violet-600 sm:left-14 sm:top-3 sm:opacity-0 sm:group-hover:opacity-100"
           aria-label="Add to playlist"
         >
           <HiPlus className="text-lg" />
         </button>
 
         {/* =====================================================
-            PLAY BUTTON — BOTTOM RIGHT
+            PLAY BUTTON
+            Desktop: hover
+            Mobile: always visible
         ===================================================== */}
 
         <button
@@ -1325,10 +1526,10 @@ function GenreCard({
           onClick={() =>
             onPlay(track, tracks)
           }
-          className={`absolute bottom-3 right-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg shadow-violet-500/30 transition-all duration-300 hover:scale-105 ${
+          className={`absolute bottom-2.5 right-2.5 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg shadow-violet-500/30 transition-all duration-300 hover:scale-105 sm:bottom-3 sm:right-3 sm:h-11 sm:w-11 ${
             isCurrent
               ? "translate-y-0 opacity-100"
-              : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+              : "translate-y-0 opacity-100 sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
           }`}
           aria-label={
             isCurrent && isPlaying
@@ -1348,7 +1549,7 @@ function GenreCard({
       {/* TITLE */}
 
       <h3
-        className="mt-3 truncate text-sm font-semibold"
+        className="mt-2.5 truncate text-sm font-semibold sm:mt-3"
         title={track.title}
       >
         {track.title}
@@ -1357,7 +1558,7 @@ function GenreCard({
       {/* ARTIST */}
 
       <p
-        className="mt-1 truncate text-xs text-[var(--text-muted)]"
+        className="mt-1 truncate text-[11px] text-[var(--text-muted)] sm:text-xs"
         title={
           track.user?.name ||
           track.artist

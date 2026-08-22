@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      minlength: 2,
+      maxlength: 60,
     },
 
     email: {
@@ -19,7 +21,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      minlength: 6,
+      minlength: 8,
     },
 
     role: {
@@ -34,15 +36,26 @@ const userSchema = new mongoose.Schema(
       default: "active",
     },
 
-    // =====================================================
-    // LIKED SONGS
-    // =====================================================
+    authVersion: {
+      type: Number,
+      default: 0,
+    },
 
     likedSongs: [
       {
         type: String,
       },
     ],
+
+    resetPasswordToken: {
+      type: String,
+      default: null,
+    },
+
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

@@ -5,20 +5,14 @@ const protect = async (req, res, next) => {
   try {
     const token = req.cookies.token;
 
-    // No token
     if (!token) {
       return res.status(401).json({
         message: "Not authenticated.",
       });
     }
 
-    // Verify token
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Find user
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
@@ -33,13 +27,17 @@ const protect = async (req, res, next) => {
       });
     }
 
-    // Attach user to request
+    if ((decoded.authVersion ?? 0) !== user.authVersion) {
+      return res.status(401).json({
+        message:
+          "Your session is no longer valid. Please sign in again.",
+      });
+    }
+
     req.user = user;
 
     next();
   } catch (error) {
-    console.error("Auth middleware error:", error);
-
     return res.status(401).json({
       message: "Invalid or expired authentication.",
     });
