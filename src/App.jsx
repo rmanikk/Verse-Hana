@@ -25,7 +25,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* =========================
             PUBLIC ROUTES
         ========================== */}
@@ -41,8 +40,11 @@ function App() {
           element={<ForgotPassword />}
         />
 
+        {/* Password reset uses:
+            /reset-password?email=user@example.com
+        */}
         <Route
-          path="/reset-password/:token"
+          path="/reset-password"
           element={<ResetPassword />}
         />
 
@@ -51,7 +53,6 @@ function App() {
         ========================== */}
 
         <Route element={<ProtectedRoute />}>
-
           <Route
             path="/mood"
             element={<MoodSelection />}
@@ -96,7 +97,6 @@ function App() {
             path="/genres"
             element={<Genre />}
           />
-
         </Route>
 
         {/* =========================
@@ -104,19 +104,19 @@ function App() {
         ========================== */}
 
         <Route
-          element={<ProtectedRoute requiredRole="admin" />}
+          element={
+            <ProtectedRoute requiredRole="admin" />
+          }
         >
           <Route
             path="/admin"
             element={<AdminDashboard />}
           />
         </Route>
-
       </Routes>
 
       {/* Global Music Player */}
       <MusicPlayer />
-
     </BrowserRouter>
   );
 }

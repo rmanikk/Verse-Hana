@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Loader2, Music2 } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  Music2,
+} from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -10,41 +15,28 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const [rememberMe, setRememberMe] =
-    useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [showPassword, setShowPassword] =
-    useState(false);
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError("");
 
-    const normalizedEmail =
-      email.trim().toLowerCase();
+    const normalizedEmail = email.trim().toLowerCase();
 
     if (!normalizedEmail || !password) {
-      setError(
-        "Please enter your email and password."
-      );
+      setError("Please enter your email and password.");
       return;
     }
 
-    const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(normalizedEmail)) {
-      setError(
-        "Please enter a valid email address."
-      );
+      setError("Please enter a valid email address.");
       return;
     }
 
@@ -77,30 +69,30 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)] flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--background)] px-3 py-6 text-[var(--text-primary)] sm:px-4 sm:py-8">
+      <div className="w-full max-w-md min-w-0">
 
         {/* Logo */}
-        <div className="flex justify-center mb-8">
+        <div className="mb-7 flex justify-center sm:mb-8">
           <Link
             to="/"
             className="flex items-center gap-3"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600 shadow-lg shadow-violet-600/20">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-600 shadow-lg shadow-violet-600/20">
               <Music2
                 size={23}
                 className="text-white"
               />
             </div>
 
-            <span className="text-2xl font-bold">
+            <span className="text-xl font-bold sm:text-2xl">
               VerseHana
             </span>
           </Link>
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-2xl backdrop-blur-xl sm:p-8">
+        <div className="w-full min-w-0 rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-2xl backdrop-blur-xl sm:p-8">
 
           <div className="mb-7 text-center">
             <h1 className="text-2xl font-bold sm:text-3xl">
@@ -114,7 +106,7 @@ export default function Login() {
 
           {/* Error */}
           {error && (
-            <div className="mb-5 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            <div className="mb-5 break-words rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm leading-5 text-red-400">
               {error}
             </div>
           )}
@@ -123,9 +115,8 @@ export default function Login() {
             onSubmit={handleSubmit}
             className="space-y-5"
           >
-
             {/* Email */}
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="email"
                 className="mb-2 block text-sm font-medium"
@@ -136,19 +127,21 @@ export default function Login() {
               <input
                 id="email"
                 type="email"
+                inputMode="email"
                 autoComplete="email"
                 value={email}
                 onChange={(e) =>
                   setEmail(e.target.value)
                 }
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+                disabled={loading}
+                className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
 
             {/* Password */}
-            <div>
-              <div className="mb-2 flex items-center justify-between">
+            <div className="min-w-0">
+              <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                 <label
                   htmlFor="password"
                   className="text-sm font-medium"
@@ -175,12 +168,11 @@ export default function Login() {
                   autoComplete="current-password"
                   value={password}
                   onChange={(e) =>
-                    setPassword(
-                      e.target.value
-                    )
+                    setPassword(e.target.value)
                   }
                   placeholder="Enter your password"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+                  disabled={loading}
+                  className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-14 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:opacity-60"
                 />
 
                 <button
@@ -190,7 +182,8 @@ export default function Login() {
                       (value) => !value
                     )
                   }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-white/50 transition hover:bg-white/10 hover:text-white"
+                  disabled={loading}
+                  className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-white/50 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed"
                   aria-label={
                     showPassword
                       ? "Hide password"
@@ -216,19 +209,18 @@ export default function Login() {
                     e.target.checked
                   )
                 }
-                className="h-4 w-4 rounded border-white/20 bg-white/5 accent-violet-600"
+                disabled={loading}
+                className="h-4 w-4 shrink-0 rounded border-white/20 bg-white/5 accent-violet-600"
               />
 
-              <span>
-                Remember me
-              </span>
+              <span>Remember me</span>
             </label>
 
             {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <>

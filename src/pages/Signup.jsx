@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import {
+  Check,
   Eye,
   EyeOff,
   Loader2,
   Music2,
-  Check,
   X,
 } from "lucide-react";
 
@@ -17,9 +18,7 @@ export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState("");
-
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] =
     useState("");
 
@@ -29,14 +28,9 @@ export default function Signup() {
   const [showConfirmPassword, setShowConfirmPassword] =
     useState(false);
 
-  const [loading, setLoading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
-
-  const [success, setSuccess] =
-    useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const passwordRules = {
     length: password.length >= 8,
@@ -57,22 +51,24 @@ export default function Signup() {
     setError("");
     setSuccess("");
 
-    const cleanName =
-      name.trim();
-
-    const cleanEmail =
-      email.trim().toLowerCase();
+    const cleanName = name.trim();
+    const cleanEmail = email.trim().toLowerCase();
 
     if (!cleanName) {
-      setError(
-        "Please enter your name."
-      );
+      setError("Please enter your name.");
       return;
     }
 
     if (cleanName.length < 2) {
       setError(
         "Name must contain at least 2 characters."
+      );
+      return;
+    }
+
+    if (cleanName.length > 60) {
+      setError(
+        "Name must be 60 characters or less."
       );
       return;
     }
@@ -95,39 +91,30 @@ export default function Signup() {
     }
 
     if (password !== confirmPassword) {
-      setError(
-        "Passwords do not match."
-      );
+      setError("Passwords do not match.");
       return;
     }
 
     try {
       setLoading(true);
 
-      const response =
-        await fetch(
-          `${API_URL}/api/auth/signup`,
-          {
-            method: "POST",
+      const response = await fetch(
+        `${API_URL}/api/auth/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            name: cleanName,
+            email: cleanEmail,
+            password,
+          }),
+        }
+      );
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-
-            credentials:
-              "include",
-
-            body: JSON.stringify({
-              name: cleanName,
-              email: cleanEmail,
-              password,
-            }),
-          }
-        );
-
-      const data =
-        await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -156,29 +143,30 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)] flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--background)] px-3 py-6 text-[var(--text-primary)] sm:px-4 sm:py-8">
+      <div className="w-full max-w-md min-w-0">
 
         {/* Logo */}
-        <div className="mb-8 flex justify-center">
+        <div className="mb-7 flex justify-center sm:mb-8">
           <Link
             to="/"
             className="flex items-center gap-3"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-600">
               <Music2
                 size={23}
                 className="text-white"
               />
             </div>
 
-            <span className="text-2xl font-bold">
+            <span className="text-xl font-bold sm:text-2xl">
               VerseHana
             </span>
           </Link>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-2xl backdrop-blur-xl sm:p-8">
+        {/* Card */}
+        <div className="w-full min-w-0 rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-2xl backdrop-blur-xl sm:p-8">
 
           <div className="mb-7 text-center">
             <h1 className="text-2xl font-bold sm:text-3xl">
@@ -190,14 +178,16 @@ export default function Signup() {
             </p>
           </div>
 
+          {/* Error */}
           {error && (
-            <div className="mb-5 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            <div className="mb-5 break-words rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm leading-5 text-red-400">
               {error}
             </div>
           )}
 
+          {/* Success */}
           {success && (
-            <div className="mb-5 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-400">
+            <div className="mb-5 break-words rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm leading-5 text-green-400">
               {success}
             </div>
           )}
@@ -206,9 +196,8 @@ export default function Signup() {
             onSubmit={handleSubmit}
             className="space-y-5"
           >
-
             {/* Name */}
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="name"
                 className="mb-2 block text-sm font-medium"
@@ -225,12 +214,14 @@ export default function Signup() {
                   setName(e.target.value)
                 }
                 placeholder="Your name"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+                disabled={loading}
+                maxLength={60}
+                className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
 
             {/* Email */}
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="email"
                 className="mb-2 block text-sm font-medium"
@@ -241,18 +232,20 @@ export default function Signup() {
               <input
                 id="email"
                 type="email"
+                inputMode="email"
                 autoComplete="email"
                 value={email}
                 onChange={(e) =>
                   setEmail(e.target.value)
                 }
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+                disabled={loading}
+                className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
 
             {/* Password */}
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="password"
                 className="mb-2 block text-sm font-medium"
@@ -271,12 +264,11 @@ export default function Signup() {
                   autoComplete="new-password"
                   value={password}
                   onChange={(e) =>
-                    setPassword(
-                      e.target.value
-                    )
+                    setPassword(e.target.value)
                   }
                   placeholder="Create a password"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+                  disabled={loading}
+                  className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-14 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:opacity-60"
                 />
 
                 <button
@@ -286,7 +278,13 @@ export default function Signup() {
                       (value) => !value
                     )
                   }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-white/50 hover:bg-white/10 hover:text-white"
+                  disabled={loading}
+                  className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-white/50 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed"
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
                 >
                   {showPassword ? (
                     <EyeOff size={19} />
@@ -303,7 +301,7 @@ export default function Signup() {
                 Password must contain:
               </p>
 
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2">
                 <PasswordRule
                   valid={passwordRules.length}
                   text="8+ characters"
@@ -327,7 +325,7 @@ export default function Signup() {
             </div>
 
             {/* Confirm password */}
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="confirmPassword"
                 className="mb-2 block text-sm font-medium"
@@ -351,7 +349,8 @@ export default function Signup() {
                     )
                   }
                   placeholder="Confirm your password"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+                  disabled={loading}
+                  className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-14 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:opacity-60"
                 />
 
                 <button
@@ -361,7 +360,13 @@ export default function Signup() {
                       (value) => !value
                     )
                   }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-white/50 hover:bg-white/10 hover:text-white"
+                  disabled={loading}
+                  className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-white/50 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed"
+                  aria-label={
+                    showConfirmPassword
+                      ? "Hide confirm password"
+                      : "Show confirm password"
+                  }
                 >
                   {showConfirmPassword ? (
                     <EyeOff size={19} />
@@ -376,7 +381,7 @@ export default function Signup() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <>
@@ -392,6 +397,7 @@ export default function Signup() {
             </button>
           </form>
 
+          {/* Login */}
           <p className="mt-7 text-center text-sm text-[var(--text-secondary)]">
             Already have an account?{" "}
             <Link
@@ -403,6 +409,7 @@ export default function Signup() {
           </p>
         </div>
 
+        {/* Back */}
         <div className="mt-6 text-center">
           <Link
             to="/"
@@ -416,25 +423,30 @@ export default function Signup() {
   );
 }
 
-function PasswordRule({
-  valid,
-  text,
-}) {
+function PasswordRule({ valid, text }) {
   return (
     <div
-      className={`flex items-center gap-2 text-xs ${
+      className={`flex min-w-0 items-center gap-2 text-xs ${
         valid
           ? "text-green-400"
           : "text-white/40"
       }`}
     >
       {valid ? (
-        <Check size={14} />
+        <Check
+          size={14}
+          className="shrink-0"
+        />
       ) : (
-        <X size={14} />
+        <X
+          size={14}
+          className="shrink-0"
+        />
       )}
 
-      {text}
+      <span className="break-words">
+        {text}
+      </span>
     </div>
   );
 }

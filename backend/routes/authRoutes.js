@@ -25,10 +25,20 @@ const isStrongPassword = (password = "") =>
   /\d/.test(password);
 
 /*
-  Generates a secure 6-digit OTP.
-*/
+ * Generates a secure 6-digit OTP.
+ */
 const generateOTP = () => {
   return crypto.randomInt(100000, 1000000).toString();
+};
+
+/*
+ * Hash OTP before storing it.
+ */
+const hashOTP = (otp) => {
+  return crypto
+    .createHash("sha256")
+    .update(otp)
+    .digest("hex");
 };
 
 /* =====================================================
@@ -56,24 +66,30 @@ const setAuthCookie = (res, token, rememberMe) => {
   const cookie = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-
     sameSite:
       process.env.NODE_ENV === "production"
         ? "none"
         : "lax",
-
     path: "/",
   };
 
   if (rememberMe) {
-    cookie.maxAge = 7 * 24 * 60 * 60 * 1000;
+    cookie.maxAge =
+      7 * 24 * 60 * 60 * 1000;
   }
 
   res.cookie("token", token, cookie);
 };
 
+/* =====================================================
+   SEND OTP EMAIL
+===================================================== */
+
 const sendOTPEmail = async ({ email, otp }) => {
-  if (!process.env.RESEND_API_KEY || !process.env.MAIL_FROM) {
+  if (
+    !process.env.RESEND_API_KEY ||
+    !process.env.MAIL_FROM
+  ) {
     throw new Error(
       "Resend email configuration is missing."
     );
@@ -91,8 +107,11 @@ const sendOTPEmail = async ({ email, otp }) => {
 
       body: JSON.stringify({
         from: process.env.MAIL_FROM,
+
         to: [email],
-        subject: "Your VerseHana password reset code",
+
+        subject:
+          "Your VerseHana password reset code",
 
         html: `
           <div
@@ -105,14 +124,20 @@ const sendOTPEmail = async ({ email, otp }) => {
               padding: 30px;
             "
           >
-            <h2>Reset your VerseHana password</h2>
+
+            <h2>
+              Reset your VerseHana password
+            </h2>
 
             <p>
-              We received a request to reset the password
-              for your VerseHana account.
+              We received a request to reset
+              the password for your VerseHana
+              account.
             </p>
 
-            <p>Your verification code is:</p>
+            <p>
+              Your verification code is:
+            </p>
 
             <div
               style="
@@ -136,13 +161,20 @@ const sendOTPEmail = async ({ email, otp }) => {
             </p>
 
             <p>
-              If you did not request a password reset,
-              you can safely ignore this email.
+              If you did not request a password
+              reset, you can safely ignore this
+              email.
             </p>
 
-            <p style="color: #71717a; font-size: 13px;">
+            <p
+              style="
+                color: #71717a;
+                font-size: 13px;
+              "
+            >
               VerseHana Security
             </p>
+
           </div>
         `,
       }),
@@ -157,17 +189,24 @@ const sendOTPEmail = async ({ email, otp }) => {
     );
   }
 };
+
 /* =====================================================
    SIGNUP
 ===================================================== */
 
 router.post("/signup", async (req, res) => {
   try {
-    const name = String(req.body.name || "").trim();
+    const name = String(
+      req.body.name || ""
+    ).trim();
 
-    const email = normalizeEmail(req.body.email);
+    const email = normalizeEmail(
+      req.body.email
+    );
 
-    const password = String(req.body.password || "");
+    const password = String(
+      req.body.password || ""
+    );
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -176,7 +215,10 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    if (name.length < 2 || name.length > 60) {
+    if (
+      name.length < 2 ||
+      name.length > 60
+    ) {
       return res.status(400).json({
         message:
           "Name must be between 2 and 60 characters.",
@@ -197,9 +239,8 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({
-      email,
-    });
+    const existingUser =
+      await User.findOne({ email });
 
     if (existingUser) {
       return res.status(409).json({
@@ -208,10 +249,8 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(
-      password,
-      12
-    );
+    const hashedPassword =
+      await bcrypt.hash(password, 12);
 
     const user = await User.create({
       name,
@@ -222,7 +261,8 @@ router.post("/signup", async (req, res) => {
     });
 
     return res.status(201).json({
-      message: "Account created successfully.",
+      message:
+        "Account created successfully.",
 
       user: {
         id: user._id,
@@ -240,7 +280,10 @@ router.post("/signup", async (req, res) => {
       });
     }
 
-    console.error("Signup error:", error);
+    console.error(
+      "Signup error:",
+      error
+    );
 
     return res.status(500).json({
       message:
@@ -255,11 +298,17 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const email = normalizeEmail(req.body.email);
+    const email = normalizeEmail(
+      req.body.email
+    );
 
-    const password = String(req.body.password || "");
+    const password = String(
+      req.body.password || ""
+    );
 
-    const rememberMe = Boolean(req.body.rememberMe);
+    const rememberMe = Boolean(
+      req.body.rememberMe
+    );
 
     if (!email || !password) {
       return res.status(400).json({
@@ -319,7 +368,10 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Login error:", error);
+    console.error(
+      "Login error:",
+      error
+    );
 
     return res.status(500).json({
       message:
@@ -329,7 +381,8 @@ router.post("/login", async (req, res) => {
 });
 
 /* =====================================================
-   FORGOT PASSWORD — SEND OTP
+   FORGOT PASSWORD
+   SEND OTP
 ===================================================== */
 
 router.post(
@@ -339,16 +392,6 @@ router.post(
       const email = normalizeEmail(
         req.body.email
       );
-
-      /*
-        IMPORTANT:
-
-        You specifically wanted the reset process
-        to NOT continue when the email isn't in
-        the database.
-
-        Therefore we return 404 here.
-      */
 
       if (!isValidEmail(email)) {
         return res.status(400).json({
@@ -368,11 +411,6 @@ router.post(
         });
       }
 
-      /*
-        Don't allow suspended accounts to start
-        a password reset.
-      */
-
       if (user.status === "suspended") {
         return res.status(403).json({
           message:
@@ -381,47 +419,42 @@ router.post(
       }
 
       /*
-        Generate a 6-digit OTP.
-      */
-
+       * Generate new 6-digit OTP.
+       */
       const otp = generateOTP();
 
       /*
-        Store only a HASH of the OTP in MongoDB.
-
-        If the database is ever exposed, the actual
-        OTP isn't directly visible.
-      */
-
-      const hashedOTP = crypto
-        .createHash("sha256")
-        .update(otp)
-        .digest("hex");
-
-      user.resetPasswordOtp = hashedOTP;
+       * Store only hashed OTP.
+       */
+      user.resetOtpHash =
+        hashOTP(otp);
 
       /*
-        OTP expires after 10 minutes.
-      */
-
-      user.resetPasswordOtpExpires =
+       * OTP valid for 10 minutes.
+       */
+      user.resetOtpExpires =
         new Date(
           Date.now() + 10 * 60 * 1000
         );
 
       /*
-        Reset attempts whenever a new OTP
-        is generated.
-      */
+       * Reset attempts.
+       */
+      user.resetOtpAttempts = 0;
 
-      user.resetPasswordOtpAttempts = 0;
+      /*
+       * Reset verification state.
+       */
+      user.resetOtpVerified = false;
+
+      user.resetOtpVerifiedExpires =
+        null;
 
       await user.save();
 
       /*
-        Send OTP email.
-      */
-
+       * Send email.
+       */
       try {
         await sendOTPEmail({
           email: user.email,
@@ -429,13 +462,14 @@ router.post(
         });
       } catch (mailError) {
         /*
-          Don't leave a usable OTP in the database
-          if email delivery failed.
-        */
-
-        user.resetPasswordOtp = null;
-        user.resetPasswordOtpExpires = null;
-        user.resetPasswordOtpAttempts = 0;
+         * Remove OTP if email fails.
+         */
+        user.resetOtpHash = null;
+        user.resetOtpExpires = null;
+        user.resetOtpAttempts = 0;
+        user.resetOtpVerified = false;
+        user.resetOtpVerifiedExpires =
+          null;
 
         await user.save();
 
@@ -469,7 +503,7 @@ router.post(
 );
 
 /* =====================================================
-   VERIFY OTP
+   VERIFY RESET OTP
 ===================================================== */
 
 router.post(
@@ -510,12 +544,11 @@ router.post(
       }
 
       /*
-        Make sure an OTP actually exists.
-      */
-
+       * Check if OTP exists.
+       */
       if (
-        !user.resetPasswordOtp ||
-        !user.resetPasswordOtpExpires
+        !user.resetOtpHash ||
+        !user.resetOtpExpires
       ) {
         return res.status(400).json({
           message:
@@ -524,16 +557,17 @@ router.post(
       }
 
       /*
-        Check expiration.
-      */
-
+       * Check expiration.
+       */
       if (
-        user.resetPasswordOtpExpires <
-        new Date()
+        user.resetOtpExpires < new Date()
       ) {
-        user.resetPasswordOtp = null;
-        user.resetPasswordOtpExpires = null;
-        user.resetPasswordOtpAttempts = 0;
+        user.resetOtpHash = null;
+        user.resetOtpExpires = null;
+        user.resetOtpAttempts = 0;
+        user.resetOtpVerified = false;
+        user.resetOtpVerifiedExpires =
+          null;
 
         await user.save();
 
@@ -544,17 +578,17 @@ router.post(
       }
 
       /*
-        Prevent unlimited OTP attempts.
-
-        Maximum: 5 attempts.
-      */
-
+       * Maximum 5 attempts.
+       */
       if (
-        user.resetPasswordOtpAttempts >= 5
+        user.resetOtpAttempts >= 5
       ) {
-        user.resetPasswordOtp = null;
-        user.resetPasswordOtpExpires = null;
-        user.resetPasswordOtpAttempts = 0;
+        user.resetOtpHash = null;
+        user.resetOtpExpires = null;
+        user.resetOtpAttempts = 0;
+        user.resetOtpVerified = false;
+        user.resetOtpVerifiedExpires =
+          null;
 
         await user.save();
 
@@ -565,48 +599,55 @@ router.post(
       }
 
       /*
-        Hash the submitted OTP and compare
-        it against the stored hash.
-      */
-
-      const hashedOTP = crypto
-        .createHash("sha256")
-        .update(otp)
-        .digest("hex");
+       * Compare submitted OTP.
+       */
+      const hashedOTP =
+        hashOTP(otp);
 
       if (
-        hashedOTP !== user.resetPasswordOtp
+        hashedOTP !== user.resetOtpHash
       ) {
-        user.resetPasswordOtpAttempts += 1;
+        user.resetOtpAttempts += 1;
 
         await user.save();
 
         const remaining =
           5 -
-          user.resetPasswordOtpAttempts;
+          user.resetOtpAttempts;
 
         return res.status(400).json({
           message:
             remaining > 0
               ? `Incorrect verification code. ${remaining} attempt${
-                  remaining === 1 ? "" : "s"
+                  remaining === 1
+                    ? ""
+                    : "s"
                 } remaining.`
               : "Too many incorrect attempts. Please request a new code.",
         });
       }
 
       /*
-        OTP is correct.
+       * OTP is correct.
+       *
+       * Mark verification as completed.
+       *
+       * The verification session lasts
+       * another 10 minutes.
+       */
+      user.resetOtpVerified = true;
 
-        We don't change the password yet.
+      user.resetOtpVerifiedExpires =
+        new Date(
+          Date.now() + 10 * 60 * 1000
+        );
 
-        The frontend can now move the user to
-        the "new password" screen.
-      */
+      await user.save();
 
       return res.status(200).json({
         message:
           "Verification code confirmed.",
+
         verified: true,
       });
     } catch (error) {
@@ -676,13 +717,34 @@ router.post(
       }
 
       /*
-        Make sure OTP exists.
-      */
-
+       * The OTP must have been verified first.
+       */
       if (
-        !user.resetPasswordOtp ||
-        !user.resetPasswordOtpExpires
+        !user.resetOtpVerified ||
+        !user.resetOtpVerifiedExpires
       ) {
+        return res.status(400).json({
+          message:
+            "Please verify your email code first.",
+        });
+      }
+
+      /*
+       * Check verification-session expiration.
+       */
+      if (
+        user.resetOtpVerifiedExpires <
+        new Date()
+      ) {
+        user.resetOtpHash = null;
+        user.resetOtpExpires = null;
+        user.resetOtpAttempts = 0;
+        user.resetOtpVerified = false;
+        user.resetOtpVerifiedExpires =
+          null;
+
+        await user.save();
+
         return res.status(400).json({
           message:
             "Your verification session has expired. Please request a new code.",
@@ -690,68 +752,17 @@ router.post(
       }
 
       /*
-        Check expiration.
-      */
+       * Verify OTP one more time.
+       *
+       * This prevents a modified frontend
+       * request from bypassing verification.
+       */
+      const hashedOTP =
+        hashOTP(otp);
 
       if (
-        user.resetPasswordOtpExpires <
-        new Date()
+        hashedOTP !== user.resetOtpHash
       ) {
-        user.resetPasswordOtp = null;
-        user.resetPasswordOtpExpires = null;
-        user.resetPasswordOtpAttempts = 0;
-
-        await user.save();
-
-        return res.status(400).json({
-          message:
-            "This verification code has expired. Please request a new one.",
-        });
-      }
-
-      /*
-        Don't allow more than 5 attempts.
-      */
-
-      if (
-        user.resetPasswordOtpAttempts >= 5
-      ) {
-        user.resetPasswordOtp = null;
-        user.resetPasswordOtpExpires = null;
-        user.resetPasswordOtpAttempts = 0;
-
-        await user.save();
-
-        return res.status(429).json({
-          message:
-            "Too many incorrect attempts. Please request a new code.",
-        });
-      }
-
-      /*
-        Verify OTP again.
-
-        IMPORTANT:
-
-        We verify the OTP AGAIN here instead of
-        trusting the frontend's previous verification.
-
-        This prevents someone from simply modifying
-        frontend requests and skipping OTP verification.
-      */
-
-      const hashedOTP = crypto
-        .createHash("sha256")
-        .update(otp)
-        .digest("hex");
-
-      if (
-        hashedOTP !== user.resetPasswordOtp
-      ) {
-        user.resetPasswordOtpAttempts += 1;
-
-        await user.save();
-
         return res.status(400).json({
           message:
             "Incorrect verification code.",
@@ -759,11 +770,8 @@ router.post(
       }
 
       /*
-        Everything is valid.
-
-        Update password.
-      */
-
+       * Update password.
+       */
       user.password =
         await bcrypt.hash(
           password,
@@ -771,45 +779,34 @@ router.post(
         );
 
       /*
-        Increment authVersion.
-
-        This invalidates previously issued JWTs
-        if your auth middleware checks authVersion.
-      */
-
+       * Invalidate existing JWTs.
+       */
       user.authVersion += 1;
 
       /*
-        Clear OTP immediately.
-
-        OTP can never be reused.
-      */
-
-      user.resetPasswordOtp = null;
-
-      user.resetPasswordOtpExpires = null;
-
-      user.resetPasswordOtpAttempts = 0;
+       * Completely invalidate OTP.
+       */
+      user.resetOtpHash = null;
+      user.resetOtpExpires = null;
+      user.resetOtpAttempts = 0;
+      user.resetOtpVerified = false;
+      user.resetOtpVerifiedExpires =
+        null;
 
       await user.save();
 
       /*
-        Clear any existing authentication cookie.
-      */
-
+       * Clear authentication cookie.
+       */
       res.cookie("token", "", {
         httpOnly: true,
-
         expires: new Date(0),
-
         sameSite:
           process.env.NODE_ENV === "production"
             ? "none"
             : "lax",
-
         secure:
           process.env.NODE_ENV === "production",
-
         path: "/",
       });
 
@@ -832,7 +829,7 @@ router.post(
 );
 
 /* =====================================================
-   RESEND OTP
+   RESEND RESET OTP
 ===================================================== */
 
 router.post(
@@ -869,36 +866,42 @@ router.post(
       }
 
       /*
-        Generate new OTP.
-      */
-
+       * Generate new OTP.
+       */
       const otp = generateOTP();
 
-      const hashedOTP = crypto
-        .createHash("sha256")
-        .update(otp)
-        .digest("hex");
+      user.resetOtpHash =
+        hashOTP(otp);
 
-      user.resetPasswordOtp = hashedOTP;
-
-      user.resetPasswordOtpExpires =
+      user.resetOtpExpires =
         new Date(
           Date.now() + 10 * 60 * 1000
         );
 
-      user.resetPasswordOtpAttempts = 0;
+      user.resetOtpAttempts = 0;
+
+      user.resetOtpVerified = false;
+
+      user.resetOtpVerifiedExpires =
+        null;
 
       await user.save();
 
+      /*
+       * Send email.
+       */
       try {
         await sendOTPEmail({
           email: user.email,
           otp,
         });
       } catch (mailError) {
-        user.resetPasswordOtp = null;
-        user.resetPasswordOtpExpires = null;
-        user.resetPasswordOtpAttempts = 0;
+        user.resetOtpHash = null;
+        user.resetOtpExpires = null;
+        user.resetOtpAttempts = 0;
+        user.resetOtpVerified = false;
+        user.resetOtpVerifiedExpires =
+          null;
 
         await user.save();
 
@@ -961,17 +964,13 @@ router.post(
   (req, res) => {
     res.cookie("token", "", {
       httpOnly: true,
-
       expires: new Date(0),
-
       sameSite:
         process.env.NODE_ENV === "production"
           ? "none"
           : "lax",
-
       secure:
         process.env.NODE_ENV === "production",
-
       path: "/",
     });
 
