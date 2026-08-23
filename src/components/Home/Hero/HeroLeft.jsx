@@ -29,7 +29,8 @@ function HeroLeft() {
           border
           border-violet-500/30
           bg-violet-500/10
-          px-4 py-2
+          px-4
+          py-2
           text-xs
           font-medium
           text-violet-600
@@ -47,19 +48,19 @@ function HeroLeft() {
 
       <h1
         className="
-          mt-6
+          mt-5
           text-4xl
           font-extrabold
           leading-[1.08]
           tracking-tight
           text-[var(--text-primary)]
 
-          sm:mt-7
+          sm:mt-6
           sm:text-5xl
 
           md:text-6xl
 
-          lg:mt-8
+          lg:mt-7
           lg:text-6xl
 
           xl:text-7xl
@@ -93,18 +94,18 @@ function HeroLeft() {
       <p
         className="
           mx-auto
-          mt-6
+          mt-5
           max-w-lg
           text-base
           leading-7
           text-[var(--text-secondary)]
 
-          sm:mt-7
+          sm:mt-6
           sm:text-lg
           sm:leading-8
 
           lg:mx-0
-          lg:mt-8
+          lg:mt-7
         "
       >
         Find songs based on how you feel, not just what you search.
@@ -123,7 +124,7 @@ function HeroLeft() {
 
       <div
         className="
-          mt-8
+          mt-7
           flex
           flex-col
           items-center
@@ -133,7 +134,7 @@ function HeroLeft() {
           sm:justify-center
           sm:gap-4
 
-          lg:mt-10
+          lg:mt-8
           lg:justify-start
           lg:gap-5
         "
@@ -141,6 +142,7 @@ function HeroLeft() {
         {/* Start Listening */}
 
         <button
+          type="button"
           className="
             w-full
             rounded-full
@@ -170,6 +172,7 @@ function HeroLeft() {
         {/* Explore Moods */}
 
         <button
+          type="button"
           className="
             w-full
             rounded-full

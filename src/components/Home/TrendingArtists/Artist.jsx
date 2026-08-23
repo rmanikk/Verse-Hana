@@ -1,11 +1,18 @@
 import { motion } from "framer-motion";
-import { HiPlay, HiUserGroup } from "react-icons/hi2";
+import {
+  HiPlay,
+  HiUserGroup,
+} from "react-icons/hi2";
 
 function Artist({ artist }) {
   return (
     <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.25 }}
+      whileHover={{
+        y: -8,
+      }}
+      transition={{
+        duration: 0.25,
+      }}
       className="
         group
         relative
@@ -28,17 +35,24 @@ function Artist({ artist }) {
       {/* Artist Image */}
 
       <div className="relative overflow-hidden rounded-2xl">
+
         <motion.img
           src={artist.image}
           alt={artist.name}
-          whileHover={{ scale: 1.08 }}
-          transition={{ duration: 0.5 }}
+          whileHover={{
+            scale: 1.08,
+          }}
+          transition={{
+            duration: 0.5,
+          }}
           className="
-            h-64
+            h-56
             w-full
             object-cover
 
-            sm:h-72
+            sm:h-64
+
+            lg:h-72
           "
         />
 
@@ -59,8 +73,14 @@ function Artist({ artist }) {
         {/* Play Button */}
 
         <motion.button
-          initial={{ opacity: 0, scale: 0.7 }}
-          whileHover={{ scale: 1.1 }}
+          type="button"
+          initial={{
+            opacity: 0,
+            scale: 0.7,
+          }}
+          whileHover={{
+            scale: 1.1,
+          }}
           aria-label={`Play ${artist.name}`}
           className="
             absolute
@@ -121,6 +141,7 @@ function Artist({ artist }) {
       {/* Artist Information */}
 
       <div className="px-2 pb-3 pt-4 sm:pt-5">
+
         {/* Name */}
 
         <h3

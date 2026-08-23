@@ -16,9 +16,12 @@ function MoodSection() {
         lg:py-24
       "
     >
-      {/* Background Glow */}
+      {/* =====================================================
+          BACKGROUND GLOW
+      ===================================================== */}
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
+
         <div
           className="
             absolute
@@ -50,9 +53,12 @@ function MoodSection() {
             sm:w-[350px]
           "
         />
+
       </div>
 
-      {/* Content */}
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
 
       <div
         className="
@@ -69,7 +75,10 @@ function MoodSection() {
           xl:px-16
         "
       >
-        {/* Heading */}
+
+        {/* =================================================
+            HEADING
+        ================================================= */}
 
         <motion.div
           initial={{ opacity: 0, y: 35 }}
@@ -78,7 +87,8 @@ function MoodSection() {
           viewport={{ once: true }}
           className="mx-auto max-w-3xl text-center"
         >
-          {/* Label */}
+
+          {/* LABEL */}
 
           <span
             className="
@@ -101,7 +111,7 @@ function MoodSection() {
             🎧 Browse by Emotion
           </span>
 
-          {/* Heading */}
+          {/* HEADING */}
 
           <h2
             className="
@@ -136,7 +146,7 @@ function MoodSection() {
             </span>
           </h2>
 
-          {/* Description */}
+          {/* DESCRIPTION */}
 
           <p
             className="
@@ -158,9 +168,12 @@ function MoodSection() {
             Whether you're celebrating, relaxing, studying, or simply
             enjoying the moment, VerseHana helps you find the perfect music.
           </p>
+
         </motion.div>
 
-        {/* Mood Cards */}
+        {/* =================================================
+            MOOD CARDS
+        ================================================= */}
 
         <div
           className="
@@ -179,7 +192,9 @@ function MoodSection() {
             xl:gap-8
           "
         >
+
           {moods.map((mood, index) => (
+
             <motion.div
               key={mood.id}
               initial={{ opacity: 0, y: 40 }}
@@ -190,11 +205,15 @@ function MoodSection() {
                 delay: index * 0.08,
               }}
               className="h-full"
+              data-requires-auth
             >
               <MoodCard mood={mood} />
             </motion.div>
+
           ))}
+
         </div>
+
       </div>
     </section>
   );

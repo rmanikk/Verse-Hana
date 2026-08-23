@@ -1,55 +1,77 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { HiMagnifyingGlass } from "react-icons/hi2";
+
 function SearchCard() {
+  const navigate = useNavigate();
+
+  const [search, setSearch] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    navigate("/login");
+  };
+
   return (
-    <div className="mt-8 w-full sm:mt-10">
+    <form
+      onSubmit={handleSubmit}
+      className="
+        mt-6
+        w-full
+
+        sm:mt-7
+      "
+    >
       <div
         className="
           flex
           w-full
           items-center
+          gap-3
           rounded-2xl
           border
           border-[var(--border)]
           bg-[var(--surface)]/80
           px-4
-          py-3.5
+          py-3
           backdrop-blur-xl
           transition
           duration-300
 
-          focus-within:border-violet-500
+          focus-within:border-violet-500/50
           focus-within:ring-2
           focus-within:ring-violet-500/10
 
           sm:px-5
-          sm:py-4
-
-          lg:px-6
+          sm:py-3.5
         "
       >
         {/* Search Icon */}
 
-        <span
+        <HiMagnifyingGlass
           className="
-            mr-3
             shrink-0
             text-lg
+            text-[var(--text-muted)]
 
-            sm:mr-4
             sm:text-xl
           "
-        >
-          🔍
-        </span>
+        />
 
-        {/* Search Input */}
+        {/* Input */}
 
         <input
           type="text"
+          value={search}
+          onChange={(event) =>
+            setSearch(event.target.value)
+          }
           placeholder="Search by mood, artist or song..."
           aria-label="Search by mood, artist or song"
           className="
             min-w-0
-            w-full
+            flex-1
             bg-transparent
             text-sm
             text-[var(--text-primary)]
@@ -59,8 +81,33 @@ function SearchCard() {
             sm:text-base
           "
         />
+
+        {/* Search Button */}
+
+        <button
+          type="submit"
+          className="
+            shrink-0
+            rounded-xl
+            bg-violet-600
+            px-3
+            py-2
+            text-xs
+            font-semibold
+            text-white
+            transition
+
+            hover:bg-violet-500
+
+            sm:px-4
+            sm:py-2.5
+            sm:text-sm
+          "
+        >
+          Search
+        </button>
       </div>
-    </div>
+    </form>
   );
 }
 

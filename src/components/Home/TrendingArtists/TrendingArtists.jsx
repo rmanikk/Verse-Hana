@@ -10,32 +10,32 @@ function TrendingArtists() {
       className="
         relative
         overflow-hidden
-        py-16
+        py-12
 
-        sm:py-24
+        sm:py-16
 
-        lg:py-24
-        xl:py-36
+        lg:py-20
       "
     >
       {/* Background Glow */}
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
+
         <div
           className="
             absolute
             left-[-140px]
             top-20
-            h-[300px]
-            w-[300px]
+            h-[280px]
+            w-[280px]
             rounded-full
             bg-fuchsia-600/10
-            blur-[130px]
+            blur-[120px]
 
             sm:left-[-180px]
-            sm:h-[400px]
-            sm:w-[400px]
-            sm:blur-[160px]
+            sm:h-[360px]
+            sm:w-[360px]
+            sm:blur-[150px]
           "
         />
 
@@ -44,18 +44,19 @@ function TrendingArtists() {
             absolute
             right-[-140px]
             bottom-10
-            h-[300px]
-            w-[300px]
+            h-[280px]
+            w-[280px]
             rounded-full
             bg-violet-600/10
-            blur-[130px]
+            blur-[120px]
 
             sm:right-[-180px]
-            sm:h-[400px]
-            sm:w-[400px]
-            sm:blur-[160px]
+            sm:h-[360px]
+            sm:w-[360px]
+            sm:blur-[150px]
           "
         />
+
       </div>
 
       {/* Content */}
@@ -78,14 +79,24 @@ function TrendingArtists() {
         {/* Section Header */}
 
         <motion.div
-          initial={{ opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          initial={{
+            opacity: 0,
+            y: 35,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            duration: 0.6,
+          }}
           className="
             flex
             flex-col
-            gap-7
+            gap-5
 
             lg:flex-row
             lg:items-end
@@ -96,6 +107,7 @@ function TrendingArtists() {
           {/* Heading Content */}
 
           <div className="max-w-3xl">
+
             <span
               className="
                 inline-flex
@@ -118,13 +130,13 @@ function TrendingArtists() {
 
             <h2
               className="
-                mt-6
+                mt-5
                 text-3xl
                 font-bold
                 leading-tight
                 text-[var(--text-primary)]
 
-                sm:mt-8
+                sm:mt-6
                 sm:text-4xl
 
                 md:text-5xl
@@ -151,13 +163,13 @@ function TrendingArtists() {
 
             <p
               className="
-                mt-5
+                mt-4
                 max-w-2xl
                 text-sm
                 leading-7
                 text-[var(--text-secondary)]
 
-                sm:mt-6
+                sm:mt-5
                 sm:text-base
                 sm:leading-8
 
@@ -167,11 +179,13 @@ function TrendingArtists() {
               Discover artists whose music connects with millions of
               listeners and every kind of emotion.
             </p>
+
           </div>
 
           {/* Explore Button */}
 
           <button
+            type="button"
             className="
               group
               flex
@@ -209,18 +223,19 @@ function TrendingArtists() {
               "
             />
           </button>
+
         </motion.div>
 
         {/* Artist Grid */}
 
         <div
           className="
-            mt-12
+            mt-9
             grid
             grid-cols-1
             gap-5
 
-            sm:mt-16
+            sm:mt-12
             sm:grid-cols-2
             sm:gap-6
 
@@ -233,9 +248,17 @@ function TrendingArtists() {
           {artists.map((artist, index) => (
             <motion.div
               key={artist.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              initial={{
+                opacity: 0,
+                y: 40,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+              }}
               transition={{
                 duration: 0.5,
                 delay: index * 0.1,

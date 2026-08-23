@@ -13,14 +13,13 @@ function MoodPills() {
   return (
     <div
       className="
-        mt-6
+        mt-5
         flex
         flex-wrap
         justify-center
         gap-2
 
-        sm:mt-8
-        sm:justify-center
+        sm:mt-6
         sm:gap-3
 
         lg:justify-start
@@ -29,6 +28,7 @@ function MoodPills() {
       {moods.map((mood) => (
         <button
           key={mood}
+          type="button"
           className="
             rounded-full
             border

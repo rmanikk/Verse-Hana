@@ -119,6 +119,7 @@ function LyricsPreview() {
           {/* Album */}
 
           <div>
+
             <motion.div
               animate={{
                 y: [0, -6, 0],
@@ -128,7 +129,13 @@ function LyricsPreview() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="relative overflow-hidden rounded-2xl sm:rounded-3xl"
+              className="
+                relative
+                overflow-hidden
+                rounded-2xl
+
+                sm:rounded-3xl
+              "
             >
               <img
                 src={album1}
@@ -155,6 +162,7 @@ function LyricsPreview() {
             {/* Song Information */}
 
             <div className="mt-5 sm:mt-6">
+
               <p className="text-sm font-medium text-violet-500">
                 Now Playing
               </p>
@@ -175,20 +183,31 @@ function LyricsPreview() {
               <p className="mt-2 text-sm text-[var(--text-secondary)] sm:text-base">
                 VerseHana • Late Night
               </p>
+
             </div>
           </div>
 
           {/* Player */}
 
-          <div className="mt-7 sm:mt-8">
+          <div className="mt-6 sm:mt-8">
+
             {/* Progress */}
 
             <div className="h-1.5 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+
               <motion.div
-                initial={{ width: "0%" }}
-                whileInView={{ width: "48%" }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5 }}
+                initial={{
+                  width: "0%",
+                }}
+                whileInView={{
+                  width: "48%",
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 1.5,
+                }}
                 className="
                   h-full
                   rounded-full
@@ -197,6 +216,7 @@ function LyricsPreview() {
                   to-fuchsia-500
                 "
               />
+
             </div>
 
             <div
@@ -214,8 +234,16 @@ function LyricsPreview() {
 
             {/* Controls */}
 
-            <div className="mt-5 flex items-center justify-between">
+            <div
+              className="
+                mt-5
+                flex
+                items-center
+                justify-between
+              "
+            >
               <button
+                type="button"
                 aria-label="Like song"
                 className="
                   text-[var(--text-secondary)]
@@ -227,6 +255,7 @@ function LyricsPreview() {
               </button>
 
               <button
+                type="button"
                 aria-label="Pause"
                 className="
                   flex
@@ -245,6 +274,7 @@ function LyricsPreview() {
               </button>
 
               <button
+                type="button"
                 aria-label="Volume"
                 className="
                   text-[var(--text-secondary)]
@@ -264,7 +294,7 @@ function LyricsPreview() {
           className="
             relative
             flex
-            min-h-[480px]
+            min-h-[430px]
             flex-col
             justify-center
             rounded-2xl
@@ -272,7 +302,7 @@ function LyricsPreview() {
             border-[var(--border)]
             bg-[var(--card)]
             px-5
-            py-16
+            py-14
 
             sm:min-h-[500px]
             sm:rounded-3xl
@@ -298,6 +328,7 @@ function LyricsPreview() {
             "
           >
             <div>
+
               <p
                 className="
                   text-xs
@@ -313,44 +344,57 @@ function LyricsPreview() {
               <p className="mt-1 text-xs text-[var(--text-muted)] sm:text-sm">
                 Midnight Feelings
               </p>
+
             </div>
 
             {/* Audio Visualization */}
 
             <div className="flex items-center gap-1">
-              {[4, 7, 5, 9, 6, 10, 5, 8].map((height, index) => (
-                <motion.span
-                  key={index}
-                  animate={{
-                    height: [
-                      `${height}px`,
-                      `${height + 7}px`,
-                      `${height}px`,
-                    ],
-                  }}
-                  transition={{
-                    duration: 0.8,
-                    repeat: Infinity,
-                    delay: index * 0.08,
-                  }}
-                  className="w-1 rounded-full bg-violet-500"
-                />
-              ))}
+              {[4, 7, 5, 9, 6, 10, 5, 8].map(
+                (height, index) => (
+                  <motion.span
+                    key={index}
+                    animate={{
+                      height: [
+                        `${height}px`,
+                        `${height + 7}px`,
+                        `${height}px`,
+                      ],
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      repeat: Infinity,
+                      delay: index * 0.08,
+                    }}
+                    className="
+                      w-1
+                      rounded-full
+                      bg-violet-500
+                    "
+                  />
+                )
+              )}
             </div>
           </div>
 
           {/* Lyrics */}
 
-          <div className="space-y-5 sm:space-y-6">
+          <div className="space-y-4 sm:space-y-6">
+
             {lyrics.map((line, index) => (
               <motion.p
                 key={line.text}
-                initial={{ opacity: 0, x: 15 }}
+                initial={{
+                  opacity: 0,
+                  x: 15,
+                }}
                 whileInView={{
                   opacity: line.active ? 1 : 0.28,
                   x: 0,
                 }}
-                viewport={{ once: true }}
+                viewport={{
+                  once: true,
+                }}
                 transition={{
                   duration: 0.5,
                   delay: index * 0.08,
@@ -375,6 +419,7 @@ function LyricsPreview() {
                 {line.text}
               </motion.p>
             ))}
+
           </div>
 
           {/* Bottom Hint */}

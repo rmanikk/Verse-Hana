@@ -1,12 +1,18 @@
 import { motion } from "framer-motion";
-import { HiPlay, HiHeart, HiStar } from "react-icons/hi2";
+import {
+  HiPlay,
+  HiHeart,
+  HiStar,
+} from "react-icons/hi2";
 
 function MusicCard({ playlist }) {
   return (
     <motion.div
       whileHover={{
         y: -10,
-        transition: { duration: 0.25 },
+        transition: {
+          duration: 0.25,
+        },
       }}
       className="
         group
@@ -27,17 +33,22 @@ function MusicCard({ playlist }) {
       {/* Album Cover / Visual Area */}
 
       <div className="relative overflow-hidden">
+
         <motion.img
           whileHover={{ scale: 1.08 }}
-          transition={{ duration: 0.4 }}
+          transition={{
+            duration: 0.4,
+          }}
           src={playlist.cover}
           alt={playlist.title}
           className="
-            h-64
+            h-56
             w-full
             object-cover
 
-            sm:h-72
+            sm:h-64
+
+            lg:h-72
           "
         />
 
@@ -59,8 +70,14 @@ function MusicCard({ playlist }) {
         {/* Play Button */}
 
         <motion.button
-          initial={{ scale: 0.8, opacity: 0 }}
-          whileHover={{ scale: 1.1 }}
+          type="button"
+          initial={{
+            scale: 0.8,
+            opacity: 0,
+          }}
+          whileHover={{
+            scale: 1.1,
+          }}
           className="
             absolute
             left-1/2
@@ -93,6 +110,7 @@ function MusicCard({ playlist }) {
         {/* Favorite */}
 
         <button
+          type="button"
           aria-label="Add to favorites"
           className="
             absolute
@@ -112,8 +130,8 @@ function MusicCard({ playlist }) {
             transition-all
             duration-300
 
-            hover:bg-violet-600
             hover:border-violet-500
+            hover:bg-violet-600
 
             sm:right-4
             sm:top-4
@@ -153,7 +171,17 @@ function MusicCard({ playlist }) {
 
       {/* Card Content */}
 
-      <div className="flex h-[190px] flex-col p-5 sm:p-6">
+      <div
+        className="
+          flex
+          min-h-[180px]
+          flex-col
+          p-5
+
+          sm:min-h-[190px]
+          sm:p-6
+        "
+      >
         {/* Title */}
 
         <h3
@@ -184,7 +212,15 @@ function MusicCard({ playlist }) {
 
         {/* Info */}
 
-        <div className="mt-auto flex items-end justify-between gap-3">
+        <div
+          className="
+            mt-auto
+            flex
+            items-end
+            justify-between
+            gap-3
+          "
+        >
           <div>
             <p className="text-xs text-[var(--text-secondary)] sm:text-sm">
               {playlist.songs} Songs

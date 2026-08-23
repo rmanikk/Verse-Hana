@@ -102,7 +102,9 @@ function MoodCard({ mood }) {
             flex
             items-center
             justify-between
-            pt-7
+            pt-6
+
+            sm:pt-7
           "
         >
           {/* Song count */}
