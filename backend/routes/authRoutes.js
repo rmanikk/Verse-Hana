@@ -72,47 +72,10 @@ const setAuthCookie = (res, token, rememberMe) => {
   res.cookie("token", token, cookie);
 };
 
-/* =====================================================
-   SEND OTP EMAIL
-===================================================== */
-
-/*
-  Uses Resend in production.
-
-  Required .env variables:
-
-  RESEND_API_KEY=your_resend_api_key
-  MAIL_FROM=VerseHana <your_verified_email@domain.com>
-
-  Development:
-  If Resend is not configured, the OTP is printed
-  in the backend terminal.
-*/
-
 const sendOTPEmail = async ({ email, otp }) => {
-  /*
-    DEVELOPMENT MODE
-
-    If Resend isn't configured, don't fail the
-    password-reset flow. Print the OTP instead.
-  */
-
   if (!process.env.RESEND_API_KEY || !process.env.MAIL_FROM) {
-    if (process.env.NODE_ENV !== "production") {
-      console.log("");
-      console.log("==========================================");
-      console.log("VERSEHANA PASSWORD RESET OTP");
-      console.log(`Email: ${email}`);
-      console.log(`OTP: ${otp}`);
-      console.log("Expires in: 10 minutes");
-      console.log("==========================================");
-      console.log("");
-
-      return;
-    }
-
     throw new Error(
-      "Password reset email is not configured."
+      "Resend email configuration is missing."
     );
   }
 
@@ -128,10 +91,8 @@ const sendOTPEmail = async ({ email, otp }) => {
 
       body: JSON.stringify({
         from: process.env.MAIL_FROM,
-
         to: [email],
-
-        subject: "Your VerseHana password reset OTP",
+        subject: "Your VerseHana password reset code",
 
         html: `
           <div
@@ -144,19 +105,14 @@ const sendOTPEmail = async ({ email, otp }) => {
               padding: 30px;
             "
           >
-
-            <h2 style="margin-bottom: 10px;">
-              Reset your VerseHana password
-            </h2>
+            <h2>Reset your VerseHana password</h2>
 
             <p>
               We received a request to reset the password
               for your VerseHana account.
             </p>
 
-            <p>
-              Your verification code is:
-            </p>
+            <p>Your verification code is:</p>
 
             <div
               style="
@@ -187,7 +143,6 @@ const sendOTPEmail = async ({ email, otp }) => {
             <p style="color: #71717a; font-size: 13px;">
               VerseHana Security
             </p>
-
           </div>
         `,
       }),
@@ -197,10 +152,11 @@ const sendOTPEmail = async ({ email, otp }) => {
   if (!response.ok) {
     const body = await response.text();
 
-    throw new Error(`Resend error: ${body}`);
+    throw new Error(
+      `Resend error: ${body}`
+    );
   }
 };
-
 /* =====================================================
    SIGNUP
 ===================================================== */
