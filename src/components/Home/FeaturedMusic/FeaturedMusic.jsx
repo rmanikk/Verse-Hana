@@ -1,10 +1,17 @@
 import { motion } from "framer-motion";
 import { HiArrowRight } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 import { playlists } from "../../../data/playlists";
 import MusicCard from "./MusicCard";
 
 function FeaturedMusic() {
+  const navigate = useNavigate();
+
+  const handleViewAll = () => {
+    navigate("/login");
+  };
+
   return (
     <section
       className="
@@ -92,6 +99,7 @@ function FeaturedMusic() {
           "
         >
           <div className="max-w-3xl">
+
             {/* Label */}
 
             <span
@@ -169,11 +177,14 @@ function FeaturedMusic() {
               Hand-picked playlists inspired by your emotions,
               favorite genres, and listening habits.
             </p>
+
           </div>
 
           {/* View All */}
 
           <button
+            type="button"
+            onClick={handleViewAll}
             className="
               group
               flex

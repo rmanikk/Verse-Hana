@@ -1,7 +1,14 @@
 import { motion } from "framer-motion";
 import { HiArrowRight } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 function MoodCard({ mood }) {
+  const navigate = useNavigate();
+
+  const handleMoodClick = () => {
+    navigate("/login");
+  };
+
   return (
     <motion.div
       whileHover={{
@@ -11,10 +18,12 @@ function MoodCard({ mood }) {
       transition={{
         duration: 0.3,
       }}
+      onClick={handleMoodClick}
       className="
         group
         relative
         h-full
+        cursor-pointer
         overflow-hidden
         rounded-3xl
         border
@@ -107,7 +116,7 @@ function MoodCard({ mood }) {
             sm:pt-7
           "
         >
-          {/* Song count */}
+          {/* Song Count */}
 
           <span
             className="

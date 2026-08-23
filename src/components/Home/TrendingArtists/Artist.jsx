@@ -3,8 +3,15 @@ import {
   HiPlay,
   HiUserGroup,
 } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 function Artist({ artist }) {
+  const navigate = useNavigate();
+
+  const handleArtistClick = () => {
+    navigate("/login");
+  };
+
   return (
     <motion.div
       whileHover={{
@@ -13,10 +20,20 @@ function Artist({ artist }) {
       transition={{
         duration: 0.25,
       }}
+      onClick={handleArtistClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleArtistClick();
+        }
+      }}
       className="
         group
         relative
         h-full
+        cursor-pointer
         overflow-hidden
         rounded-3xl
         border
@@ -32,7 +49,9 @@ function Artist({ artist }) {
         hover:shadow-violet-500/10
       "
     >
-      {/* Artist Image */}
+      {/* =====================================================
+          ARTIST IMAGE
+      ===================================================== */}
 
       <div className="relative overflow-hidden rounded-2xl">
 
@@ -48,6 +67,7 @@ function Artist({ artist }) {
           className="
             h-56
             w-full
+            cursor-pointer
             object-cover
 
             sm:h-64
@@ -70,7 +90,9 @@ function Artist({ artist }) {
           "
         />
 
-        {/* Play Button */}
+        {/* =================================================
+            PLAY BUTTON
+        ================================================= */}
 
         <motion.button
           type="button"
@@ -80,6 +102,10 @@ function Artist({ artist }) {
           }}
           whileHover={{
             scale: 1.1,
+          }}
+          onClick={(event) => {
+            event.stopPropagation();
+            navigate("/login");
           }}
           aria-label={`Play ${artist.name}`}
           className="
@@ -110,7 +136,9 @@ function Artist({ artist }) {
           <HiPlay className="ml-0.5 text-lg sm:text-xl" />
         </motion.button>
 
-        {/* Mood */}
+        {/* =================================================
+            MOOD
+        ================================================= */}
 
         <div
           className="
@@ -138,7 +166,9 @@ function Artist({ artist }) {
         </div>
       </div>
 
-      {/* Artist Information */}
+      {/* =====================================================
+          ARTIST INFORMATION
+      ===================================================== */}
 
       <div className="px-2 pb-3 pt-4 sm:pt-5">
 

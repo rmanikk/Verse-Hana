@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import {
   HiArrowUp,
-  HiEnvelope,
   HiHeart,
 } from "react-icons/hi2";
+
 import {
   FaInstagram,
   FaSpotify,
@@ -12,194 +12,369 @@ import {
 } from "react-icons/fa";
 
 function Footer() {
-  const discoverLinks = [
-    "Discover",
-    "Moods",
-    "Artists",
-    "Trending",
-  ];
-
-  const platformLinks = [
-    "Features",
-    "Lyrics",
-    "Community",
-    "About",
-  ];
-
   return (
     <footer className="relative overflow-hidden border-t border-[var(--border)] bg-[var(--background)]">
 
-      {/* Background Glow */}
+      {/* =====================================================
+          BACKGROUND GLOW
+      ===================================================== */}
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute bottom-[-250px] left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-violet-600/10 blur-[150px] sm:h-[500px] sm:w-[500px] sm:blur-[170px]" />
+        <div
+          className="
+            absolute
+            bottom-[-220px]
+            left-1/2
+            h-[350px]
+            w-[350px]
+            -translate-x-1/2
+            rounded-full
+            bg-violet-600/10
+            blur-[130px]
+
+            sm:bottom-[-250px]
+            sm:h-[500px]
+            sm:w-[500px]
+            sm:blur-[170px]
+          "
+        />
       </div>
 
-      <div className="relative mx-auto max-w-[1450px] px-5 sm:px-8 lg:px-12">
+      {/* =====================================================
+          CONTAINER
+      ===================================================== */}
 
-        {/* Main Footer */}
+      <div
+        className="
+          relative
+          mx-auto
+          w-full
+          max-w-[1450px]
+          px-5
 
-        <div className="grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr] lg:gap-14">
+          sm:px-8
 
-          {/* Brand */}
+          lg:px-12
 
-          <div>
+          xl:px-16
+        "
+      >
+
+        {/* =================================================
+            MAIN FOOTER
+        ================================================= */}
+
+        <div
+          className="
+            flex
+            flex-col
+            items-center
+            py-12
+            text-center
+
+            sm:py-16
+
+            lg:items-start
+            lg:text-left
+            lg:py-20
+          "
+        >
+
+          {/* =================================================
+              BRAND
+          ================================================= */}
+
+          <div className="w-full">
+
             <a
               href="#"
-              className="inline-flex items-center"
+              className="
+                inline-flex
+                items-center
+                justify-center
+
+                lg:justify-start
+              "
             >
-              <span className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">
+              <span
+                className="
+                  text-3xl
+                  font-extrabold
+                  tracking-tight
+                  text-[var(--text-primary)]
+
+                  sm:text-4xl
+                "
+              >
                 Verse
-                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                <span
+                  className="
+                    bg-gradient-to-r
+                    from-violet-400
+                    to-fuchsia-400
+                    bg-clip-text
+                    text-transparent
+                  "
+                >
                   Hana
                 </span>
               </span>
             </a>
 
-            <p className="mt-5 max-w-sm text-sm leading-7 text-[var(--text-secondary)]">
-              Music that understands your emotions. Discover songs,
-              artists, lyrics, and moods that feel like you.
+            {/* Description */}
+
+            <p
+              className="
+                mx-auto
+                mt-5
+                max-w-lg
+                text-sm
+                leading-7
+                text-[var(--text-secondary)]
+
+                lg:mx-0
+                lg:max-w-xl
+
+                sm:text-base
+              "
+            >
+              Music that understands your emotions.
+              Discover songs, artists, lyrics, and moods
+              that feel like you.
             </p>
 
-            {/* Social */}
+            {/* =================================================
+                SOCIAL
+            ================================================= */}
 
-            <div className="mt-7 flex items-center gap-3">
+            <div
+              className="
+                mt-7
+                flex
+                items-center
+                justify-center
+                gap-3
+
+                lg:justify-start
+              "
+            >
+
+              {/* Instagram */}
 
               <a
                 href="#"
                 aria-label="Instagram"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400"
+                className="
+                  flex
+                  h-10
+                  w-10
+                  items-center
+                  justify-center
+                  rounded-full
+                  border
+                  border-[var(--border)]
+                  bg-[var(--surface)]
+                  text-[var(--text-secondary)]
+                  transition-all
+                  duration-300
+
+                  hover:border-violet-500/40
+                  hover:bg-violet-500/10
+                  hover:text-violet-400
+
+                  sm:h-11
+                  sm:w-11
+                "
               >
                 <FaInstagram />
               </a>
 
+              {/* Spotify */}
+
               <a
                 href="#"
                 aria-label="Spotify"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400"
+                className="
+                  flex
+                  h-10
+                  w-10
+                  items-center
+                  justify-center
+                  rounded-full
+                  border
+                  border-[var(--border)]
+                  bg-[var(--surface)]
+                  text-[var(--text-secondary)]
+                  transition-all
+                  duration-300
+
+                  hover:border-violet-500/40
+                  hover:bg-violet-500/10
+                  hover:text-violet-400
+
+                  sm:h-11
+                  sm:w-11
+                "
               >
                 <FaSpotify />
               </a>
 
+              {/* YouTube */}
+
               <a
                 href="#"
                 aria-label="YouTube"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400"
+                className="
+                  flex
+                  h-10
+                  w-10
+                  items-center
+                  justify-center
+                  rounded-full
+                  border
+                  border-[var(--border)]
+                  bg-[var(--surface)]
+                  text-[var(--text-secondary)]
+                  transition-all
+                  duration-300
+
+                  hover:border-violet-500/40
+                  hover:bg-violet-500/10
+                  hover:text-violet-400
+
+                  sm:h-11
+                  sm:w-11
+                "
               >
                 <FaYoutube />
               </a>
 
+              {/* GitHub */}
+
               <a
                 href="#"
                 aria-label="GitHub"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-400"
+                className="
+                  flex
+                  h-10
+                  w-10
+                  items-center
+                  justify-center
+                  rounded-full
+                  border
+                  border-[var(--border)]
+                  bg-[var(--surface)]
+                  text-[var(--text-secondary)]
+                  transition-all
+                  duration-300
+
+                  hover:border-violet-500/40
+                  hover:bg-violet-500/10
+                  hover:text-violet-400
+
+                  sm:h-11
+                  sm:w-11
+                "
               >
                 <FaGithub />
               </a>
 
             </div>
-          </div>
 
-          {/* Discover */}
-
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-primary)]">
-              Discover
-            </h3>
-
-            <ul className="mt-6 space-y-4">
-              {discoverLinks.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-sm text-[var(--text-secondary)] transition hover:text-violet-400"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Platform */}
-
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-primary)]">
-              VerseHana
-            </h3>
-
-            <ul className="mt-6 space-y-4">
-              {platformLinks.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-sm text-[var(--text-secondary)] transition hover:text-violet-400"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-primary)]">
-              Stay in the mood
-            </h3>
-
-            <p className="mt-5 text-sm leading-6 text-[var(--text-secondary)]">
-              Get new music discoveries, mood playlists, and VerseHana
-              updates.
-            </p>
-
-            <div className="mt-5 flex items-center rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-1.5 backdrop-blur-xl">
-
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center text-[var(--text-muted)]">
-                <HiEnvelope />
-              </div>
-
-              <input
-                type="email"
-                placeholder="Your email"
-                className="min-w-0 flex-1 bg-transparent px-2 text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
-              />
-
-              <button className="shrink-0 rounded-xl bg-violet-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-violet-500">
-                Join
-              </button>
-
-            </div>
           </div>
 
         </div>
 
-        {/* Bottom */}
+        {/* =====================================================
+            BOTTOM BAR
+        ===================================================== */}
 
-        <div className="flex flex-col gap-5 border-t border-[var(--border)] py-7 text-sm text-[var(--text-muted)] sm:flex-row sm:items-center sm:justify-between">
+        <div
+          className="
+            flex
+            flex-col
+            items-center
+            gap-5
+            border-t
+            border-[var(--border)]
+            py-6
+            text-sm
+            text-[var(--text-muted)]
 
-          <p className="text-center sm:text-left">
-            © {new Date().getFullYear()} VerseHana. All rights reserved.
+            sm:py-7
+
+            lg:flex-row
+            lg:items-center
+            lg:justify-between
+            lg:gap-6
+          "
+        >
+
+          {/* Copyright */}
+
+          <p
+            className="
+              text-center
+              leading-6
+
+              lg:text-left
+            "
+          >
+            © {new Date().getFullYear()} VerseHana.
+            All rights reserved.
           </p>
 
-          <div className="flex items-center justify-center">
+          {/* Made with */}
+
+          <div
+            className="
+              flex
+              items-center
+              justify-center
+              text-center
+              leading-6
+            "
+          >
             Made with
-            <HiHeart className="mx-1 text-violet-500" />
+
+            <HiHeart
+              className="
+                mx-1
+                shrink-0
+                text-violet-500
+              "
+            />
+
             for music lovers.
           </div>
 
+          {/* Back To Top */}
+
           <motion.button
-            whileHover={{ y: -3 }}
+            type="button"
+            whileHover={{
+              y: -3,
+            }}
             onClick={() =>
               window.scrollTo({
                 top: 0,
                 behavior: "smooth",
               })
             }
-            className="flex items-center justify-center gap-2 text-[var(--text-secondary)] transition hover:text-violet-400"
+            className="
+              flex
+              items-center
+              justify-center
+              gap-2
+              text-[var(--text-secondary)]
+              transition-colors
+              duration-300
+
+              hover:text-violet-400
+            "
           >
             Back to top
+
             <HiArrowUp />
           </motion.button>
 

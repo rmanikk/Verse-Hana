@@ -4,8 +4,16 @@ import {
   HiHeart,
   HiStar,
 } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 function MusicCard({ playlist }) {
+  const navigate = useNavigate();
+
+  const handleLoginRedirect = (event) => {
+    event.stopPropagation();
+    navigate("/login");
+  };
+
   return (
     <motion.div
       whileHover={{
@@ -14,9 +22,11 @@ function MusicCard({ playlist }) {
           duration: 0.25,
         },
       }}
+      onClick={handleLoginRedirect}
       className="
         group
         h-full
+        cursor-pointer
         overflow-hidden
         rounded-3xl
         border
@@ -71,6 +81,7 @@ function MusicCard({ playlist }) {
 
         <motion.button
           type="button"
+          onClick={handleLoginRedirect}
           initial={{
             scale: 0.8,
             opacity: 0,
@@ -111,6 +122,7 @@ function MusicCard({ playlist }) {
 
         <button
           type="button"
+          onClick={handleLoginRedirect}
           aria-label="Add to favorites"
           className="
             absolute
