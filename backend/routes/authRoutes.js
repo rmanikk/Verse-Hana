@@ -2,6 +2,7 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import nodemailer from "nodemailer";
 
 import User from "../models/User.js";
 import protect from "../middleware/authMiddleware.js";
@@ -24,16 +25,14 @@ const isStrongPassword = (password = "") =>
   /[A-Z]/.test(password) &&
   /\d/.test(password);
 
-/*
- * Generates a secure 6-digit OTP.
- */
+/* =====================================================
+   OTP
+===================================================== */
+
 const generateOTP = () => {
   return crypto.randomInt(100000, 1000000).toString();
 };
 
-/*
- * Hash OTP before storing it.
- */
 const hashOTP = (otp) => {
   return crypto
     .createHash("sha256")
@@ -74,11 +73,38 @@ const setAuthCookie = (res, token, rememberMe) => {
   };
 
   if (rememberMe) {
-    cookie.maxAge =
-      7 * 24 * 60 * 60 * 1000;
+    cookie.maxAge = 7 * 24 * 60 * 60 * 1000;
   }
 
   res.cookie("token", token, cookie);
+};
+
+/* =====================================================
+   BREVO SMTP
+===================================================== */
+
+const createMailTransporter = () => {
+  if (
+    !process.env.SMTP_HOST ||
+    !process.env.SMTP_PORT ||
+    !process.env.SMTP_USER ||
+    !process.env.SMTP_PASS
+  ) {
+    throw new Error(
+      "SMTP email configuration is missing."
+    );
+  }
+
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: Number(process.env.SMTP_PORT) === 465,
+
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
 };
 
 /* =====================================================
@@ -86,107 +112,98 @@ const setAuthCookie = (res, token, rememberMe) => {
 ===================================================== */
 
 const sendOTPEmail = async ({ email, otp }) => {
-  if (
-    !process.env.RESEND_API_KEY ||
-    !process.env.MAIL_FROM
-  ) {
+  if (!process.env.MAIL_FROM) {
     throw new Error(
-      "Resend email configuration is missing."
+      "MAIL_FROM is missing from environment variables."
     );
   }
 
-  const response = await fetch(
-    "https://api.resend.com/emails",
-    {
-      method: "POST",
+  const transporter = createMailTransporter();
 
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
+  try {
+    await transporter.sendMail({
+      from: process.env.MAIL_FROM,
+      to: email,
 
-      body: JSON.stringify({
-        from: process.env.MAIL_FROM,
+      subject:
+        "Your VerseHana password reset code",
 
-        to: [email],
+      html: `
+        <div
+          style="
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #18181b;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+          "
+        >
 
-        subject:
-          "Your VerseHana password reset code",
+          <h2>
+            Reset your VerseHana password
+          </h2>
 
-        html: `
+          <p>
+            We received a request to reset
+            the password for your VerseHana
+            account.
+          </p>
+
+          <p>
+            Your verification code is:
+          </p>
+
           <div
             style="
-              font-family: Arial, sans-serif;
-              line-height: 1.6;
-              color: #18181b;
-              max-width: 600px;
-              margin: 0 auto;
-              padding: 30px;
+              display: inline-block;
+              padding: 14px 24px;
+              background: #7c3aed;
+              color: white;
+              border-radius: 12px;
+              font-size: 28px;
+              font-weight: bold;
+              letter-spacing: 8px;
+              margin: 10px 0 20px;
             "
           >
-
-            <h2>
-              Reset your VerseHana password
-            </h2>
-
-            <p>
-              We received a request to reset
-              the password for your VerseHana
-              account.
-            </p>
-
-            <p>
-              Your verification code is:
-            </p>
-
-            <div
-              style="
-                display: inline-block;
-                padding: 14px 24px;
-                background: #7c3aed;
-                color: white;
-                border-radius: 12px;
-                font-size: 28px;
-                font-weight: bold;
-                letter-spacing: 8px;
-                margin: 10px 0 20px;
-              "
-            >
-              ${otp}
-            </div>
-
-            <p>
-              This code expires in
-              <strong>10 minutes</strong>.
-            </p>
-
-            <p>
-              If you did not request a password
-              reset, you can safely ignore this
-              email.
-            </p>
-
-            <p
-              style="
-                color: #71717a;
-                font-size: 13px;
-              "
-            >
-              VerseHana Security
-            </p>
-
+            ${otp}
           </div>
-        `,
-      }),
-    }
-  );
 
-  if (!response.ok) {
-    const body = await response.text();
+          <p>
+            This code expires in
+            <strong>10 minutes</strong>.
+          </p>
 
-    throw new Error(
-      `Resend error: ${body}`
+          <p>
+            If you did not request a password
+            reset, you can safely ignore this
+            email.
+          </p>
+
+          <p
+            style="
+              color: #71717a;
+              font-size: 13px;
+            "
+          >
+            VerseHana Security
+          </p>
+
+        </div>
+      `,
+    });
+
+    console.log(
+      `Password reset email sent successfully to ${email}`
     );
+  } catch (error) {
+    console.error(
+      "Brevo SMTP error:",
+      error
+    );
+
+    throw error;
   }
 };
 
@@ -357,7 +374,8 @@ router.post("/login", async (req, res) => {
     );
 
     return res.status(200).json({
-      message: "Login successful.",
+      message:
+        "Login successful.",
 
       user: {
         id: user._id,
@@ -418,33 +436,18 @@ router.post(
         });
       }
 
-      /*
-       * Generate new 6-digit OTP.
-       */
       const otp = generateOTP();
 
-      /*
-       * Store only hashed OTP.
-       */
       user.resetOtpHash =
         hashOTP(otp);
 
-      /*
-       * OTP valid for 10 minutes.
-       */
       user.resetOtpExpires =
         new Date(
           Date.now() + 10 * 60 * 1000
         );
 
-      /*
-       * Reset attempts.
-       */
       user.resetOtpAttempts = 0;
 
-      /*
-       * Reset verification state.
-       */
       user.resetOtpVerified = false;
 
       user.resetOtpVerifiedExpires =
@@ -452,18 +455,12 @@ router.post(
 
       await user.save();
 
-      /*
-       * Send email.
-       */
       try {
         await sendOTPEmail({
           email: user.email,
           otp,
         });
       } catch (mailError) {
-        /*
-         * Remove OTP if email fails.
-         */
         user.resetOtpHash = null;
         user.resetOtpExpires = null;
         user.resetOtpAttempts = 0;
@@ -543,9 +540,6 @@ router.post(
         });
       }
 
-      /*
-       * Check if OTP exists.
-       */
       if (
         !user.resetOtpHash ||
         !user.resetOtpExpires
@@ -556,9 +550,6 @@ router.post(
         });
       }
 
-      /*
-       * Check expiration.
-       */
       if (
         user.resetOtpExpires < new Date()
       ) {
@@ -577,9 +568,6 @@ router.post(
         });
       }
 
-      /*
-       * Maximum 5 attempts.
-       */
       if (
         user.resetOtpAttempts >= 5
       ) {
@@ -598,9 +586,6 @@ router.post(
         });
       }
 
-      /*
-       * Compare submitted OTP.
-       */
       const hashedOTP =
         hashOTP(otp);
 
@@ -627,14 +612,6 @@ router.post(
         });
       }
 
-      /*
-       * OTP is correct.
-       *
-       * Mark verification as completed.
-       *
-       * The verification session lasts
-       * another 10 minutes.
-       */
       user.resetOtpVerified = true;
 
       user.resetOtpVerifiedExpires =
@@ -647,7 +624,6 @@ router.post(
       return res.status(200).json({
         message:
           "Verification code confirmed.",
-
         verified: true,
       });
     } catch (error) {
@@ -716,9 +692,6 @@ router.post(
         });
       }
 
-      /*
-       * The OTP must have been verified first.
-       */
       if (
         !user.resetOtpVerified ||
         !user.resetOtpVerifiedExpires
@@ -729,9 +702,6 @@ router.post(
         });
       }
 
-      /*
-       * Check verification-session expiration.
-       */
       if (
         user.resetOtpVerifiedExpires <
         new Date()
@@ -751,12 +721,6 @@ router.post(
         });
       }
 
-      /*
-       * Verify OTP one more time.
-       *
-       * This prevents a modified frontend
-       * request from bypassing verification.
-       */
       const hashedOTP =
         hashOTP(otp);
 
@@ -769,23 +733,14 @@ router.post(
         });
       }
 
-      /*
-       * Update password.
-       */
       user.password =
         await bcrypt.hash(
           password,
           12
         );
 
-      /*
-       * Invalidate existing JWTs.
-       */
       user.authVersion += 1;
 
-      /*
-       * Completely invalidate OTP.
-       */
       user.resetOtpHash = null;
       user.resetOtpExpires = null;
       user.resetOtpAttempts = 0;
@@ -795,9 +750,6 @@ router.post(
 
       await user.save();
 
-      /*
-       * Clear authentication cookie.
-       */
       res.cookie("token", "", {
         httpOnly: true,
         expires: new Date(0),
@@ -865,9 +817,6 @@ router.post(
         });
       }
 
-      /*
-       * Generate new OTP.
-       */
       const otp = generateOTP();
 
       user.resetOtpHash =
@@ -879,17 +828,12 @@ router.post(
         );
 
       user.resetOtpAttempts = 0;
-
       user.resetOtpVerified = false;
-
       user.resetOtpVerifiedExpires =
         null;
 
       await user.save();
 
-      /*
-       * Send email.
-       */
       try {
         await sendOTPEmail({
           email: user.email,
