@@ -1,3 +1,4 @@
+import { API_URL } from "../config/api";
 import {
   createContext,
   useContext,
@@ -28,7 +29,7 @@ export function PlayerProvider({ children }) {
     try {
       if (!song) return;
 
-      await fetch("http://localhost:5000/api/history", {
+      await fetch(`${API_URL}/api/history`, {
         method: "POST",
         credentials: "include",
         headers: {

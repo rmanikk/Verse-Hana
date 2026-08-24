@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../config/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -18,7 +19,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 import { usePlayer } from "../context/PlayerContext";
 
-const API_URL = "http://localhost:5000";
+
 
 function PlaylistDetails() {
   const { playlistId } = useParams();

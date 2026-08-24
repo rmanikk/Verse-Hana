@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { API_URL } from "../config/api";
 import { Link } from "react-router-dom";
 import {
   HiArrowLeft,
@@ -35,7 +36,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 import ManagementWorkspace from "../components/admin/ManagementWorkspace";
 
-const API_URL = "http://localhost:5000";
+
 
 const navigation = [
   { id: "overview", label: "Overview", icon: HiSquares2X2 },

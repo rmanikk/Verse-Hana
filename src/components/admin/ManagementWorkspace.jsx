@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { API_URL } from "../../config/api";
 import {
   HiArrowPath,
   HiCheckCircle,
@@ -10,7 +11,7 @@ import {
   HiXMark,
 } from "react-icons/hi2";
 
-const API = "http://localhost:5000/api/admin";
+const API = `${API_URL}/api/admin`;
 
 const config = {
   users: {

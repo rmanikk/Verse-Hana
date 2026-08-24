@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../config/api";
 import { Link } from "react-router-dom";
 import {
   HiHome,
@@ -17,7 +18,7 @@ import {
 
 import { useAuth } from "../context/AuthContext";
 
-const API_URL = "http://localhost:5000";
+
 
 function Playlists() {
   const { user, logout } = useAuth();

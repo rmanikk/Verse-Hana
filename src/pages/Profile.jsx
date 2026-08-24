@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../config/api";
 import { Link } from "react-router-dom";
 import {
   HiHome,
@@ -15,7 +16,7 @@ import {
 import { useAuth } from "../context/AuthContext";
 import MoodSelection from "./MoodSelection";
 
-const API_URL = "http://localhost:5000";
+
 
 const moods = {
   happy: {
