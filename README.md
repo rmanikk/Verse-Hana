@@ -499,13 +499,6 @@ The design focuses on:
 
 ## 🖼️ Screenshots
 
-Add screenshots of the completed project here.
-
-Example:
-
-```markdown
-## 🖼️ Screenshots
-
 ### Landing Page
 
 ![VerseHana Landing Page](screenshots/landing-page.png)
@@ -521,6 +514,7 @@ Example:
 ### Admin Dashboard
 
 ![VerseHana Admin Dashboard](screenshots/admin-dashboard.png)
+
 ```
 
 Recommended screenshot folder:
