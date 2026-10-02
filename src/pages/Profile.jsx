@@ -174,13 +174,13 @@ function Profile() {
           {/* LOGO */}
 
           <div className="flex h-20 items-center gap-3 border-b border-[var(--border)] px-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
               <HiMusicalNote className="text-xl" />
             </div>
 
             <span className="text-xl font-extrabold tracking-tight">
               Verse
-              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 Hana
               </span>
             </span>
@@ -192,7 +192,7 @@ function Profile() {
 
             <Link
               to="/dashboard"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiHome className="text-lg" />
               Home
@@ -200,7 +200,7 @@ function Profile() {
 
             <Link
               to="/discover"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiMagnifyingGlass className="text-lg" />
               Discover
@@ -208,7 +208,7 @@ function Profile() {
 
             <Link
               to="/genres"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiMusicalNote className="text-lg" />
               Genres
@@ -216,7 +216,7 @@ function Profile() {
 
             <Link
               to="/liked-songs"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiHeart className="text-lg" />
               Liked Songs
@@ -224,7 +224,7 @@ function Profile() {
 
             <Link
               to="/playlists"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiQueueList className="text-lg" />
               Playlists
@@ -232,7 +232,7 @@ function Profile() {
 
             <Link
               to="/recently-played"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiClock className="text-lg" />
               Recently Played
@@ -244,9 +244,9 @@ function Profile() {
 
           <div className="border-t border-[var(--border)] p-4">
 
-            <div className="mb-3 flex items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3">
+            <div className="mb-3 flex items-center gap-3 rounded-xl bg-teal-500/10 px-3 py-3">
 
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">
                 {userInitial}
               </div>
 
@@ -295,7 +295,7 @@ function Profile() {
               </h1>
             </div>
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">
               {userInitial}
             </div>
 
@@ -309,13 +309,13 @@ function Profile() {
                 PROFILE HERO
             ================================================= */}
 
-            <section className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 shadow-2xl shadow-violet-950/10 sm:p-8 lg:p-10">
+            <section className="relative overflow-hidden rounded-[32px] border border-teal-500/20 bg-gradient-to-br from-teal-600/15 via-[var(--surface)] to-cyan-600/10 p-6 shadow-2xl shadow-teal-950/10 sm:p-8 lg:p-10">
 
               {/* GLOW */}
 
-              <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-violet-500/20 blur-[120px]" />
+              <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-teal-500/20 blur-[120px]" />
 
-              <div className="pointer-events-none absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-fuchsia-500/10 blur-[120px]" />
+              <div className="pointer-events-none absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-cyan-500/10 blur-[120px]" />
 
               <div className="relative z-10 flex flex-col gap-8 md:flex-row md:items-center">
 
@@ -323,11 +323,11 @@ function Profile() {
 
                 <div className="relative shrink-0 self-center md:self-auto">
 
-                  <div className="flex h-28 w-28 items-center justify-center rounded-[32px] bg-gradient-to-br from-violet-500 to-fuchsia-500 text-4xl font-extrabold text-white shadow-2xl shadow-violet-500/30 sm:h-36 sm:w-36 sm:text-5xl">
+                  <div className="flex h-28 w-28 items-center justify-center rounded-[32px] bg-gradient-to-br from-teal-500 to-cyan-500 text-4xl font-extrabold text-white shadow-2xl shadow-teal-500/30 sm:h-36 sm:w-36 sm:text-5xl">
                     {userInitial}
                   </div>
 
-                  <div className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-full border-4 border-[var(--surface)] bg-violet-600 text-white">
+                  <div className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-full border-4 border-[var(--surface)] bg-teal-600 text-white">
                     <HiMusicalNote className="text-sm" />
                   </div>
 
@@ -337,7 +337,7 @@ function Profile() {
 
                 <div className="min-w-0 flex-1 text-center md:text-left">
 
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-400">
                     VerseHana member
                   </p>
 
@@ -369,7 +369,7 @@ function Profile() {
 
               <div className="mb-5">
 
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-teal-400">
                   Your music
                 </p>
 
@@ -385,16 +385,16 @@ function Profile() {
 
                 <Link
                   to="/liked-songs"
-                  className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-5 transition hover:-translate-y-1 hover:border-violet-500/30 hover:bg-violet-500/5"
+                  className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-5 transition hover:-translate-y-1 hover:border-teal-500/30 hover:bg-teal-500/5"
                 >
 
                   <div className="flex items-center justify-between">
 
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
                       <HiHeart className="text-xl" />
                     </div>
 
-                    <HiChevronRight className="text-[var(--text-muted)] transition group-hover:translate-x-1 group-hover:text-violet-400" />
+                    <HiChevronRight className="text-[var(--text-muted)] transition group-hover:translate-x-1 group-hover:text-teal-400" />
 
                   </div>
 
@@ -412,16 +412,16 @@ function Profile() {
 
                 <Link
                   to="/playlists"
-                  className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-5 transition hover:-translate-y-1 hover:border-violet-500/30 hover:bg-violet-500/5"
+                  className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-5 transition hover:-translate-y-1 hover:border-teal-500/30 hover:bg-teal-500/5"
                 >
 
                   <div className="flex items-center justify-between">
 
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-fuchsia-500/10 text-fuchsia-400">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
                       <HiQueueList className="text-xl" />
                     </div>
 
-                    <HiChevronRight className="text-[var(--text-muted)] transition group-hover:translate-x-1 group-hover:text-fuchsia-400" />
+                    <HiChevronRight className="text-[var(--text-muted)] transition group-hover:translate-x-1 group-hover:text-cyan-400" />
 
                   </div>
 
@@ -439,7 +439,7 @@ function Profile() {
 
                 <Link
                   to="/recently-played"
-                  className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-5 transition hover:-translate-y-1 hover:border-violet-500/30 hover:bg-violet-500/5"
+                  className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-5 transition hover:-translate-y-1 hover:border-teal-500/30 hover:bg-teal-500/5"
                 >
 
                   <div className="flex items-center justify-between">
@@ -472,19 +472,19 @@ function Profile() {
 
             <section className="relative overflow-hidden rounded-[28px] border border-[var(--border)] bg-[var(--surface)]/60 p-6">
 
-              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-violet-500/10 blur-[80px]" />
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-teal-500/10 blur-[80px]" />
 
               <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
 
                 <div className="flex items-center gap-4">
 
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-violet-500/10 text-2xl">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-teal-500/10 text-2xl">
                     {currentMood.emoji}
                   </div>
 
                   <div>
 
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-violet-400">
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-teal-400">
                       Your current vibe
                     </p>
 
@@ -505,7 +505,7 @@ function Profile() {
                 <button
                   type="button"
                   onClick={() => setMoodModalOpen(true)}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-violet-500/30 bg-violet-500/10 px-4 py-2.5 text-sm font-semibold text-violet-400 transition hover:bg-violet-500/20"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-teal-500/30 bg-teal-500/10 px-4 py-2.5 text-sm font-semibold text-teal-400 transition hover:bg-teal-500/20"
                 >
                   <HiSparkles />
                   Change Mood
@@ -523,7 +523,7 @@ function Profile() {
 
               <div className="mb-5">
 
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-teal-400">
                   Explore
                 </p>
 
@@ -570,7 +570,7 @@ function Profile() {
 
                 <div>
 
-                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-teal-400">
                     Account
                   </p>
 
@@ -633,10 +633,10 @@ function ProfileAction({
   return (
     <Link
       to={to}
-      className="group flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-4 transition hover:-translate-y-0.5 hover:border-violet-500/30 hover:bg-violet-500/5"
+      className="group flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)]/60 p-4 transition hover:-translate-y-0.5 hover:border-teal-500/30 hover:bg-teal-500/5"
     >
 
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-xl text-violet-400 transition group-hover:scale-105">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-xl text-teal-400 transition group-hover:scale-105">
         {icon}
       </div>
 
@@ -652,7 +652,7 @@ function ProfileAction({
 
       </div>
 
-      <HiChevronRight className="shrink-0 text-[var(--text-muted)] transition group-hover:translate-x-1 group-hover:text-violet-400" />
+      <HiChevronRight className="shrink-0 text-[var(--text-muted)] transition group-hover:translate-x-1 group-hover:text-teal-400" />
 
     </Link>
   );

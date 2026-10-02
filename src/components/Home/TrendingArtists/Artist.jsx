@@ -46,7 +46,7 @@ function Artist({ artist }) {
         duration-300
 
         hover:shadow-2xl
-        hover:shadow-violet-500/10
+        hover:shadow-teal-500/10
       "
     >
       {/* =====================================================
@@ -118,7 +118,7 @@ function Artist({ artist }) {
             items-center
             justify-center
             rounded-full
-            bg-violet-600
+            bg-teal-600
             text-white
             opacity-0
             shadow-xl
@@ -215,7 +215,7 @@ function Artist({ artist }) {
             sm:text-sm
           "
         >
-          <HiUserGroup className="shrink-0 text-violet-500" />
+          <HiUserGroup className="shrink-0 text-teal-500" />
 
           <span>
             {artist.followers} followers
@@ -229,12 +229,12 @@ function Artist({ artist }) {
             mt-4
             h-px
             w-8
-            bg-violet-500/40
+            bg-teal-500/40
             transition-all
             duration-300
 
             group-hover:w-full
-            group-hover:bg-violet-500
+            group-hover:bg-teal-500
           "
         />
       </div>

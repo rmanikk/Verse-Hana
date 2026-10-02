@@ -86,7 +86,7 @@ function SignupForm() {
               value={formData.name}
               onChange={handleChange}
               placeholder="Your name"
-              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] py-3.5 pl-11 pr-4 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] py-3.5 pl-11 pr-4 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10"
             />
           </div>
         </div>
@@ -110,7 +110,7 @@ function SignupForm() {
               value={formData.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] py-3.5 pl-11 pr-4 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] py-3.5 pl-11 pr-4 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10"
             />
           </div>
         </div>
@@ -134,13 +134,13 @@ function SignupForm() {
               value={formData.password}
               onChange={handleChange}
               placeholder="At least 8 characters"
-              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] py-3.5 pl-11 pr-12 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] py-3.5 pl-11 pr-12 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10"
             />
 
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] transition hover:text-violet-400"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] transition hover:text-teal-400"
               aria-label="Toggle password visibility"
             >
               {showPassword ? <HiEyeSlash /> : <HiEye />}
@@ -167,7 +167,7 @@ function SignupForm() {
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Repeat your password"
-              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] py-3.5 pl-11 pr-12 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10"
+              className="w-full rounded-2xl border border-[var(--border)] bg-[var(--background)] py-3.5 pl-11 pr-12 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10"
             />
 
             <button
@@ -175,7 +175,7 @@ function SignupForm() {
               onClick={() =>
                 setShowConfirmPassword((prev) => !prev)
               }
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] transition hover:text-violet-400"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] transition hover:text-teal-400"
               aria-label="Toggle confirm password visibility"
             >
               {showConfirmPassword ? <HiEyeSlash /> : <HiEye />}
@@ -193,7 +193,7 @@ function SignupForm() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition duration-300 hover:scale-[1.01] hover:shadow-violet-500/30"
+          className="w-full rounded-2xl bg-gradient-to-r from-teal-600 via-purple-600 to-cyan-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-teal-500/20 transition duration-300 hover:scale-[1.01] hover:shadow-teal-500/30"
         >
           Create Account
         </button>
@@ -203,7 +203,7 @@ function SignupForm() {
           Already have an account?{" "}
           <Link
             to="/login"
-            className="font-semibold text-violet-400 transition hover:text-violet-300"
+            className="font-semibold text-teal-400 transition hover:text-teal-300"
           >
             Sign in
           </Link>

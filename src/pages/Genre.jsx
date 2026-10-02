@@ -564,13 +564,13 @@ function Genre() {
 
           <div className="flex h-20 items-center gap-3 border-b border-[var(--border)] px-6">
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
               <HiMusicalNote className="text-xl" />
             </div>
 
             <span className="text-xl font-extrabold tracking-tight">
               Verse
-              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 Hana
               </span>
             </span>
@@ -581,7 +581,7 @@ function Genre() {
 
             <Link
               to="/dashboard"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiHome className="text-lg" />
               Home
@@ -589,20 +589,20 @@ function Genre() {
 
             <Link
               to="/discover"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiMagnifyingGlass className="text-lg" />
               Discover
             </Link>
 
-            <div className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400">
+            <div className="flex w-full items-center gap-3 rounded-xl bg-teal-500/10 px-3 py-3 text-sm font-medium text-teal-400">
               <HiMusicalNote className="text-lg" />
               Genres
             </div>
 
             <Link
               to="/liked-songs"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiHeart className="text-lg" />
               Liked Songs
@@ -610,7 +610,7 @@ function Genre() {
 
             <Link
               to="/playlists"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiQueueList className="text-lg" />
               Playlists
@@ -618,7 +618,7 @@ function Genre() {
 
             <Link
               to="/recently-played"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiClock className="text-lg" />
               Recently Played
@@ -630,9 +630,9 @@ function Genre() {
 
             <Link
               to="/profile"
-              className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+              className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-teal-500/10"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">
                 {user?.name
                   ?.charAt(0)
                   ?.toUpperCase() || "U"}
@@ -689,13 +689,13 @@ function Genre() {
 
             <div className="flex items-center gap-3">
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
                 <HiMusicalNote className="text-xl" />
               </div>
 
               <span className="text-xl font-extrabold tracking-tight">
                 Verse
-                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                   Hana
                 </span>
               </span>
@@ -718,7 +718,7 @@ function Genre() {
             <Link
               to="/dashboard"
               onClick={closeMobileMenu}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-teal-500/10"
             >
               <HiHome className="text-lg" />
               Home
@@ -727,13 +727,13 @@ function Genre() {
             <Link
               to="/discover"
               onClick={closeMobileMenu}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-teal-500/10"
             >
               <HiMagnifyingGlass className="text-lg" />
               Discover
             </Link>
 
-            <div className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400">
+            <div className="flex w-full items-center gap-3 rounded-xl bg-teal-500/10 px-3 py-3 text-sm font-medium text-teal-400">
               <HiMusicalNote className="text-lg" />
               Genres
             </div>
@@ -741,7 +741,7 @@ function Genre() {
             <Link
               to="/liked-songs"
               onClick={closeMobileMenu}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-teal-500/10"
             >
               <HiHeart className="text-lg" />
               Liked Songs
@@ -750,7 +750,7 @@ function Genre() {
             <Link
               to="/playlists"
               onClick={closeMobileMenu}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-teal-500/10"
             >
               <HiQueueList className="text-lg" />
               Playlists
@@ -759,7 +759,7 @@ function Genre() {
             <Link
               to="/recently-played"
               onClick={closeMobileMenu}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-violet-500/10"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition active:bg-teal-500/10"
             >
               <HiClock className="text-lg" />
               Recently Played
@@ -775,7 +775,7 @@ function Genre() {
               className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3"
             >
 
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">
                 {user?.name
                   ?.charAt(0)
                   ?.toUpperCase() || "U"}
@@ -832,7 +832,7 @@ function Genre() {
                 onClick={() =>
                   setMobileMenuOpen(true)
                 }
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition active:bg-violet-500/10 active:text-violet-400 lg:hidden"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition active:bg-teal-500/10 active:text-teal-400 lg:hidden"
                 aria-label="Open menu"
               >
                 <HiBars3 className="text-xl" />
@@ -846,7 +846,7 @@ function Genre() {
 
             <Link
               to="/profile"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white sm:h-10 sm:w-10"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white sm:h-10 sm:w-10"
             >
               {user?.name
                 ?.charAt(0)
@@ -861,21 +861,21 @@ function Genre() {
                 HERO
             ===================================================== */}
 
-            <section className="relative overflow-hidden rounded-3xl border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-5 sm:rounded-[32px] sm:p-8 lg:p-10">
+            <section className="relative overflow-hidden rounded-3xl border border-teal-500/20 bg-gradient-to-br from-teal-600/15 via-[var(--surface)] to-cyan-600/10 p-5 sm:rounded-[32px] sm:p-8 lg:p-10">
 
-              <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-violet-500/20 blur-[90px] sm:h-64 sm:w-64" />
+              <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-teal-500/20 blur-[90px] sm:h-64 sm:w-64" />
 
-              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-fuchsia-500/10 blur-[90px] sm:h-64 sm:w-64" />
+              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-cyan-500/10 blur-[90px] sm:h-64 sm:w-64" />
 
               <div className="relative z-10">
 
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-400 sm:text-xs">
                   Explore your sound
                 </p>
 
                 <h2 className="mt-3 max-w-3xl text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                   Find music by{" "}
-                  <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                     genre.
                   </span>
                 </h2>
@@ -898,7 +898,7 @@ function Genre() {
 
               <div className="mb-5">
 
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-400 sm:text-xs">
                   Browse
                 </p>
 
@@ -920,8 +920,8 @@ function Genre() {
                     }
                     className={`group relative min-w-0 overflow-hidden rounded-2xl border p-4 text-left transition duration-300 sm:p-5 lg:hover:-translate-y-1 ${
                       selectedGenre === genre.id
-                        ? "border-violet-500/50 bg-violet-500/15"
-                        : "border-[var(--border)] bg-[var(--surface)]/60 hover:border-violet-500/30 hover:bg-violet-500/5"
+                        ? "border-teal-500/50 bg-teal-500/15"
+                        : "border-[var(--border)] bg-[var(--surface)]/60 hover:border-teal-500/30 hover:bg-teal-500/5"
                     }`}
                   >
 
@@ -960,7 +960,7 @@ function Genre() {
 
                   <div className="min-w-0">
 
-                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-400 sm:text-xs">
                       Genre selection
                     </p>
 
@@ -1030,7 +1030,7 @@ function Genre() {
                           selectedGenre
                         )
                       }
-                      className="mt-4 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
+                      className="mt-4 rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-500"
                     >
                       Try again
                     </button>
@@ -1112,7 +1112,7 @@ function Genre() {
                             className={`rounded-xl border px-3 py-2 text-xs font-medium transition sm:px-4 sm:text-sm ${
                               currentPage === 1
                                 ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
-                                : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                                : "border-[var(--border)] text-[var(--text-secondary)] hover:border-teal-500/40 hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
                             }`}
                           >
                             ← Previous
@@ -1129,8 +1129,8 @@ function Genre() {
                                 }
                                 className={`flex h-9 w-9 items-center justify-center rounded-xl border text-xs font-semibold transition sm:h-10 sm:w-10 sm:text-sm ${
                                   currentPage === page
-                                    ? "border-violet-500 bg-violet-600 text-white shadow-lg shadow-violet-500/20"
-                                    : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                                    ? "border-teal-500 bg-teal-600 text-white shadow-lg shadow-teal-500/20"
+                                    : "border-[var(--border)] text-[var(--text-secondary)] hover:border-teal-500/40 hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
                                 }`}
                               >
                                 {page}
@@ -1154,7 +1154,7 @@ function Genre() {
                               currentPage ===
                               totalPages
                                 ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
-                                : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                                : "border-[var(--border)] text-[var(--text-secondary)] hover:border-teal-500/40 hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
                             }`}
                           >
                             Next →
@@ -1225,7 +1225,7 @@ function Genre() {
 
               <div>
 
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-400 sm:text-xs">
                   Save music
                 </p>
 
@@ -1274,7 +1274,7 @@ function Genre() {
                   ) : (
 
                     <div className="flex h-full w-full items-center justify-center">
-                      <HiMusicalNote className="text-violet-400" />
+                      <HiMusicalNote className="text-teal-400" />
                     </div>
 
                   )}
@@ -1322,7 +1322,7 @@ function Genre() {
                     onClick={() =>
                       setPlaylistModalOpen(false)
                     }
-                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-500"
                   >
                     <HiPlus />
                     Create playlist
@@ -1346,10 +1346,10 @@ function Genre() {
                             playlist._id
                           )
                         }
-                        className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 p-3 text-left transition hover:border-violet-500/40 hover:bg-violet-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 p-3 text-left transition hover:border-teal-500/40 hover:bg-teal-500/10 disabled:cursor-not-allowed disabled:opacity-50"
                       >
 
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
                           <HiQueueList className="text-xl" />
                         </div>
 
@@ -1463,8 +1463,8 @@ function GenreCard({
 
         ) : (
 
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20">
-            <HiMusicalNote className="text-5xl text-violet-400" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-teal-500/20 to-cyan-500/20">
+            <HiMusicalNote className="text-5xl text-teal-400" />
           </div>
 
         )}
@@ -1490,8 +1490,8 @@ function GenreCard({
           onClick={() => onLike(track)}
           className={`absolute left-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 lg:opacity-0 lg:group-hover:opacity-100 ${
             isLiked
-              ? "bg-violet-600 text-white opacity-100 shadow-lg shadow-violet-500/30"
-              : "bg-black/50 text-white opacity-100 hover:bg-violet-600 lg:opacity-0 lg:group-hover:opacity-100"
+              ? "bg-teal-600 text-white opacity-100 shadow-lg shadow-teal-500/30"
+              : "bg-black/50 text-white opacity-100 hover:bg-teal-600 lg:opacity-0 lg:group-hover:opacity-100"
           }`}
           aria-label={
             isLiked
@@ -1520,7 +1520,7 @@ function GenreCard({
           onClick={() =>
             onAddToPlaylist(track)
           }
-          className="absolute left-14 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-md transition-all duration-300 hover:bg-violet-600 lg:opacity-0 lg:group-hover:opacity-100"
+          className="absolute left-14 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-md transition-all duration-300 hover:bg-teal-600 lg:opacity-0 lg:group-hover:opacity-100"
           aria-label="Add to playlist"
         >
           <HiPlus className="text-lg" />
@@ -1537,7 +1537,7 @@ function GenreCard({
           onClick={() =>
             onPlay(track, tracks)
           }
-          className={`absolute bottom-3 right-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg shadow-violet-500/30 transition-all duration-300 hover:scale-105 sm:h-11 sm:w-11 ${
+          className={`absolute bottom-3 right-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-teal-600 text-white shadow-lg shadow-teal-500/30 transition-all duration-300 hover:scale-105 sm:h-11 sm:w-11 ${
             isCurrent
               ? "translate-y-0 opacity-100"
               : "translate-y-0 opacity-100 lg:translate-y-2 lg:opacity-0 lg:group-hover:translate-y-0 lg:group-hover:opacity-100"

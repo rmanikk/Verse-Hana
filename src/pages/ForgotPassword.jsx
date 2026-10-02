@@ -88,7 +88,7 @@ export default function ForgotPassword() {
             to="/"
             className="flex items-center gap-3"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-600">
               <Music2
                 size={23}
                 className="text-white"
@@ -107,7 +107,7 @@ export default function ForgotPassword() {
           {/* Header */}
           <div className="mb-7 text-center">
 
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-violet-500/10 text-violet-400">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-teal-500/10 text-teal-400">
               <Mail size={25} />
             </div>
 
@@ -151,14 +151,14 @@ export default function ForgotPassword() {
                 }
                 placeholder="you@example.com"
                 disabled={loading}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/30 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-3 font-semibold text-white transition hover:bg-teal-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <>
@@ -178,7 +178,7 @@ export default function ForgotPassword() {
           <div className="mt-7 text-center">
             <Link
               to="/login"
-              className="inline-flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300"
+              className="inline-flex items-center gap-2 text-sm text-teal-400 hover:text-teal-300"
             >
               <ArrowLeft size={16} />
               Back to login

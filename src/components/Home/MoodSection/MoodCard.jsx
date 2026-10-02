@@ -38,7 +38,7 @@ function MoodCard({ mood }) {
         sm:p-6
 
         hover:shadow-2xl
-        hover:shadow-violet-500/10
+        hover:shadow-teal-500/10
       "
     >
       {/* Gradient Glow */}
@@ -122,7 +122,7 @@ function MoodCard({ mood }) {
             className="
               text-sm
               font-medium
-              text-violet-500
+              text-teal-500
             "
           >
             {mood.songs}
@@ -146,8 +146,8 @@ function MoodCard({ mood }) {
               transition-all
               duration-300
 
-              group-hover:border-violet-500
-              group-hover:bg-violet-600
+              group-hover:border-teal-500
+              group-hover:bg-teal-600
             "
           >
             <HiArrowRight
@@ -176,7 +176,7 @@ function MoodCard({ mood }) {
           border-transparent
           transition-all
           duration-300
-          group-hover:border-violet-500/40
+          group-hover:border-teal-500/40
         "
       />
     </motion.div>

@@ -78,7 +78,7 @@ const config = {
 };
 
 const input =
-  "w-full min-w-0 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-sm outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10";
+  "w-full min-w-0 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-sm outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10";
 
 const data = async (response) => {
   const body = await response.json().catch(() => ({}));
@@ -725,7 +725,7 @@ function ManagementWorkspace({ onDataChanged }) {
       {/* ================================================= */}
 
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-lg shadow-black/5 sm:rounded-3xl sm:p-5">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-300 sm:text-xs">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-teal-300 sm:text-xs">
           Database-backed tools
         </p>
 
@@ -741,7 +741,7 @@ function ManagementWorkspace({ onDataChanged }) {
         {/* AUDIUS SYNC                                      */}
         {/* ================================================= */}
 
-        <div className="mt-4 rounded-xl border border-violet-500/20 bg-violet-500/5 p-3 sm:mt-5 sm:rounded-2xl sm:p-4">
+        <div className="mt-4 rounded-xl border border-teal-500/20 bg-teal-500/5 p-3 sm:mt-5 sm:rounded-2xl sm:p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
               <p className="text-sm font-semibold sm:text-base">
@@ -758,7 +758,7 @@ function ManagementWorkspace({ onDataChanged }) {
               type="button"
               onClick={syncAudius}
               disabled={syncing}
-              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 px-3 py-2.5 text-xs font-semibold text-white shadow-lg shadow-violet-900/20 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:rounded-xl sm:px-4 sm:text-sm"
+              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-3 py-2.5 text-xs font-semibold text-white shadow-lg shadow-teal-900/20 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:rounded-xl sm:px-4 sm:text-sm"
             >
               <HiArrowPath
                 className={syncing ? "animate-spin" : ""}
@@ -782,8 +782,8 @@ function ManagementWorkspace({ onDataChanged }) {
                 onClick={() => choose(id)}
                 className={`shrink-0 rounded-lg px-3 py-2 text-xs font-semibold transition sm:rounded-xl sm:px-3.5 sm:py-2.5 sm:text-sm ${
                   type === id
-                    ? "bg-violet-600 text-white shadow-md shadow-violet-900/20"
-                    : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] hover:text-violet-300"
+                    ? "bg-teal-600 text-white shadow-md shadow-teal-900/20"
+                    : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] hover:text-teal-300"
                 }`}
               >
                 {details.label}
@@ -841,7 +841,7 @@ function ManagementWorkspace({ onDataChanged }) {
                 type="button"
                 onClick={refresh}
                 disabled={loading}
-                className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-xs font-semibold transition hover:border-violet-500/40 hover:text-violet-300 disabled:opacity-50 sm:gap-2 sm:rounded-xl sm:px-4 sm:text-sm"
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-xs font-semibold transition hover:border-teal-500/40 hover:text-teal-300 disabled:opacity-50 sm:gap-2 sm:rounded-xl sm:px-4 sm:text-sm"
               >
                 <HiArrowPath
                   className={loading ? "animate-spin" : ""}
@@ -853,7 +853,7 @@ function ManagementWorkspace({ onDataChanged }) {
               <button
                 type="button"
                 onClick={create}
-                className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 px-3 py-2.5 text-xs font-semibold text-white sm:gap-2 sm:rounded-xl sm:px-4 sm:text-sm"
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-3 py-2.5 text-xs font-semibold text-white sm:gap-2 sm:rounded-xl sm:px-4 sm:text-sm"
               >
                 <HiPlus />
 
@@ -870,7 +870,7 @@ function ManagementWorkspace({ onDataChanged }) {
         <div className="divide-y divide-[var(--border)]">
           {loading ? (
             <div className="flex items-center gap-3 p-6 text-xs text-[var(--text-secondary)] sm:p-8 sm:text-sm">
-              <HiArrowPath className="animate-spin text-violet-300" />
+              <HiArrowPath className="animate-spin text-teal-300" />
               Loading records…
             </div>
           ) : items.length ? (
@@ -892,7 +892,7 @@ function ManagementWorkspace({ onDataChanged }) {
                     <button
                       type="button"
                       onClick={() => edit(item)}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[var(--border)] px-2.5 py-2 text-[11px] font-semibold transition hover:border-violet-500/40 hover:text-violet-300 sm:px-3 sm:py-2 sm:text-xs"
+                      className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-[var(--border)] px-2.5 py-2 text-[11px] font-semibold transition hover:border-teal-500/40 hover:text-teal-300 sm:px-3 sm:py-2 sm:text-xs"
                     >
                       <HiPencilSquare />
                       Edit
@@ -936,7 +936,7 @@ function ManagementWorkspace({ onDataChanged }) {
 
             <div className="flex shrink-0 items-start justify-between border-b border-[var(--border)] bg-[var(--card)] px-4 py-4 sm:px-6 sm:py-5">
               <div className="min-w-0 pr-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300 sm:text-xs">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-teal-300 sm:text-xs">
                   {form.id ? "Edit" : "Create"} record
                 </p>
 
@@ -949,7 +949,7 @@ function ManagementWorkspace({ onDataChanged }) {
               <button
                 type="button"
                 onClick={() => setForm(null)}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] transition hover:border-violet-500/40 hover:text-violet-300 sm:h-9 sm:w-9"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] transition hover:border-teal-500/40 hover:text-teal-300 sm:h-9 sm:w-9"
               >
                 <HiXMark className="text-base sm:text-lg" />
               </button>
@@ -967,7 +967,7 @@ function ManagementWorkspace({ onDataChanged }) {
               <button
                 type="button"
                 onClick={() => setForm(null)}
-                className="flex-1 rounded-lg border border-[var(--border)] px-3 py-2.5 text-xs font-semibold transition hover:border-violet-500/40 sm:flex-none sm:rounded-xl sm:px-4 sm:text-sm"
+                className="flex-1 rounded-lg border border-[var(--border)] px-3 py-2.5 text-xs font-semibold transition hover:border-teal-500/40 sm:flex-none sm:rounded-xl sm:px-4 sm:text-sm"
               >
                 Cancel
               </button>
@@ -975,7 +975,7 @@ function ManagementWorkspace({ onDataChanged }) {
               <button
                 type="submit"
                 disabled={saving}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-violet-600 px-3 py-2.5 text-xs font-semibold text-white transition hover:bg-violet-500 disabled:opacity-60 sm:flex-none sm:rounded-xl sm:px-4 sm:text-sm"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-teal-600 px-3 py-2.5 text-xs font-semibold text-white transition hover:bg-teal-500 disabled:opacity-60 sm:flex-none sm:rounded-xl sm:px-4 sm:text-sm"
               >
                 {saving && (
                   <HiArrowPath className="animate-spin" />
@@ -1022,7 +1022,7 @@ function Check({ label, checked, onChange }) {
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="h-4 w-4 shrink-0 rounded accent-violet-500"
+        className="h-4 w-4 shrink-0 rounded accent-teal-500"
       />
 
       <span>{label}</span>
@@ -1056,7 +1056,7 @@ function Record({ type, item }) {
       <>
         <p className="truncate text-sm font-semibold sm:text-base">
           {item.name}{" "}
-          <span className="ml-1 text-[10px] font-medium text-violet-300 sm:text-xs">
+          <span className="ml-1 text-[10px] font-medium text-teal-300 sm:text-xs">
             {item.role}
           </span>
         </p>

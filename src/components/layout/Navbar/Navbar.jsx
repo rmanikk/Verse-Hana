@@ -144,7 +144,7 @@ function Navbar() {
                     text-sm font-medium tracking-wide
                     text-[var(--text-primary)]
                     transition
-                    hover:text-violet-500
+                    hover:text-teal-500
                     xl:text-[15px]
                   "
                 >
@@ -155,7 +155,7 @@ function Navbar() {
                       absolute -bottom-2 left-0
                       h-0.5 w-0
                       rounded-full
-                      bg-violet-500
+                      bg-teal-500
                       transition-all duration-300
                       group-hover:w-full
                     "
@@ -182,8 +182,8 @@ function Navbar() {
                 bg-[var(--surface)]
                 text-[var(--text-primary)]
                 transition duration-300
-                hover:border-violet-500
-                hover:bg-violet-500/10
+                hover:border-teal-500
+                hover:bg-teal-500/10
               "
             >
               {isDark ? (
@@ -207,7 +207,7 @@ function Navbar() {
                         text-sm font-medium
                         text-[var(--text-primary)]
                         transition
-                        hover:text-violet-500
+                        hover:text-teal-500
                       "
                     >
                       Login
@@ -220,16 +220,16 @@ function Navbar() {
                       className="
                         rounded-full
                         bg-gradient-to-r
-                        from-violet-600
+                        from-teal-600
                         via-purple-600
-                        to-fuchsia-600
+                        to-cyan-600
                         px-5 py-2.5
                         text-sm font-semibold
                         text-white
                         transition duration-300
                         hover:scale-105
                         hover:shadow-lg
-                        hover:shadow-violet-500/30
+                        hover:shadow-teal-500/30
                         xl:px-6
                       "
                     >
@@ -254,7 +254,7 @@ function Navbar() {
                     {user.role === "admin" && (
                       <Link
                         to="/admin"
-                        className="text-sm font-semibold text-violet-400 transition hover:text-violet-300"
+                        className="text-sm font-semibold text-teal-400 transition hover:text-teal-300"
                       >
                         Admin
                       </Link>
@@ -296,8 +296,8 @@ function Navbar() {
                 bg-[var(--surface)]
                 text-[var(--text-primary)]
                 transition duration-300
-                hover:border-violet-500
-                hover:bg-violet-500/10
+                hover:border-teal-500
+                hover:bg-teal-500/10
               "
             >
               {isDark ? (
@@ -321,8 +321,8 @@ function Navbar() {
                 bg-[var(--surface)]
                 text-[var(--text-primary)]
                 transition duration-300
-                hover:border-violet-500
-                hover:bg-violet-500/10
+                hover:border-teal-500
+                hover:bg-teal-500/10
               "
             >
               {menuOpen ? (
@@ -375,8 +375,8 @@ function Navbar() {
                       text-sm font-medium
                       text-[var(--text-primary)]
                       transition
-                      hover:bg-violet-500/10
-                      hover:text-violet-500
+                      hover:bg-teal-500/10
+                      hover:text-teal-500
                     "
                   >
                     {item.name}
@@ -406,8 +406,8 @@ function Navbar() {
                         text-sm font-medium
                         text-[var(--text-primary)]
                         transition
-                        hover:border-violet-500
-                        hover:text-violet-500
+                        hover:border-teal-500
+                        hover:text-teal-500
                       "
                     >
                       Login
@@ -420,8 +420,8 @@ function Navbar() {
                         flex-1
                         rounded-xl
                         bg-gradient-to-r
-                        from-violet-600
-                        to-fuchsia-600
+                        from-teal-600
+                        to-cyan-600
                         px-4 py-3
                         text-center
                         text-sm font-semibold
@@ -429,7 +429,7 @@ function Navbar() {
                         transition duration-300
                         hover:scale-[1.02]
                         hover:shadow-lg
-                        hover:shadow-violet-500/20
+                        hover:shadow-teal-500/20
                       "
                     >
                       Sign Up
@@ -466,7 +466,7 @@ function Navbar() {
                       <Link
                         to="/admin"
                         onClick={closeMenu}
-                        className="block w-full rounded-xl border border-violet-500/25 bg-violet-500/10 px-4 py-3 text-center text-sm font-semibold text-violet-300 transition hover:border-violet-500/50 hover:bg-violet-500/15"
+                        className="block w-full rounded-xl border border-teal-500/25 bg-teal-500/10 px-4 py-3 text-center text-sm font-semibold text-teal-300 transition hover:border-teal-500/50 hover:bg-teal-500/15"
                       >
                         Open admin workspace
                       </Link>

@@ -414,8 +414,8 @@ function LikedSongs() {
       }
       className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
         active
-          ? "bg-violet-500/10 text-violet-400"
-          : "text-[var(--text-secondary)] hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+          ? "bg-teal-500/10 text-teal-400"
+          : "text-[var(--text-secondary)] hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
       }`}
     >
       {icon}
@@ -442,13 +442,13 @@ function LikedSongs() {
 
           <div className="flex h-20 items-center gap-3 border-b border-[var(--border)] px-6">
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
               <HiMusicalNote className="text-xl" />
             </div>
 
             <span className="text-xl font-extrabold tracking-tight">
               Verse
-              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 Hana
               </span>
             </span>
@@ -461,7 +461,7 @@ function LikedSongs() {
 
             <Link
               to="/dashboard"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiHome className="text-lg" />
               Home
@@ -469,7 +469,7 @@ function LikedSongs() {
 
             <Link
               to="/discover"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiMagnifyingGlass className="text-lg" />
               Discover
@@ -477,7 +477,7 @@ function LikedSongs() {
 
             <Link
               to="/genres"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiMusicalNote className="text-lg" />
               Genres
@@ -485,14 +485,14 @@ function LikedSongs() {
 
             {/* ACTIVE */}
 
-            <div className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400">
+            <div className="flex w-full items-center gap-3 rounded-xl bg-teal-500/10 px-3 py-3 text-sm font-medium text-teal-400">
               <HiHeart className="text-lg" />
               Liked Songs
             </div>
 
             <Link
               to="/playlists"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiQueueList className="text-lg" />
               Playlists
@@ -500,7 +500,7 @@ function LikedSongs() {
 
             <Link
               to="/recently-played"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiClock className="text-lg" />
               Recently Played
@@ -514,10 +514,10 @@ function LikedSongs() {
 
             <Link
               to="/profile"
-              className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+              className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-teal-500/10"
             >
 
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">
                 {user?.name
                   ?.charAt(0)
                   ?.toUpperCase() ||
@@ -573,7 +573,7 @@ function LikedSongs() {
                   !mobileMenuOpen
                 )
               }
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)] lg:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)] lg:hidden"
               aria-label="Open navigation"
             >
               <HiBars3 className="text-2xl" />
@@ -603,7 +603,7 @@ function LikedSongs() {
 
             <Link
               to="/profile"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white sm:h-10 sm:w-10"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white sm:h-10 sm:w-10"
             >
               {user?.name
                 ?.charAt(0)
@@ -641,13 +641,13 @@ function LikedSongs() {
 
                   <div className="flex items-center gap-3">
 
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
                       <HiMusicalNote className="text-xl" />
                     </div>
 
                     <span className="text-xl font-extrabold tracking-tight">
                       Verse
-                      <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                      <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                         Hana
                       </span>
                     </span>
@@ -737,10 +737,10 @@ function LikedSongs() {
                     onClick={() =>
                       setMobileMenuOpen(false)
                     }
-                    className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+                    className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-teal-500/10"
                   >
 
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">
                       {user?.name
                         ?.charAt(0)
                         ?.toUpperCase() ||
@@ -792,21 +792,21 @@ function LikedSongs() {
                 HIDDEN ON MOBILE/TABLET
             ===================================================== */}
 
-            <section className="relative hidden overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 sm:p-8 lg:block lg:p-10">
+            <section className="relative hidden overflow-hidden rounded-[32px] border border-teal-500/20 bg-gradient-to-br from-teal-600/15 via-[var(--surface)] to-cyan-600/10 p-6 sm:p-8 lg:block lg:p-10">
 
-              <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/20 blur-[100px]" />
+              <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-teal-500/20 blur-[100px]" />
 
-              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[100px]" />
+              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-cyan-500/10 blur-[100px]" />
 
               <div className="relative z-10">
 
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-teal-400">
                   Your favorites
                 </p>
 
                 <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                   Songs you{" "}
-                  <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                     love.
                   </span>
                 </h2>
@@ -820,8 +820,8 @@ function LikedSongs() {
 
                 {!loading &&
                   likedSongs.length > 0 && (
-                    <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">
-                      <HiHeart className="text-violet-400" />
+                    <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-4 py-2 text-sm text-teal-300">
+                      <HiHeart className="text-teal-400" />
                       {likedSongs.length}{" "}
                       {likedSongs.length === 1
                         ? "song"
@@ -843,7 +843,7 @@ function LikedSongs() {
                 <div className="mb-6 flex items-center justify-between lg:hidden">
 
                   <div>
-                    <p className="text-xs uppercase tracking-[0.18em] text-violet-400">
+                    <p className="text-xs uppercase tracking-[0.18em] text-teal-400">
                       Your collection
                     </p>
 
@@ -852,8 +852,8 @@ function LikedSongs() {
                     </h2>
                   </div>
 
-                  <div className="flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1.5 text-xs font-medium text-violet-300">
-                    <HiHeart className="text-violet-400" />
+                  <div className="flex items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1.5 text-xs font-medium text-teal-300">
+                    <HiHeart className="text-teal-400" />
 
                     {likedSongs.length}
                   </div>
@@ -932,8 +932,8 @@ function LikedSongs() {
               likedSongs.length === 0 && (
                 <div className="mt-6 flex min-h-[300px] flex-col items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]/60 px-5 text-center sm:mt-10 sm:min-h-[350px]">
 
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-violet-500/10">
-                    <HiHeart className="text-4xl text-violet-400" />
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-teal-500/10">
+                    <HiHeart className="text-4xl text-teal-400" />
                   </div>
 
                   <h2 className="mt-6 text-xl font-bold sm:text-2xl">
@@ -948,7 +948,7 @@ function LikedSongs() {
 
                   <Link
                     to="/discover"
-                    className="mt-6 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02]"
+                    className="mt-6 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-500/20 transition hover:scale-[1.02]"
                   >
                     Discover music
                   </Link>
@@ -972,7 +972,7 @@ function LikedSongs() {
 
                     <div>
 
-                      <p className="hidden text-xs font-medium uppercase tracking-[0.2em] text-violet-400 sm:block">
+                      <p className="hidden text-xs font-medium uppercase tracking-[0.2em] text-teal-400 sm:block">
                         Collection
                       </p>
 
@@ -1023,15 +1023,15 @@ function LikedSongs() {
                             }
                             className={`group relative flex min-w-0 items-center gap-2.5 overflow-hidden rounded-2xl border p-2.5 transition-all duration-300 sm:gap-4 sm:p-3 ${
                               isCurrent
-                                ? "border-violet-500/40 bg-violet-500/10 shadow-lg shadow-violet-500/5"
-                                : "border-[var(--border)] bg-[var(--surface)]/60 hover:border-violet-500/30 hover:bg-violet-500/5"
+                                ? "border-teal-500/40 bg-teal-500/10 shadow-lg shadow-teal-500/5"
+                                : "border-[var(--border)] bg-[var(--surface)]/60 hover:border-teal-500/30 hover:bg-teal-500/5"
                             }`}
                           >
 
                             {/* CURRENT SONG INDICATOR */}
 
                             {isCurrent && (
-                              <div className="absolute bottom-0 left-0 top-0 w-1 bg-gradient-to-b from-violet-400 to-fuchsia-500" />
+                              <div className="absolute bottom-0 left-0 top-0 w-1 bg-gradient-to-b from-teal-400 to-cyan-500" />
                             )}
 
                             {/* NUMBER */}
@@ -1039,7 +1039,7 @@ function LikedSongs() {
                             <div
                               className={`hidden w-7 shrink-0 text-center text-sm font-medium sm:block ${
                                 isCurrent
-                                  ? "text-violet-400"
+                                  ? "text-teal-400"
                                   : "text-[var(--text-muted)]"
                               }`}
                             >
@@ -1072,8 +1072,8 @@ function LikedSongs() {
                                   }`}
                                 />
                               ) : (
-                                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20">
-                                  <HiMusicalNote className="text-xl text-violet-400" />
+                                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-teal-500/20 to-cyan-500/20">
+                                  <HiMusicalNote className="text-xl text-teal-400" />
                                 </div>
                               )}
 
@@ -1115,7 +1115,7 @@ function LikedSongs() {
                               <h3
                                 className={`truncate text-[13px] font-semibold sm:text-[15px] ${
                                   isCurrent
-                                    ? "text-violet-400"
+                                    ? "text-teal-400"
                                     : "text-[var(--text-primary)]"
                                 }`}
                               >
@@ -1144,7 +1144,7 @@ function LikedSongs() {
                                     song
                                   )
                                 }
-                                className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:h-10 sm:w-10"
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-teal-500/10 hover:text-teal-400 sm:h-10 sm:w-10"
                                 title={
                                   isCurrent &&
                                   isPlaying
@@ -1175,7 +1175,7 @@ function LikedSongs() {
                                     song
                                   )
                                 }
-                                className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:h-10 sm:w-10"
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-teal-500/10 hover:text-teal-400 sm:h-10 sm:w-10"
                                 title="Add to playlist"
                                 aria-label="Add to playlist"
                               >
@@ -1191,7 +1191,7 @@ function LikedSongs() {
                                     song.songId
                                   )
                                 }
-                                className="flex h-8 w-8 items-center justify-center rounded-full text-violet-400 transition hover:bg-red-500/10 hover:text-red-400 sm:h-10 sm:w-10"
+                                className="flex h-8 w-8 items-center justify-center rounded-full text-teal-400 transition hover:bg-red-500/10 hover:text-red-400 sm:h-10 sm:w-10"
                                 title="Unlike"
                                 aria-label="Unlike song"
                               >
@@ -1229,7 +1229,7 @@ function LikedSongs() {
                         className={`shrink-0 rounded-xl border px-3 py-2 text-xs font-medium transition sm:px-4 sm:text-sm ${
                           currentPage === 1
                             ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
-                            : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                            : "border-[var(--border)] text-[var(--text-secondary)] hover:border-teal-500/40 hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
                         }`}
                       >
                         <span className="sm:hidden">
@@ -1256,8 +1256,8 @@ function LikedSongs() {
                             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border text-xs font-semibold transition sm:h-10 sm:w-10 sm:text-sm ${
                               currentPage ===
                               page
-                                ? "border-violet-500 bg-violet-600 text-white shadow-lg shadow-violet-500/20"
-                                : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                                ? "border-teal-500 bg-teal-600 text-white shadow-lg shadow-teal-500/20"
+                                : "border-[var(--border)] text-[var(--text-secondary)] hover:border-teal-500/40 hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
                             }`}
                           >
                             {page}
@@ -1282,7 +1282,7 @@ function LikedSongs() {
                           currentPage ===
                           totalPages
                             ? "cursor-not-allowed border-[var(--border)] text-[var(--text-muted)] opacity-50"
-                            : "border-[var(--border)] text-[var(--text-secondary)] hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                            : "border-[var(--border)] text-[var(--text-secondary)] hover:border-teal-500/40 hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
                         }`}
                       >
                         <span className="sm:hidden">
@@ -1356,7 +1356,7 @@ function LikedSongs() {
 
               <div>
 
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-teal-400">
                   Save music
                 </p>
 
@@ -1406,7 +1406,7 @@ function LikedSongs() {
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <HiMusicalNote className="text-violet-400" />
+                      <HiMusicalNote className="text-teal-400" />
                     </div>
                   )}
 
@@ -1452,7 +1452,7 @@ function LikedSongs() {
                         false
                       )
                     }
-                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-500"
                   >
                     <HiPlus />
                     Create playlist
@@ -1477,10 +1477,10 @@ function LikedSongs() {
                             playlist._id
                           )
                         }
-                        className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 p-3 text-left transition hover:border-violet-500/40 hover:bg-violet-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)]/50 p-3 text-left transition hover:border-teal-500/40 hover:bg-teal-500/10 disabled:cursor-not-allowed disabled:opacity-50"
                       >
 
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
                           <HiQueueList className="text-xl" />
                         </div>
 

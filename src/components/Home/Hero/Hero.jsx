@@ -19,7 +19,7 @@ function Hero() {
             h-[350px]
             w-[350px]
             rounded-full
-            bg-violet-700/20
+            bg-teal-700/20
             blur-[120px]
 
             sm:h-[450px]
@@ -42,7 +42,7 @@ function Hero() {
             h-[320px]
             w-[320px]
             rounded-full
-            bg-fuchsia-600/20
+            bg-cyan-600/20
             blur-[120px]
 
             sm:h-[400px]

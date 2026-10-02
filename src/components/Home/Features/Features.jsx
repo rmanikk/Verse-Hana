@@ -51,7 +51,7 @@ function Features() {
             h-[300px]
             w-[300px]
             rounded-full
-            bg-violet-600/10
+            bg-teal-600/10
             blur-[120px]
 
             sm:h-[400px]
@@ -68,7 +68,7 @@ function Features() {
             h-[300px]
             w-[300px]
             rounded-full
-            bg-fuchsia-600/10
+            bg-cyan-600/10
             blur-[120px]
 
             sm:h-[400px]
@@ -105,13 +105,13 @@ function Features() {
               inline-flex
               rounded-full
               border
-              border-violet-500/30
-              bg-violet-500/10
+              border-teal-500/30
+              bg-teal-500/10
               px-4
               py-2
               text-xs
               font-medium
-              text-violet-500
+              text-teal-500
 
               sm:px-5
               sm:text-sm
@@ -139,8 +139,8 @@ function Features() {
               className="
                 block
                 bg-gradient-to-r
-                from-violet-500
-                via-fuchsia-500
+                from-teal-500
+                via-cyan-500
                 to-pink-500
                 bg-clip-text
                 text-transparent
@@ -210,7 +210,7 @@ function Features() {
                   backdrop-blur-2xl
                   transition
                   duration-300
-                  hover:border-violet-500/30
+                  hover:border-teal-500/30
 
                   sm:p-7
                 "
@@ -225,11 +225,11 @@ function Features() {
                     h-40
                     w-40
                     rounded-full
-                    bg-violet-600/0
+                    bg-teal-600/0
                     blur-[70px]
                     transition
                     duration-500
-                    group-hover:bg-violet-600/20
+                    group-hover:bg-teal-600/20
                   "
                 />
 
@@ -245,14 +245,14 @@ function Features() {
                       justify-center
                       rounded-2xl
                       border
-                      border-violet-500/20
-                      bg-violet-500/10
+                      border-teal-500/20
+                      bg-teal-500/10
                       text-xl
-                      text-violet-500
+                      text-teal-500
                       transition
                       duration-300
                       group-hover:scale-110
-                      group-hover:bg-violet-500/20
+                      group-hover:bg-teal-500/20
 
                       sm:h-14
                       sm:w-14
@@ -271,7 +271,7 @@ function Features() {
                       font-semibold
                       uppercase
                       tracking-[0.15em]
-                      text-violet-500
+                      text-teal-500
 
                       sm:mt-8
                       sm:text-xs
@@ -318,7 +318,7 @@ function Features() {
                       mt-7
                       h-px
                       w-10
-                      bg-violet-500/40
+                      bg-teal-500/40
                       transition-all
                       duration-300
                       group-hover:w-full

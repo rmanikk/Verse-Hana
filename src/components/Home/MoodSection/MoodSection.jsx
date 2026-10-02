@@ -30,7 +30,7 @@ function MoodSection() {
             h-[280px]
             w-[280px]
             rounded-full
-            bg-violet-600/10
+            bg-teal-600/10
             blur-[120px]
 
             sm:h-[350px]
@@ -46,7 +46,7 @@ function MoodSection() {
             h-[280px]
             w-[280px]
             rounded-full
-            bg-fuchsia-600/10
+            bg-cyan-600/10
             blur-[120px]
 
             sm:h-[350px]
@@ -96,13 +96,13 @@ function MoodSection() {
               items-center
               rounded-full
               border
-              border-violet-500/30
-              bg-violet-500/10
+              border-teal-500/30
+              bg-teal-500/10
               px-4
               py-2
               text-xs
               font-medium
-              text-violet-500
+              text-teal-500
 
               sm:px-5
               sm:text-sm
@@ -135,8 +135,8 @@ function MoodSection() {
               className="
                 block
                 bg-gradient-to-r
-                from-violet-500
-                via-fuchsia-500
+                from-teal-500
+                via-cyan-500
                 to-pink-500
                 bg-clip-text
                 text-transparent

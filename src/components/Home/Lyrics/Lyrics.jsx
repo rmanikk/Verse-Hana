@@ -27,7 +27,7 @@ function Lyrics() {
             w-[320px]
             -translate-x-1/2
             rounded-full
-            bg-violet-600/10
+            bg-teal-600/10
             blur-[130px]
 
             sm:top-20
@@ -79,13 +79,13 @@ function Lyrics() {
               inline-flex
               rounded-full
               border
-              border-violet-500/30
-              bg-violet-500/10
+              border-teal-500/30
+              bg-teal-500/10
               px-4
               py-2
               text-xs
               font-medium
-              text-violet-500
+              text-teal-500
 
               sm:px-5
               sm:text-sm
@@ -118,8 +118,8 @@ function Lyrics() {
               className="
                 block
                 bg-gradient-to-r
-                from-violet-500
-                via-fuchsia-500
+                from-teal-500
+                via-cyan-500
                 to-pink-500
                 bg-clip-text
                 text-transparent

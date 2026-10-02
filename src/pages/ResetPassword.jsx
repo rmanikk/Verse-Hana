@@ -573,7 +573,7 @@ export default function ResetPassword() {
               ================================================= */}
 
               <div className="mb-7 text-center">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-violet-500/10 text-violet-400">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-teal-500/10 text-teal-400">
                   <ShieldCheck size={26} />
                 </div>
 
@@ -585,7 +585,7 @@ export default function ResetPassword() {
                   Enter the 6-digit code sent to
                 </p>
 
-                <p className="mt-1 break-all text-sm font-medium text-violet-400">
+                <p className="mt-1 break-all text-sm font-medium text-teal-400">
                   {email || "your email"}
                 </p>
               </div>
@@ -650,7 +650,7 @@ export default function ResetPassword() {
                             event
                           )
                         }
-                        className="h-11 w-9 rounded-xl border border-white/10 bg-white/5 text-center text-base font-bold outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 sm:h-14 sm:w-12 sm:text-lg"
+                        className="h-11 w-9 rounded-xl border border-white/10 bg-white/5 text-center text-base font-bold outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 sm:h-14 sm:w-12 sm:text-lg"
                       />
                     )
                   )}
@@ -671,7 +671,7 @@ export default function ResetPassword() {
                   otp.join("").length !==
                     OTP_LENGTH
                 }
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-3 font-semibold text-white transition hover:bg-teal-500 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? (
                   <>
@@ -706,7 +706,7 @@ export default function ResetPassword() {
                       handleResendOtp
                     }
                     disabled={resending}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-violet-400 transition hover:text-violet-300 disabled:opacity-50"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-teal-400 transition hover:text-teal-300 disabled:opacity-50"
                   >
                     <RefreshCw
                       size={15}
@@ -789,7 +789,7 @@ export default function ResetPassword() {
                         )
                       }
                       placeholder="Enter new password"
-                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm outline-none placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm outline-none placeholder:text-white/30 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
                     />
 
                     <button
@@ -881,7 +881,7 @@ export default function ResetPassword() {
                         )
                       }
                       placeholder="Confirm new password"
-                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm outline-none placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20"
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-12 text-sm outline-none placeholder:text-white/30 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
                     />
 
                     <button
@@ -925,7 +925,7 @@ export default function ResetPassword() {
                     password !==
                       confirmPassword
                   }
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-3 font-semibold text-white transition hover:bg-teal-500 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {loading ? (
                     <>
@@ -951,7 +951,7 @@ export default function ResetPassword() {
           <div className="mt-7 text-center">
             <Link
               to="/login"
-              className="text-sm text-violet-400 transition hover:text-violet-300"
+              className="text-sm text-teal-400 transition hover:text-teal-300"
             >
               Back to login
             </Link>
@@ -973,7 +973,7 @@ function Logo() {
         to="/"
         className="flex items-center gap-3"
       >
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-600">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-600">
           <Music2
             size={23}
             className="text-white"

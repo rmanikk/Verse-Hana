@@ -27,18 +27,18 @@ function HeroLeft() {
           gap-2
           rounded-full
           border
-          border-violet-500/30
-          bg-violet-500/10
+          border-teal-500/30
+          bg-teal-500/10
           px-4
           py-2
           text-xs
           font-medium
-          text-violet-600
+          text-teal-600
 
           sm:px-5
           sm:text-sm
 
-          dark:text-violet-300
+          dark:text-teal-300
         "
       >
         🌸 Emotion-Based Music Discovery
@@ -74,14 +74,14 @@ function HeroLeft() {
           className="
             block
             bg-gradient-to-r
-            from-violet-500
-            via-fuchsia-500
+            from-teal-500
+            via-cyan-500
             to-pink-500
             bg-clip-text
             text-transparent
 
-            dark:from-violet-400
-            dark:via-fuchsia-400
+            dark:from-teal-400
+            dark:via-cyan-400
             dark:to-pink-400
           "
         >
@@ -147,8 +147,8 @@ function HeroLeft() {
             w-full
             rounded-full
             bg-gradient-to-r
-            from-violet-600
-            to-fuchsia-600
+            from-teal-600
+            to-cyan-600
             px-7
             py-3.5
             text-sm
@@ -158,7 +158,7 @@ function HeroLeft() {
             duration-300
             hover:scale-105
             hover:shadow-lg
-            hover:shadow-violet-500/25
+            hover:shadow-teal-500/25
 
             sm:w-auto
             sm:px-8
@@ -186,9 +186,9 @@ function HeroLeft() {
             text-[var(--text-primary)]
             transition
             duration-300
-            hover:border-violet-500
-            hover:bg-violet-500/10
-            hover:text-violet-500
+            hover:border-teal-500
+            hover:bg-teal-500/10
+            hover:text-teal-500
 
             sm:w-auto
             sm:px-8

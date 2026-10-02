@@ -101,18 +101,18 @@ function MoodSelection({
 
         {/* Ambient Background */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[32px]">
-          <div className="absolute left-[-120px] top-[-120px] h-[350px] w-[350px] rounded-full bg-violet-600/15 blur-[130px]" />
+          <div className="absolute left-[-120px] top-[-120px] h-[350px] w-[350px] rounded-full bg-teal-600/15 blur-[130px]" />
 
-          <div className="absolute bottom-[-150px] right-[-120px] h-[350px] w-[350px] rounded-full bg-fuchsia-600/10 blur-[130px]" />
+          <div className="absolute bottom-[-150px] right-[-120px] h-[350px] w-[350px] rounded-full bg-cyan-600/10 blur-[130px]" />
 
-          <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/5 blur-[130px]" />
+          <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500/5 blur-[130px]" />
         </div>
 
         {/* Close */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]/80 text-[var(--text-secondary)] backdrop-blur-md transition hover:bg-violet-500/10 hover:text-white"
+          className="absolute right-5 top-5 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]/80 text-[var(--text-secondary)] backdrop-blur-md transition hover:bg-teal-500/10 hover:text-white"
           aria-label="Close mood selection"
         >
           <HiXMark className="text-xl" />
@@ -124,13 +124,13 @@ function MoodSelection({
           {/* Heading */}
           <div className="mx-auto max-w-2xl text-center">
 
-            <span className="inline-flex rounded-full border border-violet-500/20 bg-violet-500/10 px-4 py-1.5 text-xs font-medium text-violet-400">
+            <span className="inline-flex rounded-full border border-teal-500/20 bg-teal-500/10 px-4 py-1.5 text-xs font-medium text-teal-400">
               🎧 Let's set the vibe
             </span>
 
             <h1 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
               How are you feeling
-              <span className="block bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-teal-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 today?
               </span>
             </h1>
@@ -161,15 +161,15 @@ function MoodSelection({
                     transition-all duration-300
                     ${
                       isSelected
-                        ? "border-violet-500 bg-violet-500/15 shadow-lg shadow-violet-500/10"
-                        : "border-[var(--border)] bg-[var(--surface)]/70 hover:-translate-y-1 hover:border-violet-500/50 hover:bg-violet-500/5"
+                        ? "border-teal-500 bg-teal-500/15 shadow-lg shadow-teal-500/10"
+                        : "border-[var(--border)] bg-[var(--surface)]/70 hover:-translate-y-1 hover:border-teal-500/50 hover:bg-teal-500/5"
                     }
                   `}
                 >
 
                   {/* Selected Indicator */}
                   {isSelected && (
-                    <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-violet-500 text-xs text-white">
+                    <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-teal-500 text-xs text-white">
                       ✓
                     </span>
                   )}
@@ -205,13 +205,13 @@ function MoodSelection({
               className="
                 group flex items-center justify-center gap-2
                 rounded-2xl
-                bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600
+                bg-gradient-to-r from-teal-600 via-purple-600 to-cyan-600
                 px-7 py-3.5
                 text-sm font-semibold text-white
-                shadow-lg shadow-violet-500/20
+                shadow-lg shadow-teal-500/20
                 transition duration-300
                 hover:scale-[1.03]
-                hover:shadow-xl hover:shadow-violet-500/30
+                hover:shadow-xl hover:shadow-teal-500/30
                 disabled:cursor-not-allowed
                 disabled:opacity-40
                 disabled:hover:scale-100

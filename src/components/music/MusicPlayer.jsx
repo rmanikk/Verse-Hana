@@ -64,7 +64,7 @@ function MusicPlayer() {
 
       <div className="absolute left-0 right-0 top-0 h-1 bg-[var(--border)]">
         <div
-          className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all"
+          className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all"
           style={{
             width:
               duration > 0
@@ -100,7 +100,7 @@ function MusicPlayer() {
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-violet-400">
+              <div className="flex h-full w-full items-center justify-center text-teal-400">
                 ♪
               </div>
             )}
@@ -141,7 +141,7 @@ function MusicPlayer() {
           <button
             type="button"
             onClick={previousSong}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             aria-label="Previous song"
           >
             <HiBackward className="text-lg" />
@@ -152,7 +152,7 @@ function MusicPlayer() {
           <button
             type="button"
             onClick={togglePlay}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-500/30 transition hover:scale-105"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-lg shadow-teal-500/30 transition hover:scale-105"
             aria-label={
               isPlaying ? "Pause" : "Play"
             }
@@ -169,7 +169,7 @@ function MusicPlayer() {
           <button
             type="button"
             onClick={nextSong}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             aria-label="Next song"
           >
             <HiForward className="text-lg" />
@@ -193,7 +193,7 @@ function MusicPlayer() {
             max={duration || 0}
             value={progress || 0}
             onChange={handleSeek}
-            className="h-1 w-full cursor-pointer accent-violet-500"
+            className="h-1 w-full cursor-pointer accent-teal-500"
             aria-label="Song progress"
           />
 
@@ -214,7 +214,7 @@ function MusicPlayer() {
             onClick={() =>
               setVolume(volume > 0 ? 0 : 1)
             }
-            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             aria-label={
               volume > 0 ? "Mute" : "Unmute"
             }
@@ -233,7 +233,7 @@ function MusicPlayer() {
             step="0.01"
             value={volume}
             onChange={handleVolume}
-            className="w-20 cursor-pointer accent-violet-500"
+            className="w-20 cursor-pointer accent-teal-500"
             aria-label="Volume"
           />
 
@@ -277,7 +277,7 @@ function MusicPlayer() {
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-violet-400">
+              <div className="flex h-full w-full items-center justify-center text-teal-400">
                 ♪
               </div>
             )}
@@ -327,7 +327,7 @@ function MusicPlayer() {
             <button
               type="button"
               onClick={togglePlay}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-500/30"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-lg shadow-teal-500/30"
               aria-label={
                 isPlaying ? "Pause" : "Play"
               }
@@ -381,7 +381,7 @@ function MusicPlayer() {
             max={duration || 0}
             value={progress || 0}
             onChange={handleSeek}
-            className="h-1 min-w-0 flex-1 cursor-pointer accent-violet-500"
+            className="h-1 min-w-0 flex-1 cursor-pointer accent-teal-500"
             aria-label="Song progress"
           />
 

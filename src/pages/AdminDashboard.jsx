@@ -102,7 +102,7 @@ function UserAvatar({ name, size = "md" }) {
 
   return (
     <div
-      className={`flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 font-bold text-white ${sizeClasses}`}
+      className={`flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 font-bold text-white ${sizeClasses}`}
     >
       {getInitial(name)}
     </div>
@@ -116,7 +116,7 @@ function RoleBadge({ role }) {
     <span
       className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-semibold ${
         isAdmin
-          ? "border-violet-500/25 bg-violet-500/10 text-violet-300"
+          ? "border-teal-500/25 bg-teal-500/10 text-teal-300"
           : "border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)]"
       }`}
     >
@@ -152,14 +152,14 @@ function StatCard({
   label,
   value,
   detail,
-  tone = "violet",
+  tone = "teal",
 }) {
   const tones = {
-    violet:
-      "border-violet-500/20 bg-violet-500/10 text-violet-300",
+    teal:
+  "border-teal-500/20 bg-teal-500/10 text-teal-300",
     sky: "border-sky-500/20 bg-sky-500/10 text-sky-300",
     pink:
-      "border-fuchsia-500/20 bg-fuchsia-500/10 text-fuchsia-300",
+      "border-cyan-500/20 bg-cyan-500/10 text-cyan-300",
     emerald:
       "border-emerald-500/20 bg-emerald-500/10 text-emerald-300",
   };
@@ -201,7 +201,7 @@ function SectionHeading({
     <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
         {eyebrow && (
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-300 sm:text-xs">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-teal-300 sm:text-xs">
             {eyebrow}
           </p>
         )}
@@ -240,7 +240,7 @@ function Pagination({
           type="button"
           onClick={() => onPageChange(pagination.page - 1)}
           disabled={pagination.page === 1 || loading}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] transition hover:border-violet-500/40 hover:text-violet-300 disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] transition hover:border-teal-500/40 hover:text-teal-300 disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9"
           aria-label="Previous page"
         >
           <HiChevronLeft />
@@ -252,7 +252,7 @@ function Pagination({
           disabled={
             pagination.page >= pagination.totalPages || loading
           }
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] transition hover:border-violet-500/40 hover:text-violet-300 disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] transition hover:border-teal-500/40 hover:text-teal-300 disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9"
           aria-label="Next page"
         >
           <HiChevronRight />
@@ -331,7 +331,7 @@ function ActivityItem({ activity }) {
       <div
         className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
           isRoleChange
-            ? "bg-violet-500/10 text-violet-300"
+            ? "bg-teal-500/10 text-teal-300"
             : "bg-amber-500/10 text-amber-300"
         }`}
       >
@@ -348,7 +348,7 @@ function ActivityItem({ activity }) {
             {activity.previousValue}
           </span>{" "}
           to{" "}
-          <span className="font-medium text-violet-300">
+          <span className="font-medium text-teal-300">
             {activity.nextValue}
           </span>
           .
@@ -405,7 +405,7 @@ function ActivityAnalytics({
         <div className="mt-5 h-[260px] sm:mt-6 sm:h-[320px]">
           {loading ? (
             <div className="flex h-full items-center justify-center text-sm text-[var(--text-secondary)]">
-              <HiArrowPath className="mr-2 animate-spin text-violet-300" />
+              <HiArrowPath className="mr-2 animate-spin text-teal-300" />
               Loading analytics…
             </div>
           ) : data.length ? (
@@ -853,7 +853,7 @@ function AdminDashboard() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-4 text-[var(--text-primary)]">
         <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
-          <HiArrowPath className="animate-spin text-lg text-violet-400" />
+          <HiArrowPath className="animate-spin text-lg text-teal-400" />
           Loading the admin workspace…
         </div>
       </main>
@@ -872,7 +872,7 @@ function AdminDashboard() {
           
           {/* BRAND - NOT CLICKABLE */}
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-lg text-white shadow-lg shadow-violet-500/20">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 text-lg text-white shadow-lg shadow-teal-500/20">
               <HiMusicalNote />
             </div>
 
@@ -881,7 +881,7 @@ function AdminDashboard() {
                 VerseHana
               </p>
 
-              <p className="text-xs text-violet-300">
+              <p className="text-xs text-teal-300">
                 Admin console
               </p>
             </div>
@@ -889,7 +889,7 @@ function AdminDashboard() {
 
           <Link
             to="/dashboard"
-            className="mt-8 inline-flex items-center gap-2 text-xs font-medium text-[var(--text-secondary)] transition hover:text-violet-300"
+            className="mt-8 inline-flex items-center gap-2 text-xs font-medium text-[var(--text-secondary)] transition hover:text-teal-300"
           >
             <HiArrowLeft />
             Back to app
@@ -907,8 +907,8 @@ function AdminDashboard() {
                   onClick={() => showView(item.id)}
                   className={`flex items-center gap-3 rounded-xl px-3.5 py-3 text-left text-sm font-semibold transition ${
                     isActive
-                      ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-500/20"
-                      : "text-[var(--text-secondary)] hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                      ? "bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-lg shadow-teal-500/20"
+                      : "text-[var(--text-secondary)] hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
                   }`}
                 >
                   <Icon className="text-lg" />
@@ -945,7 +945,7 @@ function AdminDashboard() {
 
             {/* BRAND - NOT CLICKABLE */}
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/20">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-500/20">
                 <HiMusicalNote />
               </div>
 
@@ -954,7 +954,7 @@ function AdminDashboard() {
                   VerseHana
                 </p>
 
-                <p className="text-[10px] text-violet-300">
+                <p className="text-[10px] text-teal-300">
                   Admin console
                 </p>
               </div>
@@ -965,7 +965,7 @@ function AdminDashboard() {
               onClick={() =>
                 setMobileMenuOpen((current) => !current)
               }
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card)] text-xl transition hover:border-violet-500/40 hover:text-violet-300"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card)] text-xl transition hover:border-teal-500/40 hover:text-teal-300"
               aria-label={
                 mobileMenuOpen
                   ? "Close navigation"
@@ -993,8 +993,8 @@ function AdminDashboard() {
                       onClick={() => showView(item.id)}
                       className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${
                         isActive
-                          ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-500/20"
-                          : "text-[var(--text-secondary)] hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                          ? "bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-lg shadow-teal-500/20"
+                          : "text-[var(--text-secondary)] hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
                       }`}
                     >
                       <Icon className="text-lg" />
@@ -1025,7 +1025,7 @@ function AdminDashboard() {
                 <Link
                   to="/dashboard"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-semibold text-[var(--text-secondary)] hover:bg-violet-500/10 hover:text-violet-300"
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-semibold text-[var(--text-secondary)] hover:bg-teal-500/10 hover:text-teal-300"
                 >
                   <HiArrowLeft />
                   Back
@@ -1044,7 +1044,7 @@ function AdminDashboard() {
           {/* PAGE HEADER */}
           <header className="flex flex-col gap-4 border-b border-[var(--border)] pb-5 sm:flex-row sm:items-start sm:justify-between sm:pb-6">
             <div className="min-w-0">
-              <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-300 sm:text-xs">
+              <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-teal-300 sm:text-xs">
                 <HiShieldCheck className="text-sm" />
                 Secure workspace
               </div>
@@ -1066,7 +1066,7 @@ function AdminDashboard() {
               type="button"
               onClick={refreshWorkspace}
               disabled={loading}
-              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-xs font-semibold transition hover:border-violet-500/40 hover:bg-violet-500/10 disabled:cursor-wait disabled:opacity-60 sm:w-auto sm:text-sm"
+              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-xs font-semibold transition hover:border-teal-500/40 hover:bg-teal-500/10 disabled:cursor-wait disabled:opacity-60 sm:w-auto sm:text-sm"
             >
               <HiArrowPath
                 className={loading ? "animate-spin" : ""}
@@ -1098,12 +1098,12 @@ function AdminDashboard() {
             <div className="space-y-6 pt-6 sm:space-y-8 sm:pt-8">
 
               {/* HERO */}
-              <section className="relative overflow-hidden rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-600/20 via-[var(--card)] to-fuchsia-600/10 p-5 sm:rounded-[28px] sm:p-8">
-                <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-fuchsia-500/15 blur-3xl sm:h-56 sm:w-56" />
+              <section className="relative overflow-hidden rounded-2xl border border-teal-500/20 bg-gradient-to-br from-teal-600/20 via-[var(--card)] to-cyan-600/10 p-5 sm:rounded-[28px] sm:p-8">
+                <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-500/15 blur-3xl sm:h-56 sm:w-56" />
 
                 <div className="relative flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-5">
                   <div className="min-w-0">
-                    <p className="text-xs font-medium text-violet-200 sm:text-sm">
+                    <p className="text-xs font-medium text-teal-200 sm:text-sm">
                       Welcome back, {user?.name || "Admin"}.
                     </p>
 
@@ -1210,7 +1210,7 @@ function AdminDashboard() {
                       <button
                         type="button"
                         onClick={() => showView("engagement")}
-                        className="text-xs font-semibold text-violet-300 transition hover:text-violet-200 sm:text-sm"
+                        className="text-xs font-semibold text-teal-300 transition hover:text-teal-200 sm:text-sm"
                       >
                         View all
                       </button>
@@ -1230,7 +1230,7 @@ function AdminDashboard() {
                               {index + 1}
                             </span>
 
-                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-fuchsia-500/10 text-fuchsia-300 sm:h-10 sm:w-10">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300 sm:h-10 sm:w-10">
                               <HiMusicalNote />
                             </div>
 
@@ -1272,7 +1272,7 @@ function AdminDashboard() {
                       <button
                         type="button"
                         onClick={() => showView("members")}
-                        className="text-xs font-semibold text-violet-300 transition hover:text-violet-200 sm:text-sm"
+                        className="text-xs font-semibold text-teal-300 transition hover:text-teal-200 sm:text-sm"
                       >
                         Review
                       </button>
@@ -1323,7 +1323,7 @@ function AdminDashboard() {
                     <button
                       type="button"
                       onClick={() => showView("activity")}
-                      className="text-xs font-semibold text-violet-300 transition hover:text-violet-200 sm:text-sm"
+                      className="text-xs font-semibold text-teal-300 transition hover:text-teal-200 sm:text-sm"
                     >
                       Open activity log
                     </button>
@@ -1378,7 +1378,7 @@ function AdminDashboard() {
                         }))
                       }
                       placeholder="Search name or email"
-                      className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] py-2.5 pl-10 pr-3 text-xs outline-none transition placeholder:text-[var(--text-muted)] focus:border-violet-500 focus:ring-2 focus:ring-violet-500/10 sm:text-sm"
+                      className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] py-2.5 pl-10 pr-3 text-xs outline-none transition placeholder:text-[var(--text-muted)] focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10 sm:text-sm"
                     />
                   </div>
 
@@ -1390,7 +1390,7 @@ function AdminDashboard() {
                         role: event.target.value,
                       }))
                     }
-                    className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-xs outline-none focus:border-violet-500 sm:text-sm"
+                    className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-xs outline-none focus:border-teal-500 sm:text-sm"
                   >
                     <option value="">All roles</option>
                     <option value="admin">Admins</option>
@@ -1405,7 +1405,7 @@ function AdminDashboard() {
                         status: event.target.value,
                       }))
                     }
-                    className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-xs outline-none focus:border-violet-500 sm:text-sm"
+                    className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-xs outline-none focus:border-teal-500 sm:text-sm"
                   >
                     <option value="">All statuses</option>
                     <option value="active">Active</option>
@@ -1415,7 +1415,7 @@ function AdminDashboard() {
                   <button
                     type="submit"
                     disabled={loadingMembers}
-                    className="rounded-xl bg-violet-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-violet-500 disabled:cursor-wait disabled:opacity-60 sm:text-sm"
+                    className="rounded-xl bg-teal-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-teal-500 disabled:cursor-wait disabled:opacity-60 sm:text-sm"
                   >
                     Apply
                   </button>
@@ -1424,7 +1424,7 @@ function AdminDashboard() {
                     type="button"
                     onClick={resetMemberFilters}
                     disabled={loadingMembers}
-                    className="rounded-xl border border-[var(--border)] px-4 py-2.5 text-xs font-semibold text-[var(--text-secondary)] transition hover:border-violet-500/40 hover:text-violet-300 disabled:opacity-60 sm:text-sm"
+                    className="rounded-xl border border-[var(--border)] px-4 py-2.5 text-xs font-semibold text-[var(--text-secondary)] transition hover:border-teal-500/40 hover:text-teal-300 disabled:opacity-60 sm:text-sm"
                   >
                     Reset
                   </button>
@@ -1439,7 +1439,7 @@ function AdminDashboard() {
                   </p>
 
                   {loadingMembers && (
-                    <span className="inline-flex items-center gap-2 text-[11px] text-violet-300 sm:text-xs">
+                    <span className="inline-flex items-center gap-2 text-[11px] text-teal-300 sm:text-xs">
                       <HiArrowPath className="animate-spin" />
                       Updating
                     </span>
@@ -1485,7 +1485,7 @@ function AdminDashboard() {
                           return (
                             <tr
                               key={member._id}
-                              className="transition hover:bg-violet-500/[0.03]"
+                              className="transition hover:bg-teal-500/[0.03]"
                             >
                               <td className="px-5 py-4">
                                 <div className="flex items-center gap-3">
@@ -1500,7 +1500,7 @@ function AdminDashboard() {
                                       </p>
 
                                       {isCurrentUser && (
-                                        <span className="text-xs text-violet-300">
+                                        <span className="text-xs text-teal-300">
                                           You
                                         </span>
                                       )}
@@ -1545,7 +1545,7 @@ function AdminDashboard() {
                                         changingRole ||
                                         changingStatus
                                       }
-                                      className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2.5 py-2 text-xs font-semibold outline-none focus:border-violet-500 disabled:cursor-wait disabled:opacity-60"
+                                      className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2.5 py-2 text-xs font-semibold outline-none focus:border-teal-500 disabled:cursor-wait disabled:opacity-60"
                                     >
                                       <option value="user">
                                         Member
@@ -1568,7 +1568,7 @@ function AdminDashboard() {
                                         changingRole ||
                                         changingStatus
                                       }
-                                      className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2.5 py-2 text-xs font-semibold outline-none focus:border-violet-500 disabled:cursor-wait disabled:opacity-60"
+                                      className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-2.5 py-2 text-xs font-semibold outline-none focus:border-teal-500 disabled:cursor-wait disabled:opacity-60"
                                     >
                                       <option value="active">
                                         Active
@@ -1659,11 +1659,11 @@ function AdminDashboard() {
                           key={track._id}
                           className="flex items-center gap-3 rounded-2xl border border-[var(--border)] p-3 sm:gap-4 sm:p-4"
                         >
-                          <span className="w-5 text-xs font-bold text-violet-300 sm:text-sm">
+                          <span className="w-5 text-xs font-bold text-teal-300 sm:text-sm">
                             {index + 1}
                           </span>
 
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 text-violet-300 sm:h-10 sm:w-10">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/10 text-teal-300 sm:h-10 sm:w-10">
                             <HiMusicalNote />
                           </div>
 
@@ -1677,12 +1677,12 @@ function AdminDashboard() {
                             </p>
                           </div>
 
-                          <div className="rounded-xl bg-fuchsia-500/10 px-2.5 py-1.5 text-right sm:px-3 sm:py-2">
-                            <p className="text-xs font-bold text-fuchsia-200 sm:text-sm">
+                          <div className="rounded-xl bg-cyan-500/10 px-2.5 py-1.5 text-right sm:px-3 sm:py-2">
+                            <p className="text-xs font-bold text-cyan-200 sm:text-sm">
                               {formatNumber(track.likes)}
                             </p>
 
-                            <p className="text-[10px] text-fuchsia-300">
+                            <p className="text-[10px] text-cyan-300">
                               saves
                             </p>
                           </div>
@@ -1786,7 +1786,7 @@ function AdminDashboard() {
                 <div className="divide-y divide-[var(--border)] px-4 sm:px-5">
                   {loadingActivity ? (
                     <div className="flex items-center gap-3 py-10 text-sm text-[var(--text-secondary)]">
-                      <HiArrowPath className="animate-spin text-violet-300" />
+                      <HiArrowPath className="animate-spin text-teal-300" />
                       Loading activity…
                     </div>
                   ) : activity.length ? (

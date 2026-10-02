@@ -44,11 +44,11 @@ function MoodPills() {
             duration-300
 
             hover:-translate-y-1
-            hover:border-violet-500/50
-            hover:bg-violet-500/10
-            hover:text-violet-500
+            hover:border-teal-500/50
+            hover:bg-teal-500/10
+            hover:text-teal-500
             hover:shadow-lg
-            hover:shadow-violet-500/10
+            hover:shadow-teal-500/10
 
             sm:px-4
             sm:py-2

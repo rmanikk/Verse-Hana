@@ -31,7 +31,7 @@ function CTA() {
             -translate-x-1/2
             -translate-y-1/2
             rounded-full
-            bg-violet-600/10
+            bg-teal-600/10
             blur-[140px]
 
             sm:h-[500px]
@@ -48,7 +48,7 @@ function CTA() {
             h-32
             w-32
             rounded-full
-            bg-fuchsia-500/10
+            bg-cyan-500/10
             blur-[80px]
 
             sm:h-40
@@ -137,7 +137,7 @@ function CTA() {
               w-[300px]
               -translate-x-1/2
               rounded-full
-              bg-violet-600/15
+              bg-teal-600/15
               blur-[100px]
 
               sm:h-[400px]
@@ -168,13 +168,13 @@ function CTA() {
                 gap-2
                 rounded-full
                 border
-                border-violet-500/30
-                bg-violet-500/10
+                border-teal-500/30
+                bg-teal-500/10
                 px-4
                 py-2
                 text-xs
                 font-medium
-                text-violet-500
+                text-teal-500
 
                 sm:px-5
                 sm:text-sm
@@ -213,8 +213,8 @@ function CTA() {
                 className="
                   block
                   bg-gradient-to-r
-                  from-violet-400
-                  via-fuchsia-400
+                  from-teal-400
+                  via-cyan-400
                   to-pink-400
                   bg-clip-text
                   text-transparent
@@ -272,21 +272,21 @@ function CTA() {
                   gap-3
                   rounded-full
                   bg-gradient-to-r
-                  from-violet-600
+                  from-teal-600
                   via-purple-600
-                  to-fuchsia-600
+                  to-cyan-600
                   px-7
                   py-3.5
                   font-semibold
                   text-white
                   shadow-lg
-                  shadow-violet-500/20
+                  shadow-teal-500/20
                   transition
                   duration-300
 
                   hover:scale-105
                   hover:shadow-xl
-                  hover:shadow-violet-500/30
+                  hover:shadow-teal-500/30
 
                   sm:w-auto
                   sm:px-8
@@ -320,8 +320,8 @@ function CTA() {
                   transition
                   duration-300
 
-                  hover:border-violet-500/40
-                  hover:bg-violet-500/10
+                  hover:border-teal-500/40
+                  hover:bg-teal-500/10
 
                   sm:w-auto
                   sm:px-8

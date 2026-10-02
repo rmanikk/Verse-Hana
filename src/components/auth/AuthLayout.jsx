@@ -6,9 +6,9 @@ function AuthLayout({ children, title, subtitle }) {
     <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
       {/* Background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute left-[-150px] top-[-150px] h-[400px] w-[400px] rounded-full bg-violet-600/15 blur-[150px]" />
+        <div className="absolute left-[-150px] top-[-150px] h-[400px] w-[400px] rounded-full bg-teal-600/15 blur-[150px]" />
 
-        <div className="absolute bottom-[-150px] right-[-150px] h-[400px] w-[400px] rounded-full bg-fuchsia-600/10 blur-[150px]" />
+        <div className="absolute bottom-[-150px] right-[-150px] h-[400px] w-[400px] rounded-full bg-cyan-600/10 blur-[150px]" />
 
         <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-600/5 blur-[130px]" />
       </div>
@@ -23,13 +23,13 @@ function AuthLayout({ children, title, subtitle }) {
               to="/"
               className="inline-flex items-center gap-2"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-600 to-cyan-600 text-white">
                 <HiMusicalNote className="text-xl" />
               </div>
 
               <span className="text-2xl font-extrabold tracking-tight">
                 Verse
-                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                   Hana
                 </span>
               </span>
@@ -60,7 +60,7 @@ function AuthLayout({ children, title, subtitle }) {
           <div className="mt-6 text-center">
             <Link
               to="/"
-              className="text-sm text-[var(--text-muted)] transition hover:text-violet-400"
+              className="text-sm text-[var(--text-muted)] transition hover:text-teal-400"
             >
               ← Back to VerseHana
             </Link>

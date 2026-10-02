@@ -29,7 +29,7 @@ function Footer() {
             w-[350px]
             -translate-x-1/2
             rounded-full
-            bg-violet-600/10
+            bg-teal-600/10
             blur-[130px]
 
             sm:bottom-[-250px]
@@ -110,8 +110,8 @@ function Footer() {
                 <span
                   className="
                     bg-gradient-to-r
-                    from-violet-400
-                    to-fuchsia-400
+                    from-teal-400
+                    to-cyan-400
                     bg-clip-text
                     text-transparent
                   "
@@ -178,9 +178,9 @@ function Footer() {
                   transition-all
                   duration-300
 
-                  hover:border-violet-500/40
-                  hover:bg-violet-500/10
-                  hover:text-violet-400
+                  hover:border-teal-500/40
+                  hover:bg-teal-500/10
+                  hover:text-teal-400
 
                   sm:h-11
                   sm:w-11
@@ -208,9 +208,9 @@ function Footer() {
                   transition-all
                   duration-300
 
-                  hover:border-violet-500/40
-                  hover:bg-violet-500/10
-                  hover:text-violet-400
+                  hover:border-teal-500/40
+                  hover:bg-teal-500/10
+                  hover:text-teal-400
 
                   sm:h-11
                   sm:w-11
@@ -238,9 +238,9 @@ function Footer() {
                   transition-all
                   duration-300
 
-                  hover:border-violet-500/40
-                  hover:bg-violet-500/10
-                  hover:text-violet-400
+                  hover:border-teal-500/40
+                  hover:bg-teal-500/10
+                  hover:text-teal-400
 
                   sm:h-11
                   sm:w-11
@@ -268,9 +268,9 @@ function Footer() {
                   transition-all
                   duration-300
 
-                  hover:border-violet-500/40
-                  hover:bg-violet-500/10
-                  hover:text-violet-400
+                  hover:border-teal-500/40
+                  hover:bg-teal-500/10
+                  hover:text-teal-400
 
                   sm:h-11
                   sm:w-11
@@ -341,7 +341,7 @@ function Footer() {
               className="
                 mx-1
                 shrink-0
-                text-violet-500
+                text-teal-500
               "
             />
 
@@ -370,7 +370,7 @@ function Footer() {
               transition-colors
               duration-300
 
-              hover:text-violet-400
+              hover:text-teal-400
             "
           >
             Back to top

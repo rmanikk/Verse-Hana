@@ -37,7 +37,7 @@ function MusicCard({ playlist }) {
         duration-300
 
         hover:shadow-2xl
-        hover:shadow-violet-500/10
+        hover:shadow-teal-500/10
       "
     >
       {/* Album Cover / Visual Area */}
@@ -101,7 +101,7 @@ function MusicCard({ playlist }) {
             items-center
             justify-center
             rounded-full
-            bg-violet-600
+            bg-teal-600
             text-white
             shadow-2xl
             opacity-0
@@ -142,8 +142,8 @@ function MusicCard({ playlist }) {
             transition-all
             duration-300
 
-            hover:border-violet-500
-            hover:bg-violet-600
+            hover:border-teal-500
+            hover:bg-teal-600
 
             sm:right-4
             sm:top-4
@@ -162,7 +162,7 @@ function MusicCard({ playlist }) {
             bottom-3
             left-3
             rounded-full
-            bg-violet-600/90
+            bg-teal-600/90
             px-3
             py-1.5
             text-xs

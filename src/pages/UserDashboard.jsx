@@ -593,13 +593,13 @@ function UserDashboard() {
 
         <div className="flex min-w-0 items-center gap-3">
 
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/10">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400 ring-1 ring-teal-500/10">
             <HiMusicalNote className="text-xl" />
           </div>
 
           <span className="truncate text-xl font-extrabold tracking-tight">
             Verse
-            <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
               Hana
             </span>
           </span>
@@ -644,8 +644,8 @@ function UserDashboard() {
                 transition-all duration-200
                 ${
                   active
-                    ? "bg-violet-500/10 text-violet-400 shadow-sm shadow-violet-500/5"
-                    : "text-[var(--text-secondary)] hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                    ? "bg-teal-500/10 text-teal-400 shadow-sm shadow-teal-500/5"
+                    : "text-[var(--text-secondary)] hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
                 }
               `}
             >
@@ -678,10 +678,10 @@ function UserDashboard() {
               ? closeMobileMenu
               : undefined
           }
-          className="mb-3 flex min-w-0 items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+          className="mb-3 flex min-w-0 items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-teal-500/10"
         >
 
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white shadow-lg shadow-violet-500/10">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white shadow-lg shadow-teal-500/10">
             {user?.name
               ?.charAt(0)
               ?.toUpperCase() || "U"}
@@ -711,7 +711,7 @@ function UserDashboard() {
                 ? closeMobileMenu
                 : undefined
             }
-            className="mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-violet-400 transition hover:bg-violet-500/10"
+            className="mb-2 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-teal-400 transition hover:bg-teal-500/10"
           >
             <HiShieldCheck className="text-lg" />
             Admin Panel
@@ -807,7 +807,7 @@ function UserDashboard() {
                 onClick={() =>
                   setMobileMenuOpen(true)
                 }
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-violet-500/30 hover:bg-violet-500/10 hover:text-violet-400 lg:hidden"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] transition hover:border-teal-500/30 hover:bg-teal-500/10 hover:text-teal-400 lg:hidden"
                 aria-label="Open menu"
               >
                 <HiBars3 className="text-xl" />
@@ -831,7 +831,7 @@ function UserDashboard() {
 
             <Link
               to="/profile"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white shadow-lg shadow-violet-500/10 ring-2 ring-violet-500/10 transition hover:scale-105"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white shadow-lg shadow-teal-500/10 ring-2 ring-teal-500/10 transition hover:scale-105"
               aria-label="Profile"
             >
               {user?.name
@@ -849,11 +849,11 @@ function UserDashboard() {
                 MOOD HERO
             ===================================================== */}
 
-            <section className="relative overflow-hidden rounded-[28px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-5 shadow-xl shadow-violet-950/5 sm:rounded-[32px] sm:p-8 lg:p-10">
+            <section className="relative overflow-hidden rounded-[28px] border border-teal-500/20 bg-gradient-to-br from-teal-600/15 via-[var(--surface)] to-cyan-600/10 p-5 shadow-xl shadow-teal-950/5 sm:rounded-[32px] sm:p-8 lg:p-10">
 
-              <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-violet-500/15 blur-[90px] sm:h-64 sm:w-64" />
+              <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-teal-500/15 blur-[90px] sm:h-64 sm:w-64" />
 
-              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-fuchsia-500/10 blur-[90px] sm:h-64 sm:w-64" />
+              <div className="pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-cyan-500/10 blur-[90px] sm:h-64 sm:w-64" />
 
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(139,92,246,0.08),transparent_35%)]" />
 
@@ -863,7 +863,7 @@ function UserDashboard() {
 
                 <div className="flex flex-wrap items-center gap-2">
 
-                  <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                  <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-400 sm:text-xs">
                     Your vibe
                   </span>
 
@@ -880,7 +880,7 @@ function UserDashboard() {
 
                 <h2 className="mt-4 max-w-3xl text-2xl font-bold leading-tight tracking-tight sm:mt-5 sm:text-4xl lg:text-5xl">
                   Music for your{" "}
-                  <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                     {currentMood.name.toLowerCase()}
                   </span>{" "}
                   mood.
@@ -899,7 +899,7 @@ function UserDashboard() {
                   onClick={() =>
                     setShowMoodSelection(true)
                   }
-                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.01] hover:shadow-violet-500/30 sm:mt-7 sm:w-auto"
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-500/20 transition hover:scale-[1.01] hover:shadow-teal-500/30 sm:mt-7 sm:w-auto"
                 >
                   Change my mood
                   <HiArrowRightOnRectangle className="rotate-180" />
@@ -919,7 +919,7 @@ function UserDashboard() {
 
                 <div className="min-w-0">
 
-                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-400 sm:text-xs">
                     Curated for you
                   </p>
 
@@ -931,7 +931,7 @@ function UserDashboard() {
 
                 <Link
                   to="/discover"
-                  className="group inline-flex w-fit items-center gap-2 text-xs font-medium text-violet-400 transition hover:text-violet-300 sm:text-sm"
+                  className="group inline-flex w-fit items-center gap-2 text-xs font-medium text-teal-400 transition hover:text-teal-300 sm:text-sm"
                 >
                   <span>
                     View more songs for{" "}
@@ -1032,7 +1032,7 @@ function UserDashboard() {
 
                 <div className="min-w-0">
 
-                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                  <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-400 sm:text-xs">
                     Your history
                   </p>
 
@@ -1045,7 +1045,7 @@ function UserDashboard() {
                 {recentSongs.length > 0 && (
                   <Link
                     to="/recently-played"
-                    className="shrink-0 text-xs text-violet-400 transition hover:text-violet-300 sm:text-sm"
+                    className="shrink-0 text-xs text-teal-400 transition hover:text-teal-300 sm:text-sm"
                   >
                     View all
                   </Link>
@@ -1094,7 +1094,7 @@ function UserDashboard() {
                   <button
                     type="button"
                     onClick={fetchRecentSongs}
-                    className="mt-4 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-500"
+                    className="mt-4 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-500"
                   >
                     Try again
                   </button>
@@ -1159,8 +1159,8 @@ function UserDashboard() {
                               sm:gap-4 sm:p-3
                               ${
                                 isCurrent
-                                  ? "border-violet-500/30 bg-violet-500/5"
-                                  : "border-[var(--border)] hover:border-violet-500/30 hover:bg-violet-500/5"
+                                  ? "border-teal-500/30 bg-teal-500/5"
+                                  : "border-[var(--border)] hover:border-teal-500/30 hover:bg-teal-500/5"
                               }
                             `}
                           >
@@ -1170,7 +1170,7 @@ function UserDashboard() {
                             <div className="hidden w-6 shrink-0 text-center text-sm text-[var(--text-muted)] sm:block">
 
                               {isCurrent && isPlaying ? (
-                                <span className="text-violet-400">
+                                <span className="text-teal-400">
                                   ♪
                                 </span>
                               ) : (
@@ -1190,7 +1190,7 @@ function UserDashboard() {
                                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                                 />
                               ) : (
-                                <div className="flex h-full w-full items-center justify-center text-violet-400">
+                                <div className="flex h-full w-full items-center justify-center text-teal-400">
                                   <HiMusicalNote className="text-xl" />
                                 </div>
                               )}
@@ -1228,7 +1228,7 @@ function UserDashboard() {
                                   sm:text-sm
                                   ${
                                     isCurrent
-                                      ? "text-violet-400"
+                                      ? "text-teal-400"
                                       : ""
                                   }
                                 `}
@@ -1260,8 +1260,8 @@ function UserDashboard() {
                                 sm:h-10 sm:w-10
                                 ${
                                   songIsLiked
-                                    ? "bg-violet-500/10 text-violet-400"
-                                    : "text-[var(--text-muted)] hover:bg-violet-500/10 hover:text-violet-400"
+                                    ? "bg-teal-500/10 text-teal-400"
+                                    : "text-[var(--text-muted)] hover:bg-teal-500/10 hover:text-teal-400"
                                 }
                                 ${
                                   isLiking
@@ -1306,7 +1306,7 @@ function UserDashboard() {
 
                                 fetchPlaylists();
                               }}
-                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:h-10 sm:w-10"
+                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--text-muted)] transition hover:bg-teal-500/10 hover:text-teal-400 sm:h-10 sm:w-10"
                               aria-label="Add to playlist"
                               title="Add to playlist"
                             >
@@ -1320,7 +1320,7 @@ function UserDashboard() {
                               onClick={() =>
                                 handlePlayHistorySong(song)
                               }
-                              className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-violet-400 sm:flex"
+                              className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-teal-400 sm:flex"
                               aria-label={
                                 isCurrent &&
                                 isPlaying
@@ -1378,7 +1378,7 @@ function UserDashboard() {
 
               <div className="min-w-0">
 
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-violet-400 sm:text-xs">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-teal-400 sm:text-xs">
                   Add song
                 </p>
 
@@ -1413,7 +1413,7 @@ function UserDashboard() {
               {loadingPlaylists ? (
                 <div className="py-10 text-center">
 
-                  <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-violet-500/30 border-t-violet-500" />
+                  <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-teal-500/30 border-t-teal-500" />
 
                   <p className="mt-3 text-sm text-[var(--text-secondary)]">
                     Loading playlists...
@@ -1424,7 +1424,7 @@ function UserDashboard() {
 
                 <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 text-center sm:p-6">
 
-                  <HiQueueList className="mx-auto text-3xl text-violet-400" />
+                  <HiQueueList className="mx-auto text-3xl text-teal-400" />
 
                   <p className="mt-3 text-sm font-medium">
                     No playlists yet
@@ -1439,7 +1439,7 @@ function UserDashboard() {
                     onClick={() =>
                       setPlaylistModalSong(null)
                     }
-                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-500"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-500"
                   >
                     <HiPlus />
                     Create Playlist
@@ -1476,10 +1476,10 @@ function UserDashboard() {
                             playlistModalSong
                           )
                         }
-                        className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3 text-left transition hover:border-violet-500/40 hover:bg-violet-500/10 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-4"
+                        className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3 text-left transition hover:border-teal-500/40 hover:bg-teal-500/10 disabled:cursor-not-allowed disabled:opacity-60 sm:gap-4"
                       >
 
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 sm:h-12 sm:w-12">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-teal-500/20 to-cyan-500/20 sm:h-12 sm:w-12">
 
                           {playlist.songs?.[0]?.artwork ? (
                             <img
@@ -1490,7 +1490,7 @@ function UserDashboard() {
                               className="h-full w-full object-cover"
                             />
                           ) : (
-                            <HiMusicalNote className="text-xl text-violet-400" />
+                            <HiMusicalNote className="text-xl text-teal-400" />
                           )}
 
                         </div>
@@ -1511,7 +1511,7 @@ function UserDashboard() {
                         </div>
 
                         {alreadyInPlaylist ? (
-                          <span className="shrink-0 text-xs font-medium text-violet-400">
+                          <span className="shrink-0 text-xs font-medium text-teal-400">
                             Added
                           </span>
                         ) : addingToPlaylist ===
@@ -1600,7 +1600,7 @@ function SongCard({
           ARTWORK
       ===================================================== */}
 
-      <div className="relative aspect-square overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-sm transition duration-300 group-hover:border-violet-500/20 group-hover:shadow-lg group-hover:shadow-violet-950/10 sm:rounded-2xl">
+      <div className="relative aspect-square overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-sm transition duration-300 group-hover:border-teal-500/20 group-hover:shadow-lg group-hover:shadow-teal-950/10 sm:rounded-2xl">
 
         {artwork ? (
           <img
@@ -1617,8 +1617,8 @@ function SongCard({
             `}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20">
-            <HiMusicalNote className="text-4xl text-violet-400 sm:text-5xl" />
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-teal-500/20 to-cyan-500/20">
+            <HiMusicalNote className="text-4xl text-teal-400 sm:text-5xl" />
           </div>
         )}
 
@@ -1665,8 +1665,8 @@ function SongCard({
 
               ${
                 isLiked
-                  ? "bg-violet-600 text-white opacity-100"
-                  : "bg-black/60 text-white opacity-100 hover:bg-violet-600"
+                  ? "bg-teal-600 text-white opacity-100"
+                  : "bg-black/60 text-white opacity-100 hover:bg-teal-600"
               }
 
               sm:opacity-0
@@ -1718,7 +1718,7 @@ function SongCard({
               opacity-100
               backdrop-blur-md
               transition-all duration-200
-              hover:bg-violet-600
+              hover:bg-teal-600
               sm:h-10
               sm:w-10
               sm:opacity-0
@@ -1743,8 +1743,8 @@ function SongCard({
           className={`
             absolute bottom-2.5 right-2.5
             flex h-10 w-10 items-center justify-center
-            rounded-full bg-violet-600 text-white
-            shadow-lg shadow-violet-500/30
+            rounded-full bg-teal-600 text-white
+            shadow-lg shadow-teal-500/30
             transition-all duration-300
             hover:scale-105
             sm:bottom-3 sm:right-3
@@ -1775,7 +1775,7 @@ function SongCard({
         {isCurrentSong && isPlaying && (
           <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 backdrop-blur sm:bottom-3 sm:left-3 sm:px-2.5 sm:py-1.5">
 
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-400" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-400" />
 
             <span className="hidden text-[10px] font-medium text-white min-[420px]:inline">
               Playing

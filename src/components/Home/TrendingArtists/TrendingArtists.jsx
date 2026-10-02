@@ -29,7 +29,7 @@ function TrendingArtists() {
             h-[280px]
             w-[280px]
             rounded-full
-            bg-fuchsia-600/10
+            bg-cyan-600/10
             blur-[120px]
 
             sm:left-[-180px]
@@ -47,7 +47,7 @@ function TrendingArtists() {
             h-[280px]
             w-[280px]
             rounded-full
-            bg-violet-600/10
+            bg-teal-600/10
             blur-[120px]
 
             sm:right-[-180px]
@@ -113,13 +113,13 @@ function TrendingArtists() {
                 inline-flex
                 rounded-full
                 border
-                border-fuchsia-500/30
-                bg-fuchsia-500/10
+                border-cyan-500/30
+                bg-cyan-500/10
                 px-4
                 py-2
                 text-xs
                 font-medium
-                text-fuchsia-500
+                text-cyan-500
 
                 sm:px-5
                 sm:text-sm
@@ -150,8 +150,8 @@ function TrendingArtists() {
                 className="
                   block
                   bg-gradient-to-r
-                  from-fuchsia-500
-                  via-violet-500
+                  from-cyan-500
+                  via-teal-500
                   to-pink-500
                   bg-clip-text
                   text-transparent
@@ -206,9 +206,9 @@ function TrendingArtists() {
               transition-all
               duration-300
 
-              hover:border-violet-500
-              hover:bg-violet-500/10
-              hover:text-violet-500
+              hover:border-teal-500
+              hover:bg-teal-500/10
+              hover:text-teal-500
 
               sm:px-6
             "

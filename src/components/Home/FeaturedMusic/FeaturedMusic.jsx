@@ -35,7 +35,7 @@ function FeaturedMusic() {
             h-[280px]
             w-[280px]
             rounded-full
-            bg-violet-600/10
+            bg-teal-600/10
             blur-[120px]
 
             sm:left-20
@@ -52,7 +52,7 @@ function FeaturedMusic() {
             h-[280px]
             w-[280px]
             rounded-full
-            bg-fuchsia-600/10
+            bg-cyan-600/10
             blur-[120px]
 
             sm:right-20
@@ -107,13 +107,13 @@ function FeaturedMusic() {
                 inline-flex
                 rounded-full
                 border
-                border-violet-500/30
-                bg-violet-500/10
+                border-teal-500/30
+                bg-teal-500/10
                 px-4
                 py-2
                 text-xs
                 font-medium
-                text-violet-500
+                text-teal-500
 
                 sm:px-5
                 sm:text-sm
@@ -146,8 +146,8 @@ function FeaturedMusic() {
                 className="
                   block
                   bg-gradient-to-r
-                  from-violet-500
-                  via-fuchsia-500
+                  from-teal-500
+                  via-cyan-500
                   to-pink-500
                   bg-clip-text
                   text-transparent
@@ -204,9 +204,9 @@ function FeaturedMusic() {
               transition-all
               duration-300
 
-              hover:border-violet-500
-              hover:bg-violet-500/10
-              hover:text-violet-500
+              hover:border-teal-500
+              hover:bg-teal-500/10
+              hover:text-teal-500
 
               sm:px-6
             "

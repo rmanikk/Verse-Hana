@@ -302,13 +302,13 @@ function PlaylistDetails() {
           <aside className="hidden w-64 shrink-0 border-r border-[var(--border)] bg-[var(--surface)]/60 lg:flex lg:flex-col">
 
             <div className="flex h-20 items-center gap-3 border-b border-[var(--border)] px-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
                 <HiMusicalNote className="text-xl" />
               </div>
 
               <span className="text-xl font-extrabold tracking-tight">
                 Verse
-                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                   Hana
                 </span>
               </span>
@@ -318,7 +318,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/dashboard"
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
               >
                 <HiHome className="text-lg" />
                 Home
@@ -326,7 +326,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/discover"
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
               >
                 <HiMagnifyingGlass className="text-lg" />
                 Discover
@@ -334,7 +334,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/genres"
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
               >
                 <HiMusicalNote className="text-lg" />
                 Genres
@@ -342,7 +342,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/liked-songs"
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
               >
                 <HiHeart className="text-lg" />
                 Liked Songs
@@ -350,7 +350,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/playlists"
-                className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400"
+                className="flex w-full items-center gap-3 rounded-xl bg-teal-500/10 px-3 py-3 text-sm font-medium text-teal-400"
               >
                 <HiQueueList className="text-lg" />
                 Playlists
@@ -358,7 +358,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/recently-played"
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
               >
                 <HiClock className="text-lg" />
                 Recently Played
@@ -370,9 +370,9 @@ function PlaylistDetails() {
 
               <Link
                 to="/profile"
-                className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+                className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-teal-500/10"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">
                   {user?.name?.charAt(0)?.toUpperCase() ||
                     "U"}
                 </div>
@@ -455,13 +455,13 @@ function PlaylistDetails() {
           <aside className="hidden w-64 shrink-0 border-r border-[var(--border)] bg-[var(--surface)]/60 lg:flex lg:flex-col">
 
             <div className="flex h-20 items-center gap-3 border-b border-[var(--border)] px-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
                 <HiMusicalNote className="text-xl" />
               </div>
 
               <span className="text-xl font-extrabold tracking-tight">
                 Verse
-                <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                   Hana
                 </span>
               </span>
@@ -471,7 +471,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/dashboard"
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-violet-500/10"
+                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-teal-500/10"
               >
                 <HiHome className="text-lg" />
                 Home
@@ -479,7 +479,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/discover"
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-violet-500/10"
+                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-teal-500/10"
               >
                 <HiMagnifyingGlass className="text-lg" />
                 Discover
@@ -487,7 +487,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/genres"
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-violet-500/10"
+                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-teal-500/10"
               >
                 <HiMusicalNote className="text-lg" />
                 Genres
@@ -495,7 +495,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/liked-songs"
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-violet-500/10"
+                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-teal-500/10"
               >
                 <HiHeart className="text-lg" />
                 Liked Songs
@@ -503,7 +503,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/playlists"
-                className="flex items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm text-violet-400"
+                className="flex items-center gap-3 rounded-xl bg-teal-500/10 px-3 py-3 text-sm text-teal-400"
               >
                 <HiQueueList className="text-lg" />
                 Playlists
@@ -511,7 +511,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/recently-played"
-                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-violet-500/10"
+                className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-[var(--text-secondary)] hover:bg-teal-500/10"
               >
                 <HiClock className="text-lg" />
                 Recently Played
@@ -523,9 +523,9 @@ function PlaylistDetails() {
 
               <Link
                 to="/profile"
-                className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-violet-500/10"
+                className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-teal-500/10"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">
                   {user?.name?.charAt(0)?.toUpperCase() ||
                     "U"}
                 </div>
@@ -574,7 +574,7 @@ function PlaylistDetails() {
               <button
                 type="button"
                 onClick={() => navigate("/playlists")}
-                className="mt-6 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02]"
+                className="mt-6 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-500/20 transition hover:scale-[1.02]"
               >
                 Back to Playlists
               </button>
@@ -615,13 +615,13 @@ function PlaylistDetails() {
 
           <div className="flex h-20 items-center gap-3 border-b border-[var(--border)] px-6">
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
               <HiMusicalNote className="text-xl" />
             </div>
 
             <span className="text-xl font-extrabold tracking-tight">
               Verse
-              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 Hana
               </span>
             </span>
@@ -634,7 +634,7 @@ function PlaylistDetails() {
 
             <Link
               to="/dashboard"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiHome className="text-lg" />
               Home
@@ -642,7 +642,7 @@ function PlaylistDetails() {
 
             <Link
               to="/discover"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiMagnifyingGlass className="text-lg" />
               Discover
@@ -650,7 +650,7 @@ function PlaylistDetails() {
 
             <Link
               to="/genres"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiMusicalNote className="text-lg" />
               Genres
@@ -658,7 +658,7 @@ function PlaylistDetails() {
 
             <Link
               to="/liked-songs"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiHeart className="text-lg" />
               Liked Songs
@@ -668,7 +668,7 @@ function PlaylistDetails() {
 
             <Link
               to="/playlists"
-              className="flex w-full items-center gap-3 rounded-xl bg-violet-500/10 px-3 py-3 text-sm font-medium text-violet-400"
+              className="flex w-full items-center gap-3 rounded-xl bg-teal-500/10 px-3 py-3 text-sm font-medium text-teal-400"
             >
               <HiQueueList className="text-lg" />
               Playlists
@@ -676,7 +676,7 @@ function PlaylistDetails() {
 
             <Link
               to="/recently-played"
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-[var(--text-primary)]"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-[var(--text-primary)]"
             >
               <HiClock className="text-lg" />
               Recently Played
@@ -690,10 +690,10 @@ function PlaylistDetails() {
 
             <Link
               to="/profile"
-              className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-violet-500/10"
+              className="mb-3 flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-teal-500/10"
             >
 
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">
                 {user?.name?.charAt(0)?.toUpperCase() ||
                   "U"}
               </div>
@@ -741,7 +741,7 @@ function PlaylistDetails() {
 
               <Link
                 to="/playlists"
-                className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-violet-500/10 hover:text-violet-400"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--text-secondary)] transition hover:bg-teal-500/10 hover:text-teal-400"
                 title="Back to playlists"
               >
                 <HiArrowLeft className="text-xl" />
@@ -763,7 +763,7 @@ function PlaylistDetails() {
 
             <Link
               to="/profile"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-sm font-bold text-white"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white"
             >
               {user?.name?.charAt(0)?.toUpperCase() ||
                 "U"}
@@ -781,19 +781,19 @@ function PlaylistDetails() {
                 PLAYLIST HERO
             ===================================================== */}
 
-            <section className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-600/15 via-[var(--surface)] to-fuchsia-600/10 p-6 shadow-2xl shadow-violet-950/10 sm:p-8 lg:p-10">
+            <section className="relative overflow-hidden rounded-[32px] border border-teal-500/20 bg-gradient-to-br from-teal-600/15 via-[var(--surface)] to-cyan-600/10 p-6 shadow-2xl shadow-teal-950/10 sm:p-8 lg:p-10">
 
               {/* GLOW */}
 
-              <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-violet-500/20 blur-[120px]" />
+              <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-teal-500/20 blur-[120px]" />
 
-              <div className="pointer-events-none absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-fuchsia-500/10 blur-[120px]" />
+              <div className="pointer-events-none absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-cyan-500/10 blur-[120px]" />
 
               <div className="relative z-10 grid gap-8 md:grid-cols-[240px_1fr] md:items-end lg:grid-cols-[280px_1fr]">
 
                 {/* ARTWORK */}
 
-                <div className="group relative aspect-square overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 shadow-2xl">
+                <div className="group relative aspect-square overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 shadow-2xl">
 
                   {artwork ? (
                     <img
@@ -803,7 +803,7 @@ function PlaylistDetails() {
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <HiMusicalNote className="text-7xl text-violet-400/70" />
+                      <HiMusicalNote className="text-7xl text-teal-400/70" />
                     </div>
                   )}
 
@@ -815,7 +815,7 @@ function PlaylistDetails() {
 
                 <div>
 
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-violet-400">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-400">
                     Playlist
                   </p>
 
@@ -840,7 +840,7 @@ function PlaylistDetails() {
                         : "songs"}
                     </span>
 
-                    <span className="rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1.5 text-xs text-violet-400">
+                    <span className="rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1.5 text-xs text-teal-400">
                       Personal playlist
                     </span>
 
@@ -852,7 +852,7 @@ function PlaylistDetails() {
                     <button
                       type="button"
                       onClick={handlePlayAll}
-                      className="mt-7 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:-translate-y-0.5 hover:shadow-violet-500/30"
+                      className="mt-7 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-500/20 transition hover:-translate-y-0.5 hover:shadow-teal-500/30"
                     >
 
                       {currentSong &&
@@ -888,7 +888,7 @@ function PlaylistDetails() {
 
                 <div>
 
-                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-violet-400">
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-teal-400">
                     Your playlist
                   </p>
 
@@ -913,8 +913,8 @@ function PlaylistDetails() {
               {songs.length === 0 && (
                 <div className="flex min-h-[360px] flex-col items-center justify-center rounded-[28px] border border-[var(--border)] bg-[var(--surface)]/60 px-5 text-center">
 
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-violet-500/10">
-                    <HiMusicalNote className="text-4xl text-violet-400" />
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-teal-500/10">
+                    <HiMusicalNote className="text-4xl text-teal-400" />
                   </div>
 
                   <h3 className="mt-5 text-xl font-bold">
@@ -928,7 +928,7 @@ function PlaylistDetails() {
 
                   <Link
                     to="/discover"
-                    className="mt-6 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:scale-[1.02]"
+                    className="mt-6 rounded-xl bg-gradient-to-r from-teal-600 to-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-500/20 transition hover:scale-[1.02]"
                   >
                     Discover Music
                   </Link>
@@ -974,8 +974,8 @@ function PlaylistDetails() {
 
                           ${
                             isCurrent
-                              ? "border-violet-500/30 bg-violet-500/10 shadow-lg shadow-violet-950/10"
-                              : "border-[var(--border)] bg-[var(--surface)]/60 hover:border-violet-500/30 hover:bg-violet-500/5"
+                              ? "border-teal-500/30 bg-teal-500/10 shadow-lg shadow-teal-950/10"
+                              : "border-[var(--border)] bg-[var(--surface)]/60 hover:border-teal-500/30 hover:bg-teal-500/5"
                           }
                         `}
                       >
@@ -985,7 +985,7 @@ function PlaylistDetails() {
                         <div className="hidden w-7 shrink-0 text-center text-xs text-[var(--text-muted)] sm:block">
 
                           {isSongPlaying ? (
-                            <span className="font-bold text-violet-400">
+                            <span className="font-bold text-teal-400">
                               ♪
                             </span>
                           ) : (
@@ -1005,7 +1005,7 @@ function PlaylistDetails() {
                               className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                             />
                           ) : (
-                            <div className="flex h-full w-full items-center justify-center text-violet-400">
+                            <div className="flex h-full w-full items-center justify-center text-teal-400">
                               <HiMusicalNote className="text-xl" />
                             </div>
                           )}
@@ -1063,7 +1063,7 @@ function PlaylistDetails() {
 
                               ${
                                 isCurrent
-                                  ? "text-violet-400"
+                                  ? "text-teal-400"
                                   : "text-[var(--text-primary)]"
                               }
                             `}
@@ -1088,7 +1088,7 @@ function PlaylistDetails() {
                         {/* PLAYING */}
 
                         {isSongPlaying && (
-                          <span className="hidden rounded-full bg-violet-500/10 px-3 py-1.5 text-[11px] font-medium text-violet-400 lg:block">
+                          <span className="hidden rounded-full bg-teal-500/10 px-3 py-1.5 text-[11px] font-medium text-teal-400 lg:block">
                             Playing
                           </span>
                         )}
@@ -1119,8 +1119,8 @@ function PlaylistDetails() {
 
                             ${
                               isLiked
-                                ? "bg-violet-500/10 text-violet-400"
-                                : "text-[var(--text-muted)] hover:bg-violet-500/10 hover:text-violet-400"
+                                ? "bg-teal-500/10 text-teal-400"
+                                : "text-[var(--text-muted)] hover:bg-teal-500/10 hover:text-teal-400"
                             }
 
                             ${

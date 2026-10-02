@@ -78,7 +78,7 @@ export default function Login() {
             to="/"
             className="flex items-center gap-3"
           >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-600 shadow-lg shadow-violet-600/20">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-600 shadow-lg shadow-teal-600/20">
               <Music2
                 size={23}
                 className="text-white"
@@ -135,7 +135,7 @@ export default function Login() {
                 }
                 placeholder="you@example.com"
                 disabled={loading}
-                className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none transition placeholder:text-white/30 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 disabled:cursor-not-allowed disabled:opacity-60"
               />
             </div>
 
@@ -151,7 +151,7 @@ export default function Login() {
 
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-violet-400 transition hover:text-violet-300"
+                  className="text-sm text-teal-400 transition hover:text-teal-300"
                 >
                   Forgot password?
                 </Link>
@@ -172,7 +172,7 @@ export default function Login() {
                   }
                   placeholder="Enter your password"
                   disabled={loading}
-                  className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-14 text-sm outline-none transition placeholder:text-white/30 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-14 text-sm outline-none transition placeholder:text-white/30 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 disabled:cursor-not-allowed disabled:opacity-60"
                 />
 
                 <button
@@ -210,7 +210,7 @@ export default function Login() {
                   )
                 }
                 disabled={loading}
-                className="h-4 w-4 shrink-0 rounded border-white/20 bg-white/5 accent-violet-600"
+                className="h-4 w-4 shrink-0 rounded border-white/20 bg-white/5 accent-teal-600"
               />
 
               <span>Remember me</span>
@@ -220,7 +220,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-3 font-semibold text-white transition hover:bg-teal-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <>
@@ -241,7 +241,7 @@ export default function Login() {
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="font-medium text-violet-400 hover:text-violet-300"
+              className="font-medium text-teal-400 hover:text-teal-300"
             >
               Create one
             </Link>

@@ -61,7 +61,7 @@ function LyricsPreview() {
           h-72
           w-72
           rounded-full
-          bg-violet-600/15
+          bg-teal-600/15
           blur-[120px]
 
           sm:h-80
@@ -79,7 +79,7 @@ function LyricsPreview() {
           h-72
           w-72
           rounded-full
-          bg-fuchsia-600/10
+          bg-cyan-600/10
           blur-[120px]
 
           sm:h-80
@@ -163,7 +163,7 @@ function LyricsPreview() {
 
             <div className="mt-5 sm:mt-6">
 
-              <p className="text-sm font-medium text-violet-500">
+              <p className="text-sm font-medium text-teal-500">
                 Now Playing
               </p>
 
@@ -212,8 +212,8 @@ function LyricsPreview() {
                   h-full
                   rounded-full
                   bg-gradient-to-r
-                  from-violet-500
-                  to-fuchsia-500
+                  from-teal-500
+                  to-cyan-500
                 "
               />
 
@@ -248,7 +248,7 @@ function LyricsPreview() {
                 className="
                   text-[var(--text-secondary)]
                   transition
-                  hover:text-violet-500
+                  hover:text-teal-500
                 "
               >
                 <HiHeart className="text-xl" />
@@ -279,7 +279,7 @@ function LyricsPreview() {
                 className="
                   text-[var(--text-secondary)]
                   transition
-                  hover:text-violet-500
+                  hover:text-teal-500
                 "
               >
                 <HiSpeakerWave className="text-xl" />
@@ -335,7 +335,7 @@ function LyricsPreview() {
                   font-semibold
                   uppercase
                   tracking-[0.2em]
-                  text-violet-500
+                  text-teal-500
                 "
               >
                 Lyrics
@@ -369,7 +369,7 @@ function LyricsPreview() {
                     className="
                       w-1
                       rounded-full
-                      bg-violet-500
+                      bg-teal-500
                     "
                   />
                 )

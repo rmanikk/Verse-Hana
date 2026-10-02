@@ -67,7 +67,7 @@ function Community() {
             h-[280px]
             w-[280px]
             rounded-full
-            bg-violet-600/10
+            bg-teal-600/10
             blur-[120px]
 
             sm:h-[400px]
@@ -84,7 +84,7 @@ function Community() {
             h-[280px]
             w-[280px]
             rounded-full
-            bg-fuchsia-600/10
+            bg-cyan-600/10
             blur-[120px]
 
             sm:h-[400px]
@@ -133,13 +133,13 @@ function Community() {
               gap-2
               rounded-full
               border
-              border-violet-500/30
-              bg-violet-500/10
+              border-teal-500/30
+              bg-teal-500/10
               px-4
               py-2
               text-xs
               font-medium
-              text-violet-500
+              text-teal-500
 
               sm:px-5
               sm:text-sm
@@ -171,8 +171,8 @@ function Community() {
               className="
                 block
                 bg-gradient-to-r
-                from-violet-400
-                via-fuchsia-400
+                from-teal-400
+                via-cyan-400
                 to-pink-400
                 bg-clip-text
                 text-transparent
@@ -259,7 +259,7 @@ function Community() {
                 h-64
                 w-64
                 rounded-full
-                bg-violet-600/15
+                bg-teal-600/15
                 blur-[100px]
               "
             />
@@ -276,9 +276,9 @@ function Community() {
                   items-center
                   justify-center
                   rounded-2xl
-                  bg-violet-500/10
+                  bg-teal-500/10
                   text-xl
-                  text-violet-500
+                  text-teal-500
 
                   sm:h-14
                   sm:w-14
@@ -356,9 +356,9 @@ function Community() {
                       text-[var(--text-secondary)]
                       transition
 
-                      hover:border-violet-500/50
-                      hover:bg-violet-500/10
-                      hover:text-violet-500
+                      hover:border-teal-500/50
+                      hover:bg-teal-500/10
+                      hover:text-teal-500
 
                       sm:px-4
                       sm:text-sm
@@ -377,8 +377,8 @@ function Community() {
                   mt-7
                   rounded-full
                   bg-gradient-to-r
-                  from-violet-600
-                  to-fuchsia-600
+                  from-teal-600
+                  to-cyan-600
                   px-6
                   py-3
                   text-sm
@@ -388,7 +388,7 @@ function Community() {
 
                   hover:scale-105
                   hover:shadow-lg
-                  hover:shadow-violet-500/20
+                  hover:shadow-teal-500/20
 
                   sm:mt-8
                   sm:px-7
@@ -434,7 +434,7 @@ function Community() {
                   transition
                   duration-300
 
-                  hover:border-violet-500/20
+                  hover:border-teal-500/20
 
                   sm:p-5
                 "
@@ -453,8 +453,8 @@ function Community() {
                       justify-center
                       rounded-full
                       bg-gradient-to-br
-                      from-violet-500
-                      to-fuchsia-500
+                      from-teal-500
+                      to-cyan-500
                       text-sm
                       font-bold
                       text-white
@@ -550,8 +550,8 @@ function Community() {
                             items-center
                             justify-center
                             rounded-xl
-                            bg-violet-500/10
-                            text-violet-500
+                            bg-teal-500/10
+                            text-teal-500
 
                             sm:h-10
                             sm:w-10
@@ -600,7 +600,7 @@ function Community() {
                           text-[var(--text-primary)]
                           transition
 
-                          hover:bg-violet-500
+                          hover:bg-teal-500
                           hover:text-white
 
                           sm:h-9
@@ -643,7 +643,7 @@ function Community() {
                         type="button"
                         className="
                           transition
-                          hover:text-violet-500
+                          hover:text-teal-500
                         "
                       >
                         Share

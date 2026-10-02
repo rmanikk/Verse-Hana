@@ -50,7 +50,7 @@ function HeroRight() {
           h-[280px]
           w-[280px]
           rounded-full
-          bg-violet-600/20
+          bg-teal-600/20
           blur-[100px]
 
           sm:h-[350px]
@@ -180,9 +180,9 @@ function HeroRight() {
               className="
                 text-xs
                 font-medium
-                text-violet-500
+                text-teal-500
 
-                dark:text-violet-400
+                dark:text-teal-400
 
                 sm:text-sm
               "
@@ -385,10 +385,10 @@ function HeroRight() {
           {/* Equalizer */}
 
           <div className="flex gap-1">
-            <span className="h-3 w-1 animate-pulse rounded-full bg-violet-400 sm:h-4" />
-            <span className="h-5 w-1 animate-pulse rounded-full bg-violet-500 sm:h-7" />
-            <span className="h-4 w-1 animate-pulse rounded-full bg-fuchsia-400 sm:h-5" />
-            <span className="h-5 w-1 animate-pulse rounded-full bg-violet-500 sm:h-6" />
+            <span className="h-3 w-1 animate-pulse rounded-full bg-teal-400 sm:h-4" />
+            <span className="h-5 w-1 animate-pulse rounded-full bg-teal-500 sm:h-7" />
+            <span className="h-4 w-1 animate-pulse rounded-full bg-cyan-400 sm:h-5" />
+            <span className="h-5 w-1 animate-pulse rounded-full bg-teal-500 sm:h-6" />
           </div>
 
           {/* Track */}

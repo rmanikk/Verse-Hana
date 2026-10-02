@@ -39,9 +39,9 @@ function SearchCard() {
           transition
           duration-300
 
-          focus-within:border-violet-500/50
+          focus-within:border-teal-500/50
           focus-within:ring-2
-          focus-within:ring-violet-500/10
+          focus-within:ring-teal-500/10
 
           sm:px-5
           sm:py-3.5
@@ -89,7 +89,7 @@ function SearchCard() {
           className="
             shrink-0
             rounded-xl
-            bg-violet-600
+            bg-teal-600
             px-3
             py-2
             text-xs
@@ -97,7 +97,7 @@ function SearchCard() {
             text-white
             transition
 
-            hover:bg-violet-500
+            hover:bg-teal-500
 
             sm:px-4
             sm:py-2.5
