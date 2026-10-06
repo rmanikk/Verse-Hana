@@ -172,7 +172,7 @@ function Discover() {
       if (query.trim()) {
         url = `${API_URL}/api/music/search?q=${encodeURIComponent(
           query.trim()
-        )}&limit=20`;
+        )}&limit=50`;
       } else {
         url = `${API_URL}/api/music/trending?limit=20`;
       }
@@ -461,13 +461,24 @@ function Discover() {
   // SEARCH
   // =====================================================
 
-  const handleSearch = (event) => {
-    event.preventDefault();
+ const handleSearch = async (event) => {
+  event.preventDefault();
 
-    setActiveMood("");
+  const query = search.trim();
 
-    fetchTracks(search);
-  };
+  if (!query) return;
+
+  setActiveMood("");
+
+  await fetchTracks(query);
+
+  requestAnimationFrame(() => {
+    resultsSectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  });
+};
 
   // =====================================================
   // MOOD
@@ -481,7 +492,7 @@ function Discover() {
       setError("");
 
       const response = await fetch(
-        `${API_URL}/api/music/mood/${moodId}?limit=20`,
+        `${API_URL}/api/music/mood/${moodId}?limit=50`,
         {
           method: "GET",
           credentials: "include",

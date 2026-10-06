@@ -1,385 +1,76 @@
-import { motion } from "framer-motion";
 import {
-  HiArrowUp,
-  HiHeart,
-} from "react-icons/hi2";
-
-import {
-  FaInstagram,
-  FaSpotify,
-  FaYoutube,
   FaGithub,
+  FaInstagram,
+  FaTwitter,
+  FaYoutube,
 } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-[var(--border)] bg-[var(--background)]">
+    <footer className="border-t border-[var(--border)] bg-[var(--background)]">
+      <div className="mx-auto flex max-w-7xl flex-col items-center px-6 py-12 text-center">
+        
+       {/* Brand */}
+<div className="flex items-center justify-center">
+  <span
+    className="
+      text-2xl
+      font-bold
+      tracking-tight
+      text-[var(--text-primary)]
+    "
+  >
+    VerseHana
+  </span>
+</div>
 
-      {/* =====================================================
-          BACKGROUND GLOW
-      ===================================================== */}
+        {/* Description */}
+        <p className="mt-4 max-w-md text-sm leading-6 text-[var(--text-secondary)]">
+          Discover music based on how you feel, not just what you search.
+        </p>
 
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="
-            absolute
-            bottom-[-220px]
-            left-1/2
-            h-[350px]
-            w-[350px]
-            -translate-x-1/2
-            rounded-full
-            bg-teal-600/10
-            blur-[130px]
+        {/* Social Links */}
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <a
+            href="#"
+            aria-label="VerseHana GitHub"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-secondary)] transition-all duration-300 hover:-translate-y-1 hover:border-teal-500 hover:bg-teal-500/10 hover:text-teal-500"
+          >
+            <FaGithub size={17} />
+          </a>
 
-            sm:bottom-[-250px]
-            sm:h-[500px]
-            sm:w-[500px]
-            sm:blur-[170px]
-          "
-        />
-      </div>
+          <a
+            href="#"
+            aria-label="VerseHana Instagram"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-secondary)] transition-all duration-300 hover:-translate-y-1 hover:border-teal-500 hover:bg-teal-500/10 hover:text-teal-500"
+          >
+            <FaInstagram size={17} />
+          </a>
 
-      {/* =====================================================
-          CONTAINER
-      ===================================================== */}
+          <a
+            href="#"
+            aria-label="VerseHana Twitter"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-secondary)] transition-all duration-300 hover:-translate-y-1 hover:border-teal-500 hover:bg-teal-500/10 hover:text-teal-500"
+          >
+            <FaTwitter size={17} />
+          </a>
 
-      <div
-        className="
-          relative
-          mx-auto
-          w-full
-          max-w-[1450px]
-          px-5
-
-          sm:px-8
-
-          lg:px-12
-
-          xl:px-16
-        "
-      >
-
-        {/* =================================================
-            MAIN FOOTER
-        ================================================= */}
-
-        <div
-          className="
-            flex
-            flex-col
-            items-center
-            py-12
-            text-center
-
-            sm:py-16
-
-            lg:items-start
-            lg:text-left
-            lg:py-20
-          "
-        >
-
-          {/* =================================================
-              BRAND
-          ================================================= */}
-
-          <div className="w-full">
-
-            <a
-              href="#"
-              className="
-                inline-flex
-                items-center
-                justify-center
-
-                lg:justify-start
-              "
-            >
-              <span
-                className="
-                  text-3xl
-                  font-extrabold
-                  tracking-tight
-                  text-[var(--text-primary)]
-
-                  sm:text-4xl
-                "
-              >
-                Verse
-                <span
-                  className="
-                    bg-gradient-to-r
-                    from-teal-400
-                    to-cyan-400
-                    bg-clip-text
-                    text-transparent
-                  "
-                >
-                  Hana
-                </span>
-              </span>
-            </a>
-
-            {/* Description */}
-
-            <p
-              className="
-                mx-auto
-                mt-5
-                max-w-lg
-                text-sm
-                leading-7
-                text-[var(--text-secondary)]
-
-                lg:mx-0
-                lg:max-w-xl
-
-                sm:text-base
-              "
-            >
-              Music that understands your emotions.
-              Discover songs, artists, lyrics, and moods
-              that feel like you.
-            </p>
-
-            {/* =================================================
-                SOCIAL
-            ================================================= */}
-
-            <div
-              className="
-                mt-7
-                flex
-                items-center
-                justify-center
-                gap-3
-
-                lg:justify-start
-              "
-            >
-
-              {/* Instagram */}
-
-              <a
-                href="#"
-                aria-label="Instagram"
-                className="
-                  flex
-                  h-10
-                  w-10
-                  items-center
-                  justify-center
-                  rounded-full
-                  border
-                  border-[var(--border)]
-                  bg-[var(--surface)]
-                  text-[var(--text-secondary)]
-                  transition-all
-                  duration-300
-
-                  hover:border-teal-500/40
-                  hover:bg-teal-500/10
-                  hover:text-teal-400
-
-                  sm:h-11
-                  sm:w-11
-                "
-              >
-                <FaInstagram />
-              </a>
-
-              {/* Spotify */}
-
-              <a
-                href="#"
-                aria-label="Spotify"
-                className="
-                  flex
-                  h-10
-                  w-10
-                  items-center
-                  justify-center
-                  rounded-full
-                  border
-                  border-[var(--border)]
-                  bg-[var(--surface)]
-                  text-[var(--text-secondary)]
-                  transition-all
-                  duration-300
-
-                  hover:border-teal-500/40
-                  hover:bg-teal-500/10
-                  hover:text-teal-400
-
-                  sm:h-11
-                  sm:w-11
-                "
-              >
-                <FaSpotify />
-              </a>
-
-              {/* YouTube */}
-
-              <a
-                href="#"
-                aria-label="YouTube"
-                className="
-                  flex
-                  h-10
-                  w-10
-                  items-center
-                  justify-center
-                  rounded-full
-                  border
-                  border-[var(--border)]
-                  bg-[var(--surface)]
-                  text-[var(--text-secondary)]
-                  transition-all
-                  duration-300
-
-                  hover:border-teal-500/40
-                  hover:bg-teal-500/10
-                  hover:text-teal-400
-
-                  sm:h-11
-                  sm:w-11
-                "
-              >
-                <FaYoutube />
-              </a>
-
-              {/* GitHub */}
-
-              <a
-                href="#"
-                aria-label="GitHub"
-                className="
-                  flex
-                  h-10
-                  w-10
-                  items-center
-                  justify-center
-                  rounded-full
-                  border
-                  border-[var(--border)]
-                  bg-[var(--surface)]
-                  text-[var(--text-secondary)]
-                  transition-all
-                  duration-300
-
-                  hover:border-teal-500/40
-                  hover:bg-teal-500/10
-                  hover:text-teal-400
-
-                  sm:h-11
-                  sm:w-11
-                "
-              >
-                <FaGithub />
-              </a>
-
-            </div>
-
-          </div>
-
+          <a
+            href="#"
+            aria-label="VerseHana YouTube"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] text-[var(--text-secondary)] transition-all duration-300 hover:-translate-y-1 hover:border-teal-500 hover:bg-teal-500/10 hover:text-teal-500"
+          >
+            <FaYoutube size={17} />
+          </a>
         </div>
 
-        {/* =====================================================
-            BOTTOM BAR
-        ===================================================== */}
+        {/* Divider */}
+        <div className="my-8 h-px w-full max-w-2xl bg-[var(--border)]" />
 
-        <div
-          className="
-            flex
-            flex-col
-            items-center
-            gap-5
-            border-t
-            border-[var(--border)]
-            py-6
-            text-sm
-            text-[var(--text-muted)]
-
-            sm:py-7
-
-            lg:flex-row
-            lg:items-center
-            lg:justify-between
-            lg:gap-6
-          "
-        >
-
-          {/* Copyright */}
-
-          <p
-            className="
-              text-center
-              leading-6
-
-              lg:text-left
-            "
-          >
-            © {new Date().getFullYear()} VerseHana.
-            All rights reserved.
-          </p>
-
-          {/* Made with */}
-
-          <div
-            className="
-              flex
-              items-center
-              justify-center
-              text-center
-              leading-6
-            "
-          >
-            Made with
-
-            <HiHeart
-              className="
-                mx-1
-                shrink-0
-                text-teal-500
-              "
-            />
-
-            for music lovers.
-          </div>
-
-          {/* Back To Top */}
-
-          <motion.button
-            type="button"
-            whileHover={{
-              y: -3,
-            }}
-            onClick={() =>
-              window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-              })
-            }
-            className="
-              flex
-              items-center
-              justify-center
-              gap-2
-              text-[var(--text-secondary)]
-              transition-colors
-              duration-300
-
-              hover:text-teal-400
-            "
-          >
-            Back to top
-
-            <HiArrowUp />
-          </motion.button>
-
-        </div>
-
+        {/* Copyright */}
+        <p className="text-xs text-[var(--text-muted)]">
+          © {new Date().getFullYear()} VerseHana. All rights reserved.
+        </p>
       </div>
     </footer>
   );

@@ -114,6 +114,82 @@ export function PlayerProvider({ children }) {
     };
   }, [queue]);
 
+    // =====================================================
+  // KEYBOARD CONTROLS
+  // SPACE = PLAY / PAUSE
+  // LEFT / RIGHT = SEEK 5 SECONDS
+  // =====================================================
+
+  useEffect(() => {
+    const handleKeyboard = (event) => {
+      // Don't control music while typing
+      const target = event.target;
+
+      const isTyping =
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable;
+
+      if (isTyping) return;
+
+      // Space = Play / Pause
+      if (event.code === "Space") {
+        event.preventDefault();
+
+        togglePlay();
+        return;
+      }
+
+      // Left Arrow = -5 seconds
+      if (event.code === "ArrowLeft") {
+        event.preventDefault();
+
+        const audio = audioRef.current;
+
+        if (!currentSong || !duration) return;
+
+        const newTime = Math.max(
+          0,
+          audio.currentTime - 5
+        );
+
+        audio.currentTime = newTime;
+        setProgress(newTime);
+
+        return;
+      }
+
+      // Right Arrow = +5 seconds
+      if (event.code === "ArrowRight") {
+        event.preventDefault();
+
+        const audio = audioRef.current;
+
+        if (!currentSong || !duration) return;
+
+        const newTime = Math.min(
+          duration,
+          audio.currentTime + 5
+        );
+
+        audio.currentTime = newTime;
+        setProgress(newTime);
+      }
+    };
+
+    window.addEventListener(
+      "keydown",
+      handleKeyboard
+    );
+
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        handleKeyboard
+      );
+    };
+  }, [currentSong, duration]);
   // =====================================================
   // LOAD SONG
   // =====================================================

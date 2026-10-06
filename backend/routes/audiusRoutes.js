@@ -76,6 +76,17 @@ async function fetchAudius(endpoint) {
 }
 
 // =====================================================
+// TRENDING MUSIC CACHE
+// =====================================================
+
+const TRENDING_CACHE_DURATION = 24 * 60 * 60 * 1000;
+
+let trendingCache = {
+  tracks: [],
+  lastUpdated: 0,
+};
+
+// =====================================================
 // GET TRENDING MUSIC
 // GET /api/music/trending
 // =====================================================
@@ -87,16 +98,57 @@ router.get("/trending", async (req, res) => {
       100
     );
 
+    const now = Date.now();
+
+    // Use cached trending songs if they are
+    // less than 24 hours old.
+    const cacheIsValid =
+      trendingCache.tracks.length > 0 &&
+      now - trendingCache.lastUpdated <
+        TRENDING_CACHE_DURATION;
+
+    if (cacheIsValid) {
+      return res.status(200).json({
+        message: "Trending music served from cache.",
+        tracks: trendingCache.tracks.slice(0, limit),
+      });
+    }
+
+    // Cache expired or does not exist.
+    // Fetch fresh trending music from Audius.
     const data = await fetchAudius(
-      `/tracks/trending?limit=${limit}`
+      `/tracks/trending?limit=100`
     );
 
+    const tracks = data.data || [];
+
+    // Save the fresh trending songs.
+    trendingCache = {
+      tracks,
+      lastUpdated: now,
+    };
+
     return res.status(200).json({
-      message: "Audius tracks fetched successfully.",
-      tracks: data.data || [],
+      message: "Fresh trending music fetched successfully.",
+      tracks: tracks.slice(0, limit),
     });
   } catch (error) {
     console.error("Audius trending error:", error);
+
+    // If Audius fails but an older cache exists,
+    // return the cached songs instead of failing.
+    if (trendingCache.tracks.length > 0) {
+      return res.status(200).json({
+        message: "Trending music served from previous cache.",
+        tracks: trendingCache.tracks.slice(
+          0,
+          Math.min(
+            Number(req.query.limit) || 10,
+            100
+          )
+        ),
+      });
+    }
 
     return res.status(500).json({
       message: "Failed to fetch trending music.",

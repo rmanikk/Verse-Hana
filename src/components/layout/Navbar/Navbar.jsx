@@ -26,7 +26,7 @@ function Navbar() {
     { name: "Discover", href: "#discover" },
     { name: "Moods", href: "#moods" },
     { name: "Artists", href: "#artists" },
-    { name: "Lyrics", href: "#lyrics" },
+    
   ];
 
   /* ---------------- SCROLL ---------------- */
@@ -101,7 +101,7 @@ function Navbar() {
       className={`
         fixed left-0 top-0 z-50 w-full
         transition-all duration-300
-        ${
+         ${
           scrolled
             ? "border-b border-[var(--border)] bg-[var(--background)]/90 backdrop-blur-xl"
             : "bg-transparent"
@@ -413,27 +413,26 @@ function Navbar() {
                       Login
                     </Link>
 
-                    <Link
-                      to="/signup"
-                      onClick={closeMenu}
-                      className="
-                        flex-1
-                        rounded-xl
-                        bg-gradient-to-r
-                        from-teal-600
-                        to-cyan-600
-                        px-4 py-3
-                        text-center
-                        text-sm font-semibold
-                        text-white
-                        transition duration-300
-                        hover:scale-[1.02]
-                        hover:shadow-lg
-                        hover:shadow-teal-500/20
-                      "
-                    >
-                      Sign Up
-                    </Link>
+                    <Link 
+  to="/signup" 
+  onClick={closeMenu} 
+  className="
+    flex-1
+    rounded-xl
+    bg-teal-600
+    px-4 py-3
+    text-center
+    text-sm font-semibold
+    text-white
+    transition duration-300
+    hover:scale-[1.02]
+    hover:bg-teal-500
+    hover:shadow-lg
+    hover:shadow-teal-500/20
+  "
+>
+  Sign Up
+</Link>
 
                   </div>
                 ) : (

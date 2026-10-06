@@ -7,9 +7,7 @@ import MoodSection from "../components/Home/MoodSection/MoodSection";
 import FeaturedMusic from "../components/Home/FeaturedMusic/FeaturedMusic";
 import Features from "../components/Home/Features/Features";
 import TrendingArtists from "../components/Home/TrendingArtists/TrendingArtists";
-import Lyrics from "../components/Home/Lyrics/Lyrics";
-import Community from "../components/Home/Community/Community";
-import CTA from "../components/Home/CTA/CTA";
+
 import Footer from "../components/layout/Footer/Footer";
 
 import { useAuth } from "../context/AuthContext";
@@ -190,25 +188,9 @@ function Home() {
           <TrendingArtists />
         </div>
 
-        {/* =================================================
-            LYRICS
-        ================================================= */}
+        
 
-        <div id="lyrics">
-          <Lyrics />
-        </div>
-
-        {/* =================================================
-            COMMUNITY
-        ================================================= */}
-
-        <Community />
-
-        {/* =================================================
-            CTA
-        ================================================= */}
-
-        <CTA />
+        
       </main>
 
       {/* =================================================
