@@ -503,7 +503,7 @@ The design focuses on:
 
 ![VerseHana Landing Page](screenshots/landing-page.png)
 
-### Login
+### Login / Signup
 
 ![VerseHana Login](screenshots/login.jpg)
 
@@ -517,17 +517,8 @@ The design focuses on:
 
 ```
 
-Recommended screenshot folder:
 
-```text
-screenshots/
-├── landing-page.png
-├── login.png
-├── dashboard.png
-└── admin-dashboard.png
-```
 
----
 
 ## 🔒 Security
 
