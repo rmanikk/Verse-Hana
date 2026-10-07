@@ -505,7 +505,7 @@ The design focuses on:
 
 ### Login
 
-![VerseHana Login](screenshots/login.png)
+![VerseHana Login](screenshots/login.jpg)
 
 ### User Dashboard
 
